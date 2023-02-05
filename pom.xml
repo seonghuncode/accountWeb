@@ -13,4 +13,27 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <!-- 위에 까지 프로젝트 생성시 기본 생성 -->
+
+    <!-- alt + insert -> 종속성 -> artifact검색 -> spring-webmvc추가 OR 직적 의존성 추가 해도 무방-->
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.3.18.RELEASE</version>
+        </dependency>
+
+
+
+
+    </dependencies>
+
+
+
+
+
+
+
+
 </project>
