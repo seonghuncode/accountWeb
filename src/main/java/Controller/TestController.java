@@ -6,14 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class HomeController {
+public class TestController {
+
 
     @RequestMapping(value="/")
     public String test(){
-        return "index";
+        return "test/index";
     }
 
-    @RequestMapping(value = "/test")
+    @RequestMapping(value = "test/test")
     @ResponseBody
     public String test2(){
         return "test2 입니다.";
@@ -21,7 +22,7 @@ public class HomeController {
 
     @RequestMapping("test3")
     public String test3(){
-        return "test3";
+        return "/test/test3";
     }
 
 }
