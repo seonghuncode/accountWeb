@@ -7,12 +7,34 @@
     <!-- Annotation 활성화 -->
     <mvc:annotation-driven/>
 
+    <!-- Base package / 만약 패키지를 생성하지도 잡아주지 않을 경우 test 오류  == component 패키지 지정-->
+    <context:component-scan base-package="controller"/>
 
-    <!-- Base package / 만약 패키지를 생성하지도 잡아주지 않을 경우 controller 오류  == component 패키지 지정-->
-    <context:component-scan base-package="Controller"/>
-
+    <!-- controller에서 return할때 해당 경로 앞뒤에 붙여질 경로 / JSP부 리졸버 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/> <!-- jsp경로 -->
         <property name="suffix" value=".jsp"/>
+        <property name="viewNames" value="jsp/*"/>  <!-- 타임리프를 사용하기 위해 각각의 리졸브를 만들기 위해 추가 -->
     </bean>
+
+    <!-- Thymeleaf 뷰 리졸버 -->
+    <bean id="templateResolver"
+          class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML5" />
+        <property name="cacheable" value="false" />
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+    </bean>
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine" />
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+
+   
+
 </beans>
