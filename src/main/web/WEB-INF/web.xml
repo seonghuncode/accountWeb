@@ -6,9 +6,10 @@
     <!-- 왼쪽의 버전은 tomcat버전과 맞춰야 한다. ex. tomcat8.5sms 3.1버전 intellij 맵핑되지 않은 spring 구성 파일 -->
     <!-- 경로를 지정하는 부분? -->
 
+    <!-- contextloaderlistener의 환경설정 파일인 applicationContext.xml의 위치를 지정 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <param-value>/**/WEB-INF/applicationContext.xml</param-value>
     </context-param>
 
     <listener>
@@ -41,6 +42,11 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- spring 정적 리소스 사용 설정 / *.css요청은 servlet이 아닌 default로 처리 (resources에 css외부 파일을 html에서 못 읽어 올 경우 사용) -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
 
 
 
