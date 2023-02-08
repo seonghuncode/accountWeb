@@ -24,6 +24,7 @@
           <element id="library" level="project" name="Maven: org.thymeleaf:thymeleaf:3.0.11.RELEASE" />
           <element id="library" level="project" name="Maven: org.thymeleaf:thymeleaf-spring4:3.0.11.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:springloaded:1.2.8.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:springloaded:1.2.5.RELEASE" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="accountWeb/web/웹" />

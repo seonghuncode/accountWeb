@@ -32,6 +32,13 @@
             <version>3.0.11.RELEASE</version>
         </dependency>
 
+        <!-- 스프링 리로드 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+            <version>1.2.5.RELEASE</version>
+        </dependency>
+
 
 
 
