@@ -45,6 +45,9 @@
     </bean>
 
 
+<!--&lt;!&ndash;<mvc:resources mapping="/css/**" location="/resources/static/css/" />&ndash;&gt;-->
+<!--    <mvc:resources mapping="/resources/**" location="/src/main/resources/" />-->
+
 
 
 
