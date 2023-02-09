@@ -6,30 +6,38 @@
     <!-- 왼쪽의 버전은 tomcat버전과 맞춰야 한다. ex. tomcat8.5sms 3.1버전 intellij 맵핑되지 않은 spring 구성 파일 -->
     <!-- 경로를 지정하는 부분? -->
 
-    
-    <!-- contextloaderlistener의 환경설정 파일인 applicationContext.xml의 위치를 지정 -->
+
+    <!-- contextloaderlistener의 환경설정 파일인 applicationContext.xml의 위치를 지정 / 연결할 XML파일 설정 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/**/WEB-INF/applicationContext.xml</param-value>
+        <param-value>/**/WEB-INF/applicationContext.xml</param-value> <!-- 공유하는 bean설정 -->
     </context-param>
 
+    <!-- Controller가 공유하는 Bean들을 포함하는 Spring Container를 생성한다 -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- aliases 설정 -->
     <servlet>
+        <!-- 아래 서블릿 매핑에 servlet-name은 반드시 같아야 한다 -->
+        <!-- 파일 이름 + -servlet.xml로 생성 / servlet-name으로 설정한 이름과 실제 wev-inf폴더 내부  name-servlet.xml파일의 이름이 같아야 한다.-->
         <servlet-name>dispatcher</servlet-name>
+        <!-- 개발자에 의해 작성된 실제 클래스 이름 -->
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 작은 수 부터 로드된다 -->
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- url 패턴을 정해주는 부분 -->
+    <!-- url 패턴을 정해주는 부분 / 서블릿 매핑 -->
     <servlet-mapping>
+        <!-- 매핑할 서블릿 이름 -->
         <servlet-name>dispatcher</servlet-name>
+        <!-- URL주소 -->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <!-- filter를 통해 웹에 오는 모든 요청의 캐릭터 섹을 utf-8로 변경 -->
+    <!-- filter를 통해 웹에 오는 모든 요청의 캐릭터 섹을 utf-8로 변경 / 한글 인코딩 설정-->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
