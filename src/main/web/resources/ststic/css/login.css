@@ -1,9 +1,23 @@
-.t1{
-    background-color: red;
-    color: yellow;
+/* 로그인 CSS */
+.login_input {
+    outline: 1px solid ;
+    width: 90%;
+    padding: 6px;
+    justify-items: center;
 }
 
-.t2{
-    background-color: red;
-    color: yellow;
+.login_function {
+    font-size: 11px;
+    margin-top: 15px;
+    color: #92949F;
+}
+
+.login_btn {
+    margin-top: 60px;
+    width: 85%;
+    text-align: center;
+}
+
+.login_copy{
+    color: #8E929F;
 }
