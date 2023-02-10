@@ -7,6 +7,7 @@
     <!-- Annotation 활성화 / 어노테이션 옵션 -->
     <mvc:annotation-driven/>
 
+    <context:annotation-config /> <!--  자동 주입 사용을 위한 코드 ex.@Autowired -->
     <!--
      web.xml에 특정 주소로 호출하게 되면 이때 연결할 Controller를 설정 해주어야 한다.
      이 기능을 dispatcher-servlet.xml에서 담당한다.
@@ -58,3 +59,4 @@
 
 
 </beans>
+

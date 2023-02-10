@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <!-- controller 어노테이션을 제외한 모든 어노테이션을 스캔하겠다는 의미 / @service, @repository등의 파일 스캔 -->
+    <context:component-scan base-package="controller">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!--
+    JDBC API를 이용하여 DB에 연동을 처리하기 위해서는 데이터베이스로 부터 커넥션을 얻어야 한다. -> 스프링 컨테이너 생성
+    (mysql datasource)
+    -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/> <!-- data 소스를 만드는데 mysql을 사용하여 만들 것이다. mariadb = mysql -->
+        <property name="url" value="jdbc:mysql://localhost:3306/accountWeb?useSSL=false@amp;serverTimezone=UTC"/> <!-- 접속 주소 설정 / timezone = utc -> 전세계 표준 시간 -->
+        <property name="username" value="ysh"/>
+        <property name="password" value="ysh123"/>
+    </bean>
+
+    <!-- mybatis SqlSessionFactoryBean : DB의 연결과 SQL의 실행에 대한 모든 것을 가진 객체 / 추후 데이터 저장, 수정, 삭제, 조회시 추가 설정 필요-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+
+<!--    자신의 PC(로컬)에 MySql을 설치했을 경우-->
+<!--    <bean id="dataSource"-->
+<!--          class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+<!--        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>-->
+<!--        <property name="url"-->
+<!--                  value="jdbc:mysql://127.0.0.1:3306/스키마이름?useSSL=false&amp;serverTimezone=UTC">-->
+<!--        </property>-->
+<!--        <property name="username" value="MySQL 계정"></property>-->
+<!--        <property name="password" value="비밀번호"></property>-->
+<!--    </bean>-->
 
 
 
