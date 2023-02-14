@@ -1,5 +1,7 @@
 package controller;
 
+import TestDao.TestDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class TestController {
+
+    @Autowired(required = false)
+    private TestDao testDao;
 
 
 //    @RequestMapping(value="/")
@@ -32,7 +37,13 @@ public class TestController {
         return "thymeleaf/test/test3";
     }
 
-
+    @RequestMapping("/mysql/test")
+    @ResponseBody
+    public String showTable(){
+        String result = testDao.showTest();
+        String result2 = showTable();
+        return result2;
+    }
 
 
 
