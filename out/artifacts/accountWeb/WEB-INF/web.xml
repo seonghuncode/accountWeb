@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
     <!-- 왼쪽의 버전은 tomcat버전과 맞춰야 한다. ex. tomcat8.5sms 3.1버전 intellij 맵핑되지 않은 spring 구성 파일 -->
     <!-- 경로를 지정하는 부분? -->
 

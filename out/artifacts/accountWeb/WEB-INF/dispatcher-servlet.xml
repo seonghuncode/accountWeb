@@ -7,7 +7,7 @@
     <!-- Annotation 활성화 / 어노테이션 옵션 -->
     <mvc:annotation-driven/>
 
-    <context:annotation-config /> <!--  자동 주입 사용을 위한 코드 ex.@Autowired -->
+<!--    <context:annotation-config /> &lt;!&ndash;  자동 주입 사용을 위한 코드 ex.@Autowired &ndash;&gt;-->
     <!--
      web.xml에 특정 주소로 호출하게 되면 이때 연결할 Controller를 설정 해주어야 한다.
      이 기능을 dispatcher-servlet.xml에서 담당한다.
@@ -16,8 +16,21 @@
 
     <!-- Base package / 만약 패키지를 생성하지도 잡아주지 않을 경우 test 오류  == component 패키지 지정-->
     <context:component-scan base-package="controller"/>
+<!--    <context:component-scan base-package="service" />-->
+<!--    <context:component-scan base-package="repository" />-->
 
-<!--    정적자원 매핑 / 현재 경로 오류오 인해 web.xml에 spring 정적 리스서 설정을 통해 사용하고 있다.&ndash;&gt;-->
+    <!-- @Autowired로 service class , repository class를 읽어들이지 못해서 추가한 코드 -->
+    <bean id="testService" class="service.TestService" />
+    <bean id="testRepository" class="repository.TestRepositoryImpl" />
+<!--    <context:component-scan base-package="controller"></context:component-scan>-->
+<!--    <context:component-scan base-package="service" ></context:component-scan>-->
+<!--    <context:component-scan base-package="repository"></context:component-scan>-->
+<!--    <context:annotation-config />-->
+
+<!--    <mvc:resources mapping="/resources/**" location="/resources/"/>-->
+
+
+    <!--    정적자원 매핑 / 현재 경로 오류오 인해 web.xml에 spring 정적 리스서 설정을 통해 사용하고 있다.&ndash;&gt;-->
 <!--    <mvc:resources mapping="/resources/**" location="/resources/"/>-->
 
     <!-- controller에서 return할때 해당 경로 앞뒤에 붙여질 경로 / JSP부 리졸버 -->
@@ -57,6 +70,6 @@
 
 
 
-
+<!-- HandlerMapping, Controller, ViewResolver, View등의 빈 설정 -->
 </beans>
 
