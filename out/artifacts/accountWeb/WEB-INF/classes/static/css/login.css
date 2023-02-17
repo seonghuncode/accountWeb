@@ -1,0 +1,23 @@
+/* 로그인 CSS */
+.login_input {
+    outline: 1px solid ;
+    width: 90%;
+    padding: 6px;
+    justify-items: center;
+}
+
+.login_function {
+    font-size: 13px;
+    margin-top: 13px;
+    color: #92949F;
+}
+
+.login_btn {
+    margin-top: 70px;
+    width: 85%;
+    text-align: center;
+}
+
+.login_copy{
+    color: #8E929F;
+}

@@ -3,7 +3,7 @@ package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.TestRepository;
+import dao.TestRepository;
 
 @Service
 public class TestService {
@@ -15,9 +15,6 @@ public class TestService {
         String result = testRepository.getList();
         return result;
     }
-
-
-//    public List<TestVo> getList(TestVo testVo);
 
 
 

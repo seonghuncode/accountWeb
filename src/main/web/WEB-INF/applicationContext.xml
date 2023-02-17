@@ -10,37 +10,8 @@
     <context:component-scan base-package="controller">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-<!--    <context:component-scan base-package = "controller"/>-->
-
-<!--    <context:component-scan base-package="controller" use-default-filters="false">-->
-<!--        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />-->
-<!--    </context:component-scan>-->
 
 
-
-
-
-
-
-
-
-
-    <!--
-    JDBC API를 이용하여 DB에 연동을 처리하기 위해서는 데이터베이스로 부터 커넥션을 얻어야 한다. -> 스프링 컨테이너 생성
-    (mysql datasource)
-    -->
-<!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-<!--        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/> &lt;!&ndash; data 소스를 만드는데 mysql을 사용하여 만들 것이다. mariadb = mysql &ndash;&gt;-->
-<!--        <property name="url" value="jdbc:mysql://localhost:3306/accountWeb?useSSL=false@amp;serverTimezone=UTC"/> &lt;!&ndash; 접속 주소 설정 / timezone = utc -> 전세계 표준 시간 &ndash;&gt;-->
-<!--        <property name="username" value="ysh"/>-->
-<!--        <property name="password" value="ysh123"/>-->
-<!--    </bean>-->
-<!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">-->
-<!--        <property name="driverClass" value="org.mariadb.jdbc.Driver"></property>-->
-<!--        <property name="url" value="jdbc:mariadb://localhost:3306/accountWeb"></property>-->
-<!--        <property name="username" value="ysh"></property>-->
-<!--        <property name="password" value="ysh123"></property>-->
-<!--    </bean>-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/account_web"></property>
@@ -49,21 +20,18 @@
     </bean>
 
 
-
     <!-- mybatis SqlSessionFactoryBean : DB의 연결과 SQL의 실행에 대한 모든 것을 가진 객체 / 추후 데이터 저장, 수정, 삭제, 조회시 추가 설정 필요-->
     <!-- sqlSession Factory객체를 만드는 과정 -->
     <!-- 내부적으로 sqlsession을 통해connection을 생성한거나 sqqk을 전달하고 결과를 리턴받는 구조로 작성 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
-        <property name="mapperLocations" value="classpath:/repository/test2Mapper.xml"></property>
-<!--        <property name="mapperLocations" value="resources/static/mappers/test2Mapper.xml"/>-->
+        <property name="mapperLocations" value="classpath:/mybatis/mappers/**/*.xml"></property>
 <!--        <property name="configLocation" value="/resources/config/config.xml"></property>-->
-
     </bean>
 
     <!-- 지정된 패키지의 모든 mybatis관련 어노테이션을 찾아서 처리한다. 자동으로 해당 패키지를 인식하는 방식 -->
 <!--    <mybatis-spring:scan base-package="repository"/>-->
-    <mybatis-spring:scan base-package="repository"/>
+    <mybatis-spring:scan base-package="dao"/>
 
 
     <!-- sqlSession을 사용하기 위한 빈 추가 -->
@@ -72,36 +40,6 @@
     </bean>
 
 
-
-
-
-
-    <!-- Mybatis가 동작할대 Mapper를 인식할 수 있도록 설정 -->
-<!--    <mybatis-spring:scan base-package="mappers" />-->
-
-<!--    &lt;!&ndash; mybatis 설정의 지정된 패키지의 모든 어노테이션을 찾아 설정하는 것을 의미한다. &ndash;&gt;-->
-<!--    <mybatis-spring:scan base-package="org."/>-->
-
-
-
-    <!--    &lt;!&ndash; test &ndash;&gt;-->
-<!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-<!--        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>-->
-<!--        <property name="url" value="jdbc:log4jdb:mysql://127.0.0.1:3306/accountWeb?useSSL=false&amp;serverTimezone=UTC"></property>-->
-<!--        <property name="username" value="ysh"></property>-->
-<!--        <property name="password" value="ysh123"></property>-->
-<!--    </bean>-->
-
-<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-<!--        <property name="dataSource" ref="dataSource"></property>-->
-<!--        <property name="configLocation" value="classpath:/mybatis-config.xml"></property>-->
-<!--        <property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>-->
-<!--    </bean>-->
-
-<!--    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactory" destroy-method="clearCache">-->
-<!--        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>-->
-<!--    </bean>-->
-<!--    &lt;!&ndash; test &ndash;&gt;-->
 
 
 

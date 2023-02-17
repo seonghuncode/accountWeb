@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class UsrController {
 
-
-
     @RequestMapping(value = "/")
     public String Main() {
         return "redirect:/usr/loginForm";

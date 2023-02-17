@@ -63,8 +63,9 @@ public class TestController {
         return "thymeleaf/test/test3";
     }
 
-    @RequestMapping("/mybatis/test")
+    @RequestMapping(value ="/mybatis/test", produces = "application/json; charset=utf8")
     @ResponseBody
+    //실제 데이터베이스 에서 mybatis를 통해 데이터 가지고 오는 테스트
     public String Test(TestVo testVo) {
         String result = testService.getList();
         System.out.println(result);

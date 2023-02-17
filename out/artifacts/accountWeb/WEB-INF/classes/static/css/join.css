@@ -1,0 +1,83 @@
+.main_center{
+    display: flex;
+    justify-content: center;  /* 가로 기준 중앙 */
+    flex-direction: column;  /* 세로 기준 중앙 */
+    height:100vh;            /* flex-direction이랑 같이 사용해야 한다. */
+    width:33.3%;               /* 100%를 주면 양쪽 끝에 붙는다. */
+    margin: 0px auto;          /* width비율에 따라 온쪽에 붙지 않고 중앙에 오기 위한 코드 */
+}
+
+.main_outLine{
+    border: 1px solid;
+    border-color: #DEE2E6;
+}
+
+.join_name{
+    text-align:center;
+    margin: 1.75rem;
+    font-weight: 700;
+}
+
+.join_input{   /* input box 길이를지정하는 코드 */
+    width: 85%;
+    flex-direction: column; /* 세로기준 중앙 */
+    margin: 0px auto; /* 왼쪽에 붙지 않고 중앙으로 오도록 하기 위한 코드 */
+
+}
+
+.join_input > div >  input{ /* input box (이름, 비밀번호, 비밀번호 재확인)  */
+    outline: 1px solid black;
+    font-size: 12px;
+    padding: 6px;
+}
+
+.join_input > div > div >  input{ /* input box + 중복확인 버튼 (이메일, 아이디) */
+    outline: 1px solid black;
+    font-size: 12px;
+    padding: 6px;
+}
+
+.join_input > div > div >  button{ /* 중복 확인 버튼 디자인 CSS */
+    font-size: 12px;
+    padding: 6px;
+    margin-left: 5px;
+}
+
+.join_show_select { /* 거래내역 공개 여부 CSS */
+  display: flex;
+}
+
+.join_show_select > div { /* 거래내역 공개 여부 CSS */
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 25px;
+}
+
+.join_select_info{  /* 거래내역 공개 여부 설명에 대한 CSS */
+    font-size: 10px;
+    font-weight: 700;
+    color: red;
+    margin-top: 5px;
+}
+
+.join_btn{  /* 가입하기 버튼 CSS */
+text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.join_btn > button{ /* 가입하기 버튼 CSS */
+    width: 85%;
+    margin-top: 50px;
+}
+
+.login_copy{
+    color: #8E929F;
+}
+
+.form-label{  /* input box의 label에 대한 CSS (이름, 이에일, 아이디, 비밀번호, 비밀번호 재확인)*/
+    font-weight: 700;
+    font-size: 13px;
+}
+
+
