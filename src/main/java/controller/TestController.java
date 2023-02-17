@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.TestService;
-import vo.TestVo;
 
 //@Configuration
 //@ComponentScan({"repository"})
@@ -66,9 +65,9 @@ public class TestController {
     @RequestMapping(value ="/mybatis/test", produces = "application/json; charset=utf8")
     @ResponseBody
     //실제 데이터베이스 에서 mybatis를 통해 데이터 가지고 오는 테스트
-    public String Test(TestVo testVo) {
+    public String Test() {
         String result = testService.getList();
-        System.out.println(result);
+        //System.out.println(result);
         return result;
     }
 }
