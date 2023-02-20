@@ -3,6 +3,8 @@ package controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -22,11 +24,15 @@ public class UsrController {
     }
 
 
+
+
     //로그인 폼 에서 정보가 오면 해당 값에 대해 예외처리 및 결과 값 코드 작성 + 성공시 세션 설정
-    @RequestMapping(value = "/usr/loginFn", produces = "application/json; charset=utf8")
+    @RequestMapping(value = "/usr/loginFn", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public String doLogin(String loginId, String loginPw) {
+    public String doLogin(@RequestParam(value = "loginId", required=false) String loginId, @RequestParam(value = "loginPw", required=false) String loginPw) {
         String result = "id : " + loginId + "pw : " +  loginPw;
+        System.out.println("result입니다.");
+        System.out.println(result);
         return  result;
     }
 

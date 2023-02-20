@@ -1,28 +1,19 @@
-
-$("#loginBtn").on("click", function () {
-    var formData = $("form").serialize();
-
-    $.ajax({
-        url: "/employeeRegistExecute",
-        async: false,
-        type: "post",
-        data: JSON.stringify(formData),
-        //contentType: "application/json; charset=UTF-8",
-        contentType: 'application/json',
-        //enctype: 'multipart/form-data',
-        //processData: false,
-        //contentType: false,
-        //cache: false,
-        success: function (result) {
-            console.log(result);
-
-
-        },
-        error: function (a, b, c, d) {
-            console.log("errorA:" + a);
-            console.log("errorB:" + b);
-            console.log("errorC:" + c);
-            console.log("errorD:" + d);
-        }
-    });
-});
+//
+// $("#loginBtn").on("click", function () {
+//     var formData = $("form").serialize();
+//
+//     $.ajax({
+//         url: "/usr/joinFn",
+//         async: false,
+//         type: "post",
+//         data: JSON.stringify(formData),
+//         contentType: 'application/json; charset=utf-8',
+//         data: JSON.stringify(userInfo),
+//         success: function (result) {
+//             console.log("success");
+//         },
+//         error: function (error) {
+//             console.log("error");
+//         }
+//     });
+// });
