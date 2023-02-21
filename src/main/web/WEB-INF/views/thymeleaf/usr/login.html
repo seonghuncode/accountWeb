@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!--GET http://localhost:8080/favicon.ico 404오류 해결에 대한 코드 -->
+    <link rel="shortcut icon" href="#">
     <meta charset="UTF-8">
     <!-- tailwind 사용 -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +38,7 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-outline-primary login_btn" id="tt" >로그인</button>
+            <button type="submit" class="btn btn-outline-primary login_btn" id="try-login" >로그인</button>
         </div>
         <div class="text-center my-9">
             <span class="login_copy">&copy;seonghun.</span>
@@ -49,32 +51,32 @@
 <!-- JQuery를 통한 ajax방식-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-    $("#tt").click(function() {
+    $("#try-login").click(function() {
         //alert("click");
 
-        var info = {
-            loginId : $("#loginId").val(),
-            loginPw : $("#loginPw").val()
+        let info = {
+            "userId" : $("#loginId").val(),
+            "password" : $("#loginPw").val()
         };
+
+
         console.log(info);
         $.ajax({
             url : "/usr/loginFn",
-            data : info,
+            data: info, //data: info, JSON.stringify(info)
             type : "post",
-            dataType : "text",
+            dataType : "html",   //dataType : "html", "json", "text"
             async : true,  //비동기
             success : function(response) {
                 alert("success");
                 console.log(response)
+                console.log("return입니다" + response);
 
-
-                
-                let f = document.createElement('form');
-                f.setAttribute('method', 'post');
-                f.setAttribute('action', '/usr/loginFn');
-                document.body.appendChild(f);
-                f.submit();
-
+                // let f = document.createElement('form');
+                // f.setAttribute('method', 'post');
+                // f.setAttribute('action', '/usr/loginFn');
+                // document.body.appendChild(f);
+                // f.submit();
 
             },
             error : function() {
@@ -84,40 +86,6 @@
     });
 </script>
 
-
-
-<!--<script>-->
-<!--    $(function(){-->
-<!--        $('#tt').on("click",function () {-->
-
-<!--            var form1 = $("#form").serialize();-->
-<!--            console.log("ajax부분")-->
-<!--            console.log(form1);-->
-
-<!--            var info = {"loginId" : loginId, "loginPw" : loginPw};-->
-
-<!--            $.ajax({-->
-<!--                type: 'post',-->
-<!--                url: "http://localhost:8080/usr/loginFn",-->
-<!--                data: info,-->
-<!--                // dataType: 'json',-->
-<!--                dataType: "html",-->
-<!--                success: function (data) {-->
-<!--                    alert("success");-->
-<!--                    console.log(data);-->
-<!--                     // location.href = "/usr/loginFn";-->
-<!--                    location.replace("/usr/loginFn");-->
-<!--                    // window.location.href = "/usr/loginFn";-->
-<!--                },-->
-<!--                error: function (request, status, error) {-->
-<!--                    console.log("전송에 문제가 있습니다. 값을 입력해 주세요.")-->
-<!--                    console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);-->
-
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 
 
 

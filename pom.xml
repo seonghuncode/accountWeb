@@ -130,6 +130,40 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Spring Security를 위한 의존성 주입(사용하고 있는 스프링 버전에 맞춰 주입, 아래 버전은 서로 동일하게) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.0.19.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.0.19.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.0.19.RELEASE</version>
+        </dependency>
+
+        <!-- 선택 사항(편의 부분-jsp에서 스프링 시큐리티 관련 태그 라이브러리를 사용하기 위해 필요) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>5.0.19.RELEASE</version>
+        </dependency>
+
+        <!-- controller에서 json으로 값을 return하기 위해 필요한 라이브러리-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.4</version>
+        </dependency>
+
+
 
 
     </dependencies>

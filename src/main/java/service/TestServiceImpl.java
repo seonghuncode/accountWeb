@@ -12,8 +12,6 @@ public class TestServiceImpl implements TestService {
     private TestRepository testRepository;
 
 
-
-
     public String getList(){
         String result = testRepository.getList();
         return result;
