@@ -40,7 +40,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="userId" class="form-label">아이디</label>
-                    <div style="display: flex">
+                    <div style="display: flex" >
                         <input type="text" class="form-control" id="userId"
                                placeholder="아이디를 입력해 주새요.(조건 : 6자리 이상)">
                         <button type="submit" class="btn btn-outline-primary col-auto">중복확인</button>
@@ -91,10 +91,26 @@
 <!-- JQuery를 통한 ajax방식-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
+
+    // function getData() {
+    //     return {
+    //         name : $("#name").val(),
+    //         email : $("#email").val(),
+    //         userId : $("#userId").val(),
+    //         userPw1 : $("#userPw1").val(),
+    //         userPw2 : $("#userPw2").val(),
+    //         view_yn : $('input:radio[name=select]:checked').val()
+    //     }
+    // }
+
+
+
+
     $("#try-join").click(function() {
         //alert("click");
+        //let data = getData();
 
-        var info = {
+        let info = {
             name : $("#name").val(),
             email : $("#email").val(),
             userId : $("#userId").val(),
@@ -102,16 +118,17 @@
             userPw2 : $("#userPw2").val(),
             view_yn : $('input:radio[name=select]:checked').val()
         };
-        console.log(info);
+
+
         $.ajax({
             url : "/usr/joinFn",
-            data : JSON.stringify(info),  //data: info,
-            type : "post",
-            dataType : "json",   //dataType : "html",
-            async : true,  //비동기
-            success : function(resposnse) {
+            data : info,  //data: info,
+            method : "post",
+            dataType : "html",   //dataType : "html",
+       //     contentType : "application/json; charset=UTF-8",
+            success : function(res) {
                 alert("success");
-                console.log(resposnse)
+                console.log("controller에서 받은 데이터 ==>  " + res)
 
                 // let f = document.createElement('form');
                 // f.setAttribute('method', 'post');
