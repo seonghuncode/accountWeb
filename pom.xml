@@ -97,12 +97,12 @@
             <version>2.0.3</version>
         </dependency>
 
-<!--        &lt;!&ndash; sql파라미터는 jdbc처럼 ?로 처리 되기 때문에 sql로그를 제대로 보여주기 위한 의존성 라이브러리 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.bgee.log4jdbc-log4j2</groupId>-->
-<!--            <artifactId>log4jdbc-log4j2-jdbc4</artifactId>-->
-<!--            <version>1.16</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; sql파라미터는 jdbc처럼 ?로 처리 되기 때문에 sql로그를 제대로 보여주기 위한 의존성 라이브러리 &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.bgee.log4jdbc-log4j2</groupId>-->
+        <!--            <artifactId>log4jdbc-log4j2-jdbc4</artifactId>-->
+        <!--            <version>1.16</version>-->
+        <!--        </dependency>-->
 
         <!-- DB연동 -->
 

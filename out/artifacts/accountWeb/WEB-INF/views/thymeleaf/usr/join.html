@@ -18,7 +18,6 @@
     <div class="main_center">
         <div class="main_outLine">
 
-
             <div class="join_name">
                 <div style="font-size: 1.125rem; line-height:1.75rem;">지출관리 웹</div>
                 <div style="font-size: 1.5rem; line-height: 2rem;">회원가입</div>
@@ -33,7 +32,7 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">이메일</label>
                     <div style="display: flex">
-                        <input type="email" class="form-control" id="email"
+                        <input type="email" class="form-control" id="email" name="email"
                                placeholder="이메일을 입력해 주세요.">
                         <button type="submit" class="btn btn-outline-primary col-auto">중복확인</button>
                     </div>
@@ -87,62 +86,10 @@
     </div>
 </div>
 
-
-<!-- JQuery를 통한 ajax방식-->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-
-    // function getData() {
-    //     return {
-    //         name : $("#name").val(),
-    //         email : $("#email").val(),
-    //         userId : $("#userId").val(),
-    //         userPw1 : $("#userPw1").val(),
-    //         userPw2 : $("#userPw2").val(),
-    //         view_yn : $('input:radio[name=select]:checked').val()
-    //     }
-    // }
+<script src="/resources/static/js/joinAjax.js"></script>
 
 
-
-
-    $("#try-join").click(function() {
-        //alert("click");
-        //let data = getData();
-
-        let info = {
-            name : $("#name").val(),
-            email : $("#email").val(),
-            userId : $("#userId").val(),
-            userPw1 : $("#userPw1").val(),
-            userPw2 : $("#userPw2").val(),
-            view_yn : $('input:radio[name=select]:checked').val()
-        };
-
-
-        $.ajax({
-            url : "/usr/joinFn",
-            data : info,  //data: info,
-            method : "post",
-            dataType : "html",   //dataType : "html",
-       //     contentType : "application/json; charset=UTF-8",
-            success : function(res) {
-                alert("success");
-                console.log("controller에서 받은 데이터 ==>  " + res)
-
-                // let f = document.createElement('form');
-                // f.setAttribute('method', 'post');
-                // f.setAttribute('action', '/usr/loginFn');
-                // document.body.appendChild(f);
-                // f.submit();
-
-            },
-            error : function() {
-                alert("error")
-            }
-        });
-    });
-</script>
 
 
 </body>

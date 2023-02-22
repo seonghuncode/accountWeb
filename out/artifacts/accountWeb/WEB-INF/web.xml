@@ -14,6 +14,9 @@
         <param-value>/**/WEB-INF/applicationContext.xml</param-value> <!-- 공유하는 bean설정 -->
     </context-param>
 
+
+
+
     <!-- Controller가 공유하는 Bean들을 포함하는 Spring Container를 생성한다 -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -57,6 +60,8 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.css</url-pattern>
     </servlet-mapping>
+
+
 
 <!--    &lt;!&ndash; 스프링 Security 필터 &ndash;&gt;-->
 <!--    &lt;!&ndash; 사용자가 요청을 할때마다 권한 인증이 이루어 져야한다 -> 모든 url(/*)요청을 해당 필터가 먼저 가로챈다 &ndash;&gt;-->
