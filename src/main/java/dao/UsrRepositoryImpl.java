@@ -13,9 +13,11 @@ public class UsrRepositoryImpl implements  UsrRepository {
 
     @Override
     public UsrDto getMemberByLoginId(String userId){
-
         return  sqlSession.selectOne("repository.TestRepositoryImpl.getList");
-
-
     }
+
+    public String getCheckExistEmail(String email){
+        return sqlSession.selectOne("dao.TestRepositoryImpl.getCheckExistEmail", email);
+    }
+
 }

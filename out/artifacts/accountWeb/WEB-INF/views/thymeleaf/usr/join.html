@@ -28,39 +28,44 @@
                     <label for="name" class="form-label">이름</label>
                     <input type="text" class="form-control" id="name"
                            placeholder="이름을 입력해 주세요.(10글자 이내)">
+                    <div id="validName" class="validError"></div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">이메일</label>
                     <div style="display: flex">
                         <input type="email" class="form-control" id="email" name="email"
                                placeholder="이메일을 입력해 주세요.">
-                        <button type="submit" class="btn btn-outline-primary col-auto">중복확인</button>
+                        <button type="submit" class="btn btn-outline-primary col-auto" id="emailDuplication">중복확인</button> <br/>
                     </div>
+                    <div id="validEmail" class="validError"></div>
                 </div>
                 <div class="mb-3">
                     <label for="userId" class="form-label">아이디</label>
-                    <div style="display: flex" >
+                    <div style="display: flex">
                         <input type="text" class="form-control" id="userId"
                                placeholder="아이디를 입력해 주새요.(조건 : 6자리 이상)">
-                        <button type="submit" class="btn btn-outline-primary col-auto">중복확인</button>
+                        <button type="submit" class="btn btn-outline-primary col-auto" id="userIdDuplication">중복확인</button>
                     </div>
+                    <div id="validUserId" class="validError"></div>
                 </div>
                 <div class="mb-3">
                     <label for="userPw1" class="form-label">비밀번호</label>
                     <input type="password" class="form-control" id="userPw1"
-                           placeholder="비밀번호를 입력해 주세요.(조건 : 영문과 특수문자 포함 8자 이상)">
+                           placeholder="비밀번호를 입력해 주세요.(조건 : 숫자,문자,특수문자 포함 8자 이상 15자 이하)">
+                    <div id="validPassword1" class="validError"></div>
                 </div>
                 <div class="mb-3">
                     <label for="userPw2" class="form-label">비밀번호 재확인</label>
                     <input type="password" class="form-control" id="userPw2"
-                           placeholder="비밀번호를 입력해 주세요.(조건 : 영문과 특수문자 포함 8자 이상)">
+                           placeholder="비밀번호를 입력해 주세요.(조건 : 숫자,문자,특수문자 포함 8자 이상 15자 이하)">
+                    <div id="validPassword2" class="validError"></div>
                 </div>
                 <div>
                     <div class="join_show_select">
                         <div>거래 내역 공개 여부(기본값 : 공개)</div>
                         <div>
-                            <input type="radio" name="select" value="yes" checked >예
-                            <input type="radio" name="select" value="no" >아니요
+                            <input type="radio" name="select" value="yes" checked>예
+                            <input type="radio" name="select" value="no">아니요
                         </div>
                     </div>
                     <div class="join_select_info">
@@ -81,15 +86,13 @@
             <div class="text-center my-9">
                 <span class="login_copy">&copy;seonghun.</span>
             </div>
-            
+
         </div>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/resources/static/js/joinAjax.js"></script>
-
-
 
 
 </body>

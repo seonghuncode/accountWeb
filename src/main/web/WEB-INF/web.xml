@@ -60,7 +60,11 @@
         <servlet-name>default</servlet-name>
         <url-pattern>*.css</url-pattern>
     </servlet-mapping>
-
+    <!-- html에서 js파일 경로를 읽어오게 하기 위해서 경로 지정 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
 
 
 <!--    &lt;!&ndash; 스프링 Security 필터 &ndash;&gt;-->

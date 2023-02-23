@@ -27,13 +27,13 @@
 
 .join_input > div >  input{ /* input box (이름, 비밀번호, 비밀번호 재확인)  */
     outline: 1px solid black;
-    font-size: 12px;
+    font-size: 11px;
     padding: 6px;
 }
 
 .join_input > div > div >  input{ /* input box + 중복확인 버튼 (이메일, 아이디) */
     outline: 1px solid black;
-    font-size: 12px;
+    font-size: 11px;
     padding: 6px;
 }
 
@@ -78,6 +78,12 @@ text-align: center;
 .form-label{  /* input box의 label에 대한 CSS (이름, 이에일, 아이디, 비밀번호, 비밀번호 재확인)*/
     font-weight: 700;
     font-size: 13px;
+}
+
+.validError{
+    color: red;
+    font-size: 11px;
+    margin-top: 2px;
 }
 
 
