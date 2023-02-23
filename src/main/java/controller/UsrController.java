@@ -71,13 +71,14 @@ public class UsrController {
                         "view_yn : " + usrDto.getView_yn()
         );
 
-//        if (true) { //이메일 중복확인 버튼을 클릭했을때 실행될 로직
-//
-//        } else if (true) {  //아이디 중복확인 버튼을 클릭했을 경우 실행될 로직
-//
-//        } else {//가입 하기 버튼을 클릭했을때 실행될 로직
-//            return usrService.doCheckJoin(usrDto, bindingResult);
-//        }
+        if (usrDto.getUserId().equals("중복확인")) { //이메일 중복확인 버튼을 클릭했을때 실행될 로직
+            String existEmail = usrService.getCheckExistEmail(usrDto.getEmail());
+            return usrService.doCheckEmail(usrDto, bindingResult, existEmail);
+        } else if (false) {  //아이디 중복확인 버튼을 클릭했을 경우 실행될 로직
+            
+        } else {//가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 나머지 DTO에서 @Valid설정한 유효성 검사)
+            return usrService.doCheckJoin(usrDto, bindingResult);
+        }
         return usrService.doCheckJoin(usrDto, bindingResult);
 
 //        //비밀번호 일치 검사

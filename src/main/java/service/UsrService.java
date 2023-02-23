@@ -13,4 +13,6 @@ public interface UsrService {
     public String getCheckExistEmail(String email);
 
     public Map<String, Object> doCheckJoin(UsrDto usrDto, BindingResult bindingResult);
+
+    public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult, String existEmail);
 }
