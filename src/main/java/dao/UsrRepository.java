@@ -10,4 +10,6 @@ public interface UsrRepository {
     public String getCheckExistEmail(String email);
 
     public String getCheckExistUserId(String userId);
+
+    public void join(UsrDto usrDto);
 }

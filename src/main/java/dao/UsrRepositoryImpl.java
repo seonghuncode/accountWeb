@@ -24,4 +24,6 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return sqlSession.selectOne("dao.UsrRepositoryImpl.getCheckExistUserId", userId);
     }
 
+    public void join(UsrDto usrDto){};
+
 }

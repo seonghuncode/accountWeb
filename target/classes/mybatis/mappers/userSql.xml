@@ -17,6 +17,18 @@
         where user_id = #{userId}
     </select>
 
+    <insert id="join" parameterType="dto.UsrDto">
+        insert into `user`
+        set `name` = #{name},
+        email = #{email},
+        user_id = #{userId},
+        `password` = #{password},
+        view_yn = #{view_yn},
+        create_date = now()
+    </insert>
+
+
+
 </mapper>
 
 

@@ -77,14 +77,14 @@ public class UsrController {
             return usrService.doCheckEmail(usrDto, bindingResult, existEmail);
         } else if (usrDto.getEmail().equals("중복확인")) {  //아이디 중복확인 버튼을 클릭했을 경우 실행될 로직
             return usrService.doCheckUserId(usrDto, bindingResult);
-        } else {//가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 나머지 DTO에서 @Valid설정한 유효성 검사)
+        } else {//가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 이메일 중복, 아이디 중복, 나머지 DTO에서 @Valid설정한 유효성 검사) / 성공 상황
             return usrService.doCheckJoin(usrDto, bindingResult);
         }
-        //return usrService.doCheckJoin(usrDto, bindingResult);
-
-
-
     }
 
 
+
+
+
+    
 }

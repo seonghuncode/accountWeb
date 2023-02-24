@@ -30,10 +30,10 @@ public class UsrDto {
     private String userId;
 
     @Length(min = 8,max = 15, message = "비밀번호는 숫자,문자,특수문자를 한자리 이상 포함한 8 ~ 15자리로 입력해 주세요.")
-    private String password;
+    private String password;  //실제 DB에 저장할 비밀번호
 
     @Length(min = 8,max = 15, message = "비밀번호는 숫자,문자,특수문자를 한자리 이상 포함한 8 ~ 15자리로 입력해 주세요.")
-    private String checkPassword;
+    private String checkPassword;  //비교만 하기 위한 변수
 
     private String view_yn;
 

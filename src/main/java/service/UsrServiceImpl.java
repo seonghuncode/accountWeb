@@ -4,6 +4,7 @@ package service;
 import dao.UsrRepository;
 import dto.UsrDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,6 +19,8 @@ public class UsrServiceImpl implements UsrService {
 
     @Autowired
     private UsrRepository usrRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UsrDto getMemberByLoginId(String userId) {
         UsrDto result = usrRepository.getMemberByLoginId(userId);
@@ -36,8 +39,19 @@ public class UsrServiceImpl implements UsrService {
         return result;
     }
 
+    //회원가입을 진행하는 로직
+    public void doJoin(UsrDto usrDto) {
+        String encoderPassword = passwordEncoder.encode(usrDto.getPassword()); //비밀번호 암호화
+//        System.out.println("암호화된 비밀번호");
+//        System.out.println(encoderPassword);
+        usrDto.setPassword(encoderPassword); //기존 비밀번호를 암호화 비밀번호로 변경
+//        System.out.println("usrDto 보기");
+//        System.out.println(usrDto);
+        usrRepository.join(usrDto); //비밀번호 저장
+    }
+
     //유효성 검사를 하고 존재하는 에러를 모두 bindingResult에 넣어 주고 에러가 없을 경우 성공 메세지를 return하도록 하는 중복 로직 함수
-    public Map<String, Object> errorProcess(BindingResult bindingResult){
+    public Map<String, Object> errorProcess(BindingResult bindingResult, UsrDto usrDto) {
         //오류값을 createResult에 넣어 주기 위한 로직
         Map<String, Object> createResult = new HashMap<>();
 
@@ -50,9 +64,11 @@ public class UsrServiceImpl implements UsrService {
                 createResult.put(error.getField(), error.getDefaultMessage());
             }
         } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
-            createResult.put("suceess", 200);
+            //회원가입 진행 로직(비밀번호 암호화 저장)
+            doJoin(usrDto); //비밀번호 저장
+            createResult.put("success", 200);
         }
-        return  createResult;
+        return createResult;
     }
 
     //가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 나머지 DTO에서 @Valid설정한 유효성 검사)
@@ -72,16 +88,16 @@ public class UsrServiceImpl implements UsrService {
         }
 
         //이메일 중복 여부 체크(중복되는 값이 존재 하지 않을 경우는 이메일 형식 여부만 판별)
-        if(getCheckExistEmail(usrDto.getEmail()) != null){
+        if (getCheckExistEmail(usrDto.getEmail()) != null) {
             bindingResult.addError(new FieldError("usrDto", "email", "해당 이메일은 이미 존재하는 이메일 입니다."));
         }
         //가입시에도 기존 조건 외에 중복 여부 확인 (조건 : 입력?, 자릿수, 중복확인)
-        if(getCheckExistUserId(usrDto.getUserId()) != null){
+        if (getCheckExistUserId(usrDto.getUserId()) != null) {
             bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 이미 존재하는 아이디 입니다."));
         }
 
         //에러들을 모두 bindingResult에 담아주는 함수
-        Map<String, Object> createResult = errorProcess(bindingResult);
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
 
 //        System.out.println("createResult");
 //        System.out.println(createResult);
@@ -90,7 +106,7 @@ public class UsrServiceImpl implements UsrService {
     }
 
     //이메일 중복확인 버튼을 클릭했을때 실행될 로직
-    public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult,String existEmail) {
+    public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult, String existEmail) {
         //이메일 중복 검사
 //        String existEmail = usrService.getCheckExistEmail(usrDto.getEmail());
         //name에 값을 넣는 이유 : ajax에서 name은 이메일 중복 여부로 사용, email은 형식이 맞는지 확인하는 용도로 사용
@@ -98,12 +114,12 @@ public class UsrServiceImpl implements UsrService {
             System.out.println("existEmail 실행");
             System.out.println(existEmail);
             bindingResult.addError(new FieldError("usrDto", "name", "해당 이메일은 이미 존재하는 이메일 입니다."));
-        }else{
+        } else {
             bindingResult.addError(new FieldError("usrDto", "name", "해당 이메일은 사용 가능 합니다."));
         }
 
         //에러들을 모두 bindingResult에 담아주는 함수
-        Map<String, Object> createResult = errorProcess(bindingResult);
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
 
 //        System.out.println("createResult");
 //        System.out.println(createResult);
@@ -111,15 +127,15 @@ public class UsrServiceImpl implements UsrService {
     }
 
     //아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직
-    public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult){
+    public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult) {
         String existUserId = getCheckExistUserId(usrDto.getUserId());
 
-        if(existUserId != null){
+        if (existUserId != null) {
             bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 이미 존재하는 아이디 입니다."));
-        }else{
+        } else {
             bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 사용 가능 합니다"));
         }
-        Map<String, Object> createResult = errorProcess(bindingResult);
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
         return createResult;
     }
 

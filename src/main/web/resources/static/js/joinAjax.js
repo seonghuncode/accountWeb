@@ -206,14 +206,18 @@ $("#try-join").click(function () {
         dataType: "json",   //dataType : "html",
         contentType: "application/json; charset=utf-8",
         success: function (res) {
-            alert("success");
+            //alert("success");
             console.log("controller에서 받은 데이터 ==>  ")
             console.log(res);
 
 
             if (res['success'] === 200) {
-                alert('회원가입이 완료 되었습니다. \n 로그인 페이지로 이동 합니다.');
-                location.href = '/usr/loginForm';
+                //alert('회원가입이 완료 되었습니다.\n 로그인 페이지로 이동 합니다.');
+                swal('로그인 성공!',$("#name").val()+"님 로그인 되었습니다.",'success')
+                    .then(function(){
+                        location.href = '/usr/loginForm';
+                    })
+                //location.href = '/usr/loginForm';
             } else {
                 validation(res);
             }
