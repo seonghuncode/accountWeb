@@ -21,16 +21,26 @@ $("#emailDuplication").click(function () {
     function validation(res) {
 
         if (res.email) {   //이메일 형식 체크
+            //실패시 input 테두리를 red로 지정하기 위한 코드
+            const inputLineColor = document.getElementById("email");
+            inputLineColor.style.outline = "1px solid red";
             $('#validEmail').html(res.email);
         } else if (res.name) {  //이메일 중복 여부 체크
             if (res.name === "해당 이메일은 사용 가능 합니다.") {  //사용 가능할 경우 폰튼 색을 파란색으로 지정
                 const changeCss = document.getElementById("validEmail");
                 changeCss.style.color = 'blue';
                 $('#validEmail').html(res.name);
+                //실패시 input 테두리를 red로 지정했기 때문에 해결시 다시 black으로 되돌리기 위한 코드
+                const inputLineColor = document.getElementById("email");
+                inputLineColor.style.outline = "1px solid black";
+
             } else { //중복의 경우 빨간색으로 다시 변경
                 const changeCss = document.getElementById("validEmail");
                 changeCss.style.color = 'red';
                 $('#validEmail').html(res.name);
+                //실패시 input 테두리를 red로 지정하기 위한 코드
+                const inputLineColor = document.getElementById("email");
+                inputLineColor.style.outline = "1px solid red";
             }
         } else { //이메일 중복 여부 체크
             $('#validEmail').html("");
@@ -39,6 +49,9 @@ $("#emailDuplication").click(function () {
     }
 
     if ($("#email").val() === "") {
+        //실패시 input 테두리를 red로 지정하기 위한 코드
+        const inputLineColor = document.getElementById("email");
+        inputLineColor.style.outline = "1px solid red";
         $('#validEmail').html("중복 확인을 위해 이메일을 입력해 주세요.");
     } else {
 
@@ -64,7 +77,6 @@ $("#emailDuplication").click(function () {
 //--------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
 //아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직-------------------------------------------------------------------------------------------
 $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭했을 경우 실행
 
@@ -75,22 +87,40 @@ $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭�
 
     function validation(res) {
 
-       if(res.userId){
-           if(res.userId === "해당 아이디는 사용 가능 합니다"){
-               const changeCss = document.getElementById("validUserId");
-               changeCss.style.color = 'blue';
-               $('#validUserId').html(res.userId);
-           }else{
-               const changeCss = document.getElementById("validUserId");
-               changeCss.style.color = 'red';
-               $('#validUserId').html(res.userId);
-           }
-       }
+        if (res.userId) {
+            if (res.userId === "해당 아이디는 사용 가능 합니다") {
+                const changeCss = document.getElementById("validUserId");
+                changeCss.style.color = 'blue';
+                $('#validUserId').html(res.userId);
+                //실패시 input 테두리를 red로 지정했기 때문에 다시 black으로 되돌리기 위한 코드
+                const inputLineColor = document.getElementById("userId");
+                inputLineColor.style.outline = "1px solid black";
+            } else {
+                const changeCss = document.getElementById("validUserId");
+                changeCss.style.color = 'red';
+                $('#validUserId').html(res.userId);
+                //실패시 input 테두리를 red로 지정하기 위한 코드
+                const inputLineColor = document.getElementById("userId");
+                inputLineColor.style.outline = "1px solid red";
+            }
+        }
 
     }
 
-    if ($("#userId").val() === "") {
+    if ($("#userId").val() === "") { //사용자가 아이디를 입력하지 않고 중복확인 버튼 클릭
+        const changeCss = document.getElementById("validUserId");
+        changeCss.style.color = 'red';
+        //실패시 input 테두리를 red로 지정하기 위한 코드
+        const inputLineColor = document.getElementById("userId");
+        inputLineColor.style.outline = "1px solid red";
         $('#validUserId').html("중복 확인을 위해 아이디를 입력해 주세요.");
+    } else if ($("#userId").val().length < 6 || $("#userId").val().length > 10 ) {
+        const changeCss = document.getElementById("validUserId");
+        changeCss.style.color = 'red';
+        //실패시 input 테두리를 red로 지정하기 위한 코드
+        const inputLineColor = document.getElementById("userId");
+        inputLineColor.style.outline = "1px solid red";
+        $('#validUserId').html("아이디는 6자리 ~ 10자리 이하로 입력해 주세요.");
     } else {
 
         $.ajax({
@@ -113,10 +143,6 @@ $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭�
     }
 })
 //--------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
 
 
 //회원가입 버튼을 클릭했을때 로직-------------------------------------------------------------------------------------------------------------

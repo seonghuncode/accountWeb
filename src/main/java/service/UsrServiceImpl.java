@@ -75,6 +75,10 @@ public class UsrServiceImpl implements UsrService {
         if(getCheckExistEmail(usrDto.getEmail()) != null){
             bindingResult.addError(new FieldError("usrDto", "email", "해당 이메일은 이미 존재하는 이메일 입니다."));
         }
+        //가입시에도 기존 조건 외에 중복 여부 확인 (조건 : 입력?, 자릿수, 중복확인)
+        if(getCheckExistUserId(usrDto.getUserId()) != null){
+            bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 이미 존재하는 아이디 입니다."));
+        }
 
         //에러들을 모두 bindingResult에 담아주는 함수
         Map<String, Object> createResult = errorProcess(bindingResult);
