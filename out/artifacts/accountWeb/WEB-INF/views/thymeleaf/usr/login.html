@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!-- JQuery를 통한 ajax방식-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <!--GET http://localhost:8080/favicon.ico 404오류 해결에 대한 코드 -->
     <link rel="shortcut icon" href="#">
     <meta charset="UTF-8">
@@ -38,7 +40,7 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-outline-primary login_btn" id="try-login" >로그인</button>
+            <button type="submit" class="btn btn-outline-primary login_btn" id="try-login">로그인</button>
         </div>
         <div class="text-center my-9">
             <span class="login_copy">&copy;seonghun.</span>
@@ -48,52 +50,8 @@
 
 <!--</form>-->
 
-<!-- JQuery를 통한 ajax방식-->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-    $("#try-login").click(function() {
-        //alert("click");
-
-        let info = {
-            "userId" : $("#loginId").val(),
-            "password" : $("#loginPw").val()
-        };
-
-
-        console.log(info);
-        $.ajax({
-            url : "/usr/loginFn",
-            data: info, //data: info, JSON.stringify(info)
-            type : "post",
-            dataType : "html",   //dataType : "html", "json", "text"
-            async : true,  //비동기
-            success : function() {
-                alert("success");
-                //console.log(response)
-                //console.log("return입니다" + response);
-
-                // let f = document.createElement('form');
-                // f.setAttribute('method', 'post');
-                // f.setAttribute('action', '/usr/loginFn');
-                // document.body.appendChild(f);
-                // f.submit();
-
-            },
-            error : function() {
-                alert("error")
-            }
-        });
-    });
-</script>
-
-
-
-
-
-
-
-
-
+//login폼 에서 값들을 controller로 보내고 다시 return받아서 처리하는 로직(ajax)
+<script src="/resources/static/js/loginAjax.js"></script>
 
 
 </body>

@@ -26,4 +26,8 @@ public class UsrRepositoryImpl implements  UsrRepository {
 
     public void join(UsrDto usrDto){};
 
+    public String getUserPassword(String userId){
+        return  sqlSession.selectOne("dao.UsrRepositoryImpl.getUserPassword", userId);
+    }
+
 }

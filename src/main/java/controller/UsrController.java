@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import service.UsrService;
 
 import java.util.Map;
@@ -35,15 +38,17 @@ public class UsrController {
     //로그인 폼에서 사용자가 입력한 value값에 대해 성공, 실패 로직을 처리하는 controller
     @RequestMapping(value = "/usr/loginFn", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public String doLogin(@RequestParam Map<String, Object> map) {
-        String result = "id : " + map.get("userId") + "pw : " + map.get("password");
-//        System.out.println("map : " + map.get("userId"));
-        System.out.println("result입니다.");
-        System.out.println(result);
-        System.out.println(map.toString());
+    public Map<String, Object> doLogin(@RequestBody UsrDto usrDto, BindingResult bindingResult) {
+        System.out.println("로그인 화면에서 넘겨 받은 값");
+        System.out.println("아이디 : " + usrDto.getUserId()+ "비밀번호" + usrDto.getPassword());
 
+        System.out.println("==============");
+        System.out.println("로그인 로직 return값");
+        System.out.println(usrService.doCheckLogin(usrDto, bindingResult));
+        System.out.println("==============");
 
-        return map.toString();
+       
+        return  usrService.doCheckLogin(usrDto, bindingResult);
     }
 
 
@@ -86,5 +91,5 @@ public class UsrController {
 
 
 
-    
+
 }

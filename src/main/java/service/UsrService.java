@@ -17,4 +17,6 @@ public interface UsrService {
     public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult, String existEmail);
 
     public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult);
+    
+    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult);  //로그인 하는 로직
 }

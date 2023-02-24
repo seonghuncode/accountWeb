@@ -51,7 +51,9 @@ public class UsrServiceImpl implements UsrService {
     }
 
     //유효성 검사를 하고 존재하는 에러를 모두 bindingResult에 넣어 주고 에러가 없을 경우 성공 메세지를 return하도록 하는 중복 로직 함수
-    public Map<String, Object> errorProcess(BindingResult bindingResult, UsrDto usrDto) {
+    //매개변수로 String successFn 받는이유 : 에러를 모아주는 기능은 로그인과 회원가입에서 사용하는데 로그인 요청에서 에러가 없으면 로그인 기능을 수행하고
+    //회원가입 요청에서 에러가 없을 경우 회원가입 기능이 실행되도록 어떠한 요청인지 구분하기 위한 매개변수
+    public Map<String, Object> errorProcess(BindingResult bindingResult, UsrDto usrDto, String successFn) {
         //오류값을 createResult에 넣어 주기 위한 로직
         Map<String, Object> createResult = new HashMap<>();
 
@@ -64,8 +66,13 @@ public class UsrServiceImpl implements UsrService {
                 createResult.put(error.getField(), error.getDefaultMessage());
             }
         } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
-            //회원가입 진행 로직(비밀번호 암호화 저장)
-            doJoin(usrDto); //비밀번호 저장
+
+            if(successFn == "join"){
+                //회원가입 진행 로직(비밀번호 암호화 저장)
+                doJoin(usrDto); //비밀번호 저장
+            }else if(successFn == "login"){
+                doLogin(usrDto);
+            }
             createResult.put("success", 200);
         }
         return createResult;
@@ -97,7 +104,8 @@ public class UsrServiceImpl implements UsrService {
         }
 
         //에러들을 모두 bindingResult에 담아주는 함수
-        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
+        String successFn = "join";//회원가입 로직이라는 것을 errorProccess에 알려주기 위한 변수
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto, successFn);
 
 //        System.out.println("createResult");
 //        System.out.println(createResult);
@@ -118,8 +126,10 @@ public class UsrServiceImpl implements UsrService {
             bindingResult.addError(new FieldError("usrDto", "name", "해당 이메일은 사용 가능 합니다."));
         }
 
+
+        String successFn = "join";
         //에러들을 모두 bindingResult에 담아주는 함수
-        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto, successFn);
 
 //        System.out.println("createResult");
 //        System.out.println(createResult);
@@ -135,8 +145,48 @@ public class UsrServiceImpl implements UsrService {
         } else {
             bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 사용 가능 합니다"));
         }
-        Map<String, Object> createResult = errorProcess(bindingResult, usrDto);
+        String successFn = "join";
+        Map<String, Object> createResult = errorProcess(bindingResult, usrDto, successFn);
         return createResult;
+    }
+
+
+    //로그인 진행을 위한 로직(1. 아이디 DB존재 여부, 해당 아이디랑 비밀번호 일치 하는지 확인)
+    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult){
+
+        //현재 사용자가 입력한 아이디가  DB에 존재하지 않거나 존재할 경우 해당 아이디의 비밀번호가 다르면 문제 없다
+        //입력한 아이디와 비밀번호가 일치하는지 비교 불가(평문이 같다고 암호화 까지 같지 않다?? 해독한 상택로 비교해야 한다??)
+
+//        System.out.println("<<<>>>>>>>>");
+//        System.out.println( usrRepository.getUserPassword(usrDto.getUserId()));
+//        System.out.println(passwordEncoder.encode(usrDto.getPassword()));
+//        System.out.println("<<<>>>>>>>>");
+
+        //해당 아이디가 DB에 존재 하는지 확인
+        String existUserId = usrRepository.getCheckExistUserId(usrDto.getUserId());
+//        System.out.println("찾아온 아이디 : " + existUserId);
+        if(existUserId == null){ //해당 아이디가 DB에 존재 하지 않을 경우
+            bindingResult.addError(new FieldError("usrDto", "userId", "아이디 또는 비밀번호가 일치 하지 않습니다."));
+        }else if(existUserId != null){  //해당 아이디가 DB에 존재 한다면 사용자가 입력한 비밀번호가 일치하는지 확인
+            String findPasswordFromDB = usrRepository.getUserPassword(usrDto.getUserId()); //아이디를 파라미터로 넘기면 해당 아이디의 비밀번호를 찾아온다.
+            String encoderPassword = passwordEncoder.encode(usrDto.getPassword()); //사용자가 입력한 비밀번호
+            if((passwordEncoder.matches(usrDto.getPassword(), findPasswordFromDB)) == false){ //사용자가 입력한 아이디의 비밀번호 != 사용자가 입력한 비밀번호
+                bindingResult.addError(new FieldError("usrDto", "password", "아이디 또는 비밀번호가 일치 하지 않습니다."));
+            }
+        }
+
+        String successFn = "login";
+        System.out.println("에러모음");
+        System.out.println( errorProcess(bindingResult, usrDto, successFn));
+
+        //에러만 모아주는 함수를 실행시켜 결과만 리턴
+        return  errorProcess(bindingResult, usrDto, successFn);
+    }
+
+    //doCheckLogin로직에서 유효성 검사를 완료하고 에러가 없을 경우 로그인을 하는 함수
+    public void doLogin(UsrDto usrDto){
+        //로그인 기능 추가, 문구, 세션 확인
+        System.out.println(usrDto.getUserId() + "님 로그인 되었습니다.");
     }
 
 

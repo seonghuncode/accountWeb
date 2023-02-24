@@ -27,6 +27,12 @@
         create_date = now()
     </insert>
 
+    <select id="getUserPassword" parameterType="String" resultType="String">
+        select password
+        from `user`
+        where user_id = #{userId}
+    </select>
+
 
 
 </mapper>
