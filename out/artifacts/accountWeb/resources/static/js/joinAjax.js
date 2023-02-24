@@ -5,16 +5,42 @@
 // <script type="text/javascript">
 
 //이메일 중복 확인 버튼을 클릭했을 경우
-$("#emailDuplication").click(function (){
+$("#emailDuplication").click(function () {
 
     var email = {
         email: $("#email").val(),
         userId: "중복확인"  //중복확인 버튼의 경우
+
+        /*
+        email중복 확인에 email, userId에 "중복 확인"을 넣어 보내는 이유
+        controller에서는 dto에 선언된 변수명으로만 받을 수 있기 때문에 현재 사용하지 않는 userId에 중복확인에 대한 요청이라는 것을 알려주어
+        controller에서 이메일 중복에 해당하는 유효성 검사만 실행 하고 그에 대한 결과만 return해 주도록 예외처리를 하기 위해 같이 보내준다.
+        */
     };
 
-    if($("#email").val() === ""){
-       $('#validEmail').html("중복 확인을 위해 이메일을 입력해 주세요.");
-    }else{
+    function validation(res) {
+
+        if (res.email) {   //이메일 형식 체크
+            $('#validEmail').html(res.email);
+        } else if (res.name) {  //이메일 중복 여부 체크
+            if (res.name === "해당 이메일은 사용 가능 합니다.") {  //사용 가능할 경우 폰튼 색을 파란색으로 지정
+                const changeCss = document.getElementById("validEmail");
+                changeCss.style.color = 'blue';
+                $('#validEmail').html(res.name);
+            } else { //중복의 경우 빨간색으로 다시 변경
+                const changeCss = document.getElementById("validEmail");
+                changeCss.style.color = 'red';
+                $('#validEmail').html(res.name);
+            }
+        } else { //이메일 중복 여부 체크
+            $('#validEmail').html("");
+        }
+
+    }
+
+    if ($("#email").val() === "") {
+        $('#validEmail').html("중복 확인을 위해 이메일을 입력해 주세요.");
+    } else {
 
         $.ajax({
             url: "/usr/joinFn",
@@ -23,30 +49,77 @@ $("#emailDuplication").click(function (){
             dataType: "json",   //dataType : "html",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
-                alert("success");
-                console.log("controller에서 받은 데이터 ==>  ")
-                console.log(res);
-
-
-                if (res['success'] === 200) {
-                    alert('회원가입이 완료 되었습니다. \n 로그인 페이지로 이동 합니다.');
-                    location.href = '/usr/loginForm';
-                } else {
-                    console.log(res)
-                }
-
-
+                // alert("success");
+                // console.log("controller에서 받은 데이터 ==>  ")
+                // console.log(res);
+                validation(res);
             },
             error: function () {
+                console.log("요청 또는 응답에 있어 문제가 발생했습니다.");
                 alert("error")
             }
-
         });
+    }
+})
+
+
+
+
+//아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직
+$("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭했을 경우 실행
+
+    var userId = {
+        userId: $("#userId").val(),
+        email: "중복확인"  //controller에 중복확인 버튼 로직을 실행시킬 것을 알려주기 위해서
+    };
+
+    function validation(res) {
+
+        if (res.email) {   //이메일 형식 체크
+            $('#validEmail').html(res.email);
+        } else if (res.name) {  //이메일 중복 여부 체크
+            if (res.name === "해당 이메일은 사용 가능 합니다.") {  //사용 가능할 경우 폰튼 색을 파란색으로 지정
+                const changeCss = document.getElementById("validEmail");
+                changeCss.style.color = 'blue';
+                $('#validEmail').html(res.name);
+            } else { //중복의 경우 빨간색으로 다시 변경
+                const changeCss = document.getElementById("validEmail");
+                changeCss.style.color = 'red';
+                $('#validEmail').html(res.name);
+            }
+        } else { //이메일 중복 여부 체크
+            $('#validEmail').html("");
+        }
 
     }
 
+    if ($("#email").val() === "") {
+        $('#validEmail').html("중복 확인을 위해 이메일을 입력해 주세요.");
+    } else {
 
+        $.ajax({
+            url: "/usr/joinFn",
+            data: JSON.stringify(email),  //data: info, JSON.stringify(info)
+            method: "post",
+            dataType: "json",   //dataType : "html",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                // alert("success");
+                // console.log("controller에서 받은 데이터 ==>  ")
+                // console.log(res);
+                validation(res);
+            },
+            error: function () {
+                console.log("요청 또는 응답에 있어 문제가 발생했습니다.");
+                alert("error")
+            }
+        });
+    }
 })
+
+
+
+
 
 
 
@@ -67,27 +140,27 @@ $("#try-join").click(function () {
             $('#validName').html("");
         }
 
-        if(res.email){
+        if (res.email) {
             $('#validEmail').html(res.email);
-        }else{
+        } else {
             $('#validEmail').html("");
         }
 
-        if(res.userId){
+        if (res.userId) {
             $('#validUserId').html(res.userId);
-        }else{
+        } else {
             $('#validUserId').html("");
         }
 
-        if(res.password){
+        if (res.password) {
             $('#validPassword1').html(res.password);
-        }else{
+        } else {
             $('#validPassword1').html("");
         }
 
-        if(res.checkPassword){
+        if (res.checkPassword) {
             $('#validPassword2').html(res.checkPassword);
-        }else{
+        } else {
             $('#validPassword2').html("");
         }
 

@@ -29,6 +29,25 @@ public class UsrServiceImpl implements UsrService {
         return result;
     }
 
+    //유효성 검사를 하고 존재하는 에러를 모두 bindingResult에 넣어 주고 에러가 없을 경우 성공 메세지를 return하도록 하는 중복 로직 함수
+    public Map<String, Object> errorProcess(BindingResult bindingResult){
+        //오류값을 createResult에 넣어 주기 위한 로직
+        Map<String, Object> createResult = new HashMap<>();
+
+        if (bindingResult.hasErrors()) {   // 파라미터(UsrDTO 등록 폼에서의 입력값)에 대한 유효성 검사 메세지가 있는 경우
+            //에러를 가지고 와서 list에 넣는다(해당 필드에 있는 메세지를 담아오겠다.)
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+//            System.out.println("allErrors");
+//            System.out.println(allErrors);
+            for (FieldError error : allErrors) {  //필드 에러만큼 반복문을 돌린다.
+                createResult.put(error.getField(), error.getDefaultMessage());
+            }
+        } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
+            createResult.put("suceess", 200);
+        }
+        return  createResult;
+    }
+
     //가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 나머지 DTO에서 @Valid설정한 유효성 검사)
     public Map<String, Object> doCheckJoin(UsrDto usrDto, BindingResult bindingResult) {
         //비밀번호 일치 검사
@@ -45,22 +64,16 @@ public class UsrServiceImpl implements UsrService {
             }
         }
 
-        //오류값을 createResult에 넣어 주기 위한 로직
-        Map<String, Object> createResult = new HashMap<>();
-
-        if (bindingResult.hasErrors()) {   // 파라미터(UsrDTO 등록 폼에서의 입력값)에 대한 유효성 검사 메세지가 있는 경우
-            //에러를 가지고 와서 list에 넣는다(해당 필드에 있는 메세지를 담아오겠다.)
-            List<FieldError> allErrors = bindingResult.getFieldErrors();
-//            System.out.println("allErrors");
-//            System.out.println(allErrors);
-            for (FieldError error : allErrors) {  //필드 에러만큼 반복문을 돌린다.
-                createResult.put(error.getField(), error.getDefaultMessage());
-            }
-        } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
-            createResult.put("suceess", 200);
+        //이메일 중복 여부 체크(중복되는 값이 존재 하지 않을 경우는 이메일 형식 여부만 판별)
+        if(getCheckExistEmail(usrDto.getEmail()) != null){
+            bindingResult.addError(new FieldError("usrDto", "email", "해당 이메일은 이미 존재하는 이메일 입니다."));
         }
-        System.out.println("createResult");
-        System.out.println(createResult);
+
+        //에러들을 모두 bindingResult에 담아주는 함수
+        Map<String, Object> createResult = errorProcess(bindingResult);
+
+//        System.out.println("createResult");
+//        System.out.println(createResult);
         return createResult;
 
     }
@@ -77,22 +90,12 @@ public class UsrServiceImpl implements UsrService {
         }else{
             bindingResult.addError(new FieldError("usrDto", "name", "해당 이메일은 사용 가능 합니다."));
         }
-        //오류값을 createResult에 넣어 주기 위한 로직
-        Map<String, Object> createResult = new HashMap<>();
 
-        if (bindingResult.hasErrors()) {   // 파라미터(UsrDTO 등록 폼에서의 입력값)에 대한 유효성 검사 메세지가 있는 경우
-            //에러를 가지고 와서 list에 넣는다(해당 필드에 있는 메세지를 담아오겠다.)
-            List<FieldError> allErrors = bindingResult.getFieldErrors();
-//            System.out.println("allErrors");
-//            System.out.println(allErrors);
-            for (FieldError error : allErrors) {  //필드 에러만큼 반복문을 돌린다.
-                createResult.put(error.getField(), error.getDefaultMessage());
-            }
-        } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
-            createResult.put("suceess", 200);
-        }
-        System.out.println("createResult");
-        System.out.println(createResult);
+        //에러들을 모두 bindingResult에 담아주는 함수
+        Map<String, Object> createResult = errorProcess(bindingResult);
+
+//        System.out.println("createResult");
+//        System.out.println(createResult);
         return createResult;
 
     }
