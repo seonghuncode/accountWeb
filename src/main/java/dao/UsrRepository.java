@@ -8,4 +8,6 @@ public interface UsrRepository {
     public UsrDto getMemberByLoginId(String userId);
 
     public String getCheckExistEmail(String email);
+
+    public String getCheckExistUserId(String userId);
 }

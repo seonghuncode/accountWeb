@@ -17,7 +17,11 @@ public class UsrRepositoryImpl implements  UsrRepository {
     }
 
     public String getCheckExistEmail(String email){
-        return sqlSession.selectOne("dao.TestRepositoryImpl.getCheckExistEmail", email);
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.getCheckExistEmail", email);
+    }
+
+    public String getCheckExistUserId(String userId){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.getCheckExistUserId", userId);
     }
 
 }

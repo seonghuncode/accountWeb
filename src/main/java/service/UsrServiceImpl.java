@@ -24,8 +24,15 @@ public class UsrServiceImpl implements UsrService {
         return result;
     }
 
+    //이메일 중복 여부만 가지고 오는 로직
     public String getCheckExistEmail(String email) {
         String result = usrRepository.getCheckExistEmail(email);
+        return result;
+    }
+
+    //아이디 중복 여부만 가지고 오는 로직
+    public String getCheckExistUserId(String userId) {
+        String result = usrRepository.getCheckExistUserId(userId);
         return result;
     }
 
@@ -82,7 +89,7 @@ public class UsrServiceImpl implements UsrService {
     public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult,String existEmail) {
         //이메일 중복 검사
 //        String existEmail = usrService.getCheckExistEmail(usrDto.getEmail());
-        //ajax에서 name은 이메일 중복 여부로 사용, email은 형식이 맞는지 확인하는 용도로 사용
+        //name에 값을 넣는 이유 : ajax에서 name은 이메일 중복 여부로 사용, email은 형식이 맞는지 확인하는 용도로 사용
         if (existEmail != null) { //중복확인시 이메일 형식이 아닐 수 있기 때문에 email에 값을 넣지 말고 name에 값을 넣는다.
             System.out.println("existEmail 실행");
             System.out.println(existEmail);
@@ -97,7 +104,19 @@ public class UsrServiceImpl implements UsrService {
 //        System.out.println("createResult");
 //        System.out.println(createResult);
         return createResult;
+    }
 
+    //아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직
+    public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult){
+        String existUserId = getCheckExistUserId(usrDto.getUserId());
+
+        if(existUserId != null){
+            bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 이미 존재하는 아이디 입니다."));
+        }else{
+            bindingResult.addError(new FieldError("usrDto", "userId", "해당 아이디는 사용 가능 합니다"));
+        }
+        Map<String, Object> createResult = errorProcess(bindingResult);
+        return createResult;
     }
 
 

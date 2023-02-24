@@ -15,4 +15,6 @@ public interface UsrService {
     public Map<String, Object> doCheckJoin(UsrDto usrDto, BindingResult bindingResult);
 
     public Map<String, Object> doCheckEmail(UsrDto usrDto, BindingResult bindingResult, String existEmail);
+
+    public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult);
 }

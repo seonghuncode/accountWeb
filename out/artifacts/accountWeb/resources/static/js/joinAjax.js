@@ -4,7 +4,7 @@
 //<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 // <script type="text/javascript">
 
-//이메일 중복 확인 버튼을 클릭했을 경우
+//이메일 중복 확인 버튼을 클릭했을 경우-----------------------------------------------------------------------------------------------------------------------------------
 $("#emailDuplication").click(function () {
 
     var email = {
@@ -61,11 +61,11 @@ $("#emailDuplication").click(function () {
         });
     }
 })
+//--------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
-
-//아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직
+//아이디 중복 확인 버튼을 클릭했을 경우 실행될 로직-------------------------------------------------------------------------------------------
 $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭했을 경우 실행
 
     var userId = {
@@ -75,38 +75,34 @@ $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭�
 
     function validation(res) {
 
-        if (res.email) {   //이메일 형식 체크
-            $('#validEmail').html(res.email);
-        } else if (res.name) {  //이메일 중복 여부 체크
-            if (res.name === "해당 이메일은 사용 가능 합니다.") {  //사용 가능할 경우 폰튼 색을 파란색으로 지정
-                const changeCss = document.getElementById("validEmail");
-                changeCss.style.color = 'blue';
-                $('#validEmail').html(res.name);
-            } else { //중복의 경우 빨간색으로 다시 변경
-                const changeCss = document.getElementById("validEmail");
-                changeCss.style.color = 'red';
-                $('#validEmail').html(res.name);
-            }
-        } else { //이메일 중복 여부 체크
-            $('#validEmail').html("");
-        }
+       if(res.userId){
+           if(res.userId === "해당 아이디는 사용 가능 합니다"){
+               const changeCss = document.getElementById("validUserId");
+               changeCss.style.color = 'blue';
+               $('#validUserId').html(res.userId);
+           }else{
+               const changeCss = document.getElementById("validUserId");
+               changeCss.style.color = 'red';
+               $('#validUserId').html(res.userId);
+           }
+       }
 
     }
 
-    if ($("#email").val() === "") {
-        $('#validEmail').html("중복 확인을 위해 이메일을 입력해 주세요.");
+    if ($("#userId").val() === "") {
+        $('#validUserId').html("중복 확인을 위해 아이디를 입력해 주세요.");
     } else {
 
         $.ajax({
             url: "/usr/joinFn",
-            data: JSON.stringify(email),  //data: info, JSON.stringify(info)
+            data: JSON.stringify(userId),  //data: info, JSON.stringify(info)
             method: "post",
             dataType: "json",   //dataType : "html",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 // alert("success");
                 // console.log("controller에서 받은 데이터 ==>  ")
-                // console.log(res);
+                console.log(res);
                 validation(res);
             },
             error: function () {
@@ -116,14 +112,14 @@ $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭�
         });
     }
 })
+//--------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 
 
 
-
-//회원가입 버튼을 클릭했을때 로직
+//회원가입 버튼을 클릭했을때 로직-------------------------------------------------------------------------------------------------------------
 $("#try-join").click(function () {
     //alert("click");
     //let data = getData();
@@ -204,4 +200,4 @@ $("#try-join").click(function () {
 
     });
 });
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
