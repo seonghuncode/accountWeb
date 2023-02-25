@@ -1,6 +1,6 @@
 /* 로그인 CSS */
 .login_input {
-    outline: 1px solid ;
+    outline: 1px solid;
     width: 90%;
     padding: 6px;
     justify-items: center;
@@ -18,6 +18,12 @@
     text-align: center;
 }
 
-.login_copy{
+.login_copy {
     color: #8E929F;
+}
+
+.validError {
+    color: red;
+    text-align: center;
+    margin-top: 5px;
 }

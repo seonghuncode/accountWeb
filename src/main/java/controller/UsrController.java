@@ -39,13 +39,14 @@ public class UsrController {
     @RequestMapping(value = "/usr/loginFn", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
     public Map<String, Object> doLogin(@RequestBody UsrDto usrDto, BindingResult bindingResult) {
-        System.out.println("로그인 화면에서 넘겨 받은 값");
-        System.out.println("아이디 : " + usrDto.getUserId()+ "비밀번호" + usrDto.getPassword());
-
-        System.out.println("==============");
-        System.out.println("로그인 로직 return값");
-        System.out.println(usrService.doCheckLogin(usrDto, bindingResult));
-        System.out.println("==============");
+        //로그인 에서 @Validated를 사용하지 않는 이유는 회원가입에 맞게 dto에 메세지를 설정해주었기 때문애 serviceImpl에서 예외처리를 만들어 사용한다.
+//        System.out.println("로그인 화면에서 넘겨 받은 값");
+//        System.out.println("아이디 : " + usrDto.getUserId()+ "비밀번호" + usrDto.getPassword());
+//
+//        System.out.println("==============");
+//        System.out.println("로그인 로직 return값");
+//        System.out.println(usrService.doCheckLogin(usrDto, bindingResult));
+//        System.out.println("==============");
 
        
         return  usrService.doCheckLogin(usrDto, bindingResult);

@@ -67,11 +67,13 @@ public class UsrServiceImpl implements UsrService {
             }
         } else { //에러가 없을 경우 실행할 로직 + DB에 회원가입 저장
 
-            if(successFn == "join"){
+            if (successFn == "join") {
                 //회원가입 진행 로직(비밀번호 암호화 저장)
                 doJoin(usrDto); //비밀번호 저장
-            }else if(successFn == "login"){
-                doLogin(usrDto);
+            } else if (successFn == "login") {
+                //System.out.println(usrDto.getName());
+                createResult.put("name", usrDto.getName());
+                doLogin(usrDto); //에러가 없을 경우 로그인 함수 실행(세션 등록....)
             }
             createResult.put("success", 200);
         }
@@ -152,7 +154,7 @@ public class UsrServiceImpl implements UsrService {
 
 
     //로그인 진행을 위한 로직(1. 아이디 DB존재 여부, 해당 아이디랑 비밀번호 일치 하는지 확인)
-    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult){
+    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult) {
 
         //현재 사용자가 입력한 아이디가  DB에 존재하지 않거나 존재할 경우 해당 아이디의 비밀번호가 다르면 문제 없다
         //입력한 아이디와 비밀번호가 일치하는지 비교 불가(평문이 같다고 암호화 까지 같지 않다?? 해독한 상택로 비교해야 한다??)
@@ -165,26 +167,43 @@ public class UsrServiceImpl implements UsrService {
         //해당 아이디가 DB에 존재 하는지 확인
         String existUserId = usrRepository.getCheckExistUserId(usrDto.getUserId());
 //        System.out.println("찾아온 아이디 : " + existUserId);
-        if(existUserId == null){ //해당 아이디가 DB에 존재 하지 않을 경우
+
+        if (usrDto.getUserId().trim().length() == 0 && usrDto.getPassword().trim().length() == 0) {
+            bindingResult.addError(new FieldError("usrDto", "userId", "아이디를 입력해 주세요."));
+            bindingResult.addError(new FieldError("usrDto", "password", "비밀번호를 입력해 주세요."));
+            bindingResult.addError(new FieldError("usrDto", "email", "미입력"));
+        } else if (usrDto.getUserId().trim().length() == 0) {  //사용자가 값을 입력하지 않은 경우
+            bindingResult.addError(new FieldError("usrDto", "userId", "아이디를 입력해 주세요."));
+            //로그인을 할경우 email변수는 사용하지 않기 때문에 email을 통해 해당 오류는 데이터를 미입력했을 경우의 오류명 이라는 것을 알려주기 위해서 추가
+            //프론트 에서 응답 받을때 단순히 userId or password라는 변수의 value값이 있으면 일치 하지 않는 오류로 판단, 추가적으로 email의 value값이 있으면 데이터 미입력 오류라는 것을 알기 위함
+            bindingResult.addError(new FieldError("usrDto", "email", "미입력"));
+        } else if (usrDto.getPassword().trim().length() == 0) {
+            bindingResult.addError(new FieldError("usrDto", "password", "비밀번호를 입력해 주세요."));
+            bindingResult.addError(new FieldError("usrDto", "email", "미입력"));
+        } else if (existUserId == null) { //해당 아이디가 DB에 존재 하지 않을 경우
             bindingResult.addError(new FieldError("usrDto", "userId", "아이디 또는 비밀번호가 일치 하지 않습니다."));
-        }else if(existUserId != null){  //해당 아이디가 DB에 존재 한다면 사용자가 입력한 비밀번호가 일치하는지 확인
+        } else if (existUserId != null) {  //해당 아이디가 DB에 존재 한다면 사용자가 입력한 비밀번호가 일치하는지 확인
             String findPasswordFromDB = usrRepository.getUserPassword(usrDto.getUserId()); //아이디를 파라미터로 넘기면 해당 아이디의 비밀번호를 찾아온다.
             String encoderPassword = passwordEncoder.encode(usrDto.getPassword()); //사용자가 입력한 비밀번호
-            if((passwordEncoder.matches(usrDto.getPassword(), findPasswordFromDB)) == false){ //사용자가 입력한 아이디의 비밀번호 != 사용자가 입력한 비밀번호
+            if ((passwordEncoder.matches(usrDto.getPassword(), findPasswordFromDB)) == false) { //사용자가 입력한 아이디의 비밀번호 != 사용자가 입력한 비밀번호
                 bindingResult.addError(new FieldError("usrDto", "password", "아이디 또는 비밀번호가 일치 하지 않습니다."));
+            } else { //사용자가 입력한 아이디가 DB에 존재할 경우 해당 아이디에 대한 사용자 이름을 찾아 name에 넣어준다(성공시 환영 인사에 이름을 넣어 주기 위해서)
+                usrDto.setName(usrRepository.findUserNameByUserId(usrDto.getUserId()));
             }
         }
 
-        String successFn = "login";
-        System.out.println("에러모음");
-        System.out.println( errorProcess(bindingResult, usrDto, successFn));
+//        System.out.println("아이디 길이 : " + usrDto.getUserId().trim().length());
+        String successFn = "login"; //errorProcess에서 로그인애 대한 오류라는 것을 알려주기 위함
+//        System.out.println("에러모음");
+//        System.out.println(errorProcess(bindingResult, usrDto, successFn));
+
 
         //에러만 모아주는 함수를 실행시켜 결과만 리턴
-        return  errorProcess(bindingResult, usrDto, successFn);
+        return errorProcess(bindingResult, usrDto, successFn);
     }
 
     //doCheckLogin로직에서 유효성 검사를 완료하고 에러가 없을 경우 로그인을 하는 함수
-    public void doLogin(UsrDto usrDto){
+    public void doLogin(UsrDto usrDto) {
         //로그인 기능 추가, 문구, 세션 확인
         System.out.println(usrDto.getUserId() + "님 로그인 되었습니다.");
     }

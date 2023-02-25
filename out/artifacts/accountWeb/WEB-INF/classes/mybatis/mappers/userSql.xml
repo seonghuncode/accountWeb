@@ -33,6 +33,12 @@
         where user_id = #{userId}
     </select>
 
+    <select id="findUserNameByUserId" parameterType="String" resultType="String">
+        select `name`
+        from `user`
+        where user_id = #{userId}
+    </select>
+
 
 
 </mapper>

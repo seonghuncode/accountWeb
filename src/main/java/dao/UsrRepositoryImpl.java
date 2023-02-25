@@ -30,4 +30,8 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return  sqlSession.selectOne("dao.UsrRepositoryImpl.getUserPassword", userId);
     }
 
+    public String findUserNameByUserId(String userId){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.findUserNameByUserId", userId);
+    }
+
 }
