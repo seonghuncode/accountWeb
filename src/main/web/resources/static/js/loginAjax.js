@@ -3,7 +3,14 @@ $("#try-login").click(function () {
 
     function validation(res) {
 
-        if(res.email && res.userId && res.password){  //--> 아이디, 비밀번호 모두 미입력한 경우
+        //현재 프로젝트 구현(로그인 -> 메인화면)이기 때문에 로그인이 되어있는 상황에서 로그인을 할 상황은 없지만 검사를 위해 만듬
+        if(res.checkPassword){  //만약 이미 로그인이 되어 있는 상태라면 어떤 값을 입력하든 이미 로그인이 되어 있다는 경고 alert를 내보낸다.
+            swal('오류', res.checkPassword, 'warning')
+                .then(function () {
+                    location.href = '/';  //이미 로그인 되어있을 경우 alert ()
+                })
+        }
+        else if(res.email && res.userId && res.password){  //--> 아이디, 비밀번호 모두 미입력한 경우
             $('#validNotCorrect').html(""); //아이디, 비밀번호중 하나라도 미입력한 경우 비교 에러는 보여주지 않는다.
 
             const inputLineColor1 = document.getElementById("loginId");  //id input red
@@ -66,7 +73,7 @@ $("#try-login").click(function () {
             console.log("5");
             
             $('#validNotCorrect').html(res.password);
-        } else if (!res.password && !res.email && !res.userId) {  //--> 어떤 에러 메세지도 없을 경우
+        } else if (!res.password && !res.email && !res.userId && !res.checkPassword) {  //--> 어떤 에러 메세지도 없을 경우
             const inputLineColor1 = document.getElementById("loginId");   //id input black
             inputLineColor1.style.outline = "1px solid black";
             $('#loginId').html(res.userId);

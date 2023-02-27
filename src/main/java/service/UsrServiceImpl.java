@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,6 @@ public class UsrServiceImpl implements UsrService {
             } else if (successFn == "login") {
                 //System.out.println(usrDto.getName());
                 createResult.put("name", usrDto.getName());
-                doLogin(usrDto); //에러가 없을 경우 로그인 함수 실행(세션 등록....)
             }
             createResult.put("success", 200);
         }
@@ -154,7 +154,7 @@ public class UsrServiceImpl implements UsrService {
 
 
     //로그인 진행을 위한 로직(1. 아이디 DB존재 여부, 해당 아이디랑 비밀번호 일치 하는지 확인)
-    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult) {
+    public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult, HttpSession httpSession) {
 
         //현재 사용자가 입력한 아이디가  DB에 존재하지 않거나 존재할 경우 해당 아이디의 비밀번호가 다르면 문제 없다
         //입력한 아이디와 비밀번호가 일치하는지 비교 불가(평문이 같다고 암호화 까지 같지 않다?? 해독한 상택로 비교해야 한다??)
@@ -167,6 +167,17 @@ public class UsrServiceImpl implements UsrService {
         //해당 아이디가 DB에 존재 하는지 확인
         String existUserId = usrRepository.getCheckExistUserId(usrDto.getUserId());
 //        System.out.println("찾아온 아이디 : " + existUserId);
+
+        boolean isLogined = false;
+        if(httpSession.getAttribute("loginedUserId") !=  null){ //이미 세션이 존재 해서 로그인이 되어 있을 경우 isLoginedid = true로 변경
+            isLogined = true;
+        }
+        if(isLogined){ //로그인을 진행할 경우 usrDto에 있는 변수명으로 bindingResult에 오류들을 모아 보내주는데 로그인 에서 사용하지 않는 checkPassword변수는
+            bindingResult.addError(new FieldError("usrDto", "checkPassword", "이미 로그인이 되어 있습니다."));
+            System.out.println("<<<<<<<<<<>>>>>>>>>>");
+            System.out.println( httpSession.getAttribute("loginedUserId"));
+            System.out.println("<<<<<<<<<<>>>>>>>>>>");
+        }
 
         if (usrDto.getUserId().trim().length() == 0 && usrDto.getPassword().trim().length() == 0) {
             bindingResult.addError(new FieldError("usrDto", "userId", "아이디를 입력해 주세요."));
@@ -197,16 +208,20 @@ public class UsrServiceImpl implements UsrService {
 //        System.out.println("에러모음");
 //        System.out.println(errorProcess(bindingResult, usrDto, successFn));
 
+        Map<String, Object> loginStatus = errorProcess(bindingResult, usrDto, successFn);  //로그인이 성공적으로 진행되면 세션 등록
+        if (loginStatus.containsKey("success") && loginStatus.containsValue(usrRepository.findUserNameByUserId(usrDto.getUserId()))){ //로그인이 성공적으로 됬을 경우 세션 등록
+            httpSession.setAttribute("loginedUserId", usrDto.getUserId());
+        }
+
 
         //에러만 모아주는 함수를 실행시켜 결과만 리턴
         return errorProcess(bindingResult, usrDto, successFn);
     }
 
-    //doCheckLogin로직에서 유효성 검사를 완료하고 에러가 없을 경우 로그인을 하는 함수
-    public void doLogin(UsrDto usrDto) {
-        //로그인 기능 추가, 문구, 세션 확인
-        System.out.println(usrDto.getUserId() + "님 로그인 되었습니다.");
-    }
+
+
+
+
 
 
 }

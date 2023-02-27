@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.UsrService;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Slf4j //log사용(로그를 남기는 것)
@@ -38,7 +39,7 @@ public class UsrController {
     //로그인 폼에서 사용자가 입력한 value값에 대해 성공, 실패 로직을 처리하는 controller
     @RequestMapping(value = "/usr/loginFn", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> doLogin(@RequestBody UsrDto usrDto, BindingResult bindingResult) {
+    public Map<String, Object> doLogin(@RequestBody UsrDto usrDto, BindingResult bindingResult, HttpSession httpSession) {
         //로그인 에서 @Validated를 사용하지 않는 이유는 회원가입에 맞게 dto에 메세지를 설정해주었기 때문애 serviceImpl에서 예외처리를 만들어 사용한다.
 //        System.out.println("로그인 화면에서 넘겨 받은 값");
 //        System.out.println("아이디 : " + usrDto.getUserId()+ "비밀번호" + usrDto.getPassword());
@@ -49,7 +50,7 @@ public class UsrController {
 //        System.out.println("==============");
 
        
-        return  usrService.doCheckLogin(usrDto, bindingResult);
+        return  usrService.doCheckLogin(usrDto, bindingResult, httpSession);
     }
 
 
@@ -86,6 +87,25 @@ public class UsrController {
         } else {//가입 하기 버튼을 클릭했을때 실행될 로직(비밀번호:일치여부, 특수문자 조합 및 길이 확인, 이메일 중복, 아이디 중복, 나머지 DTO에서 @Valid설정한 유효성 검사) / 성공 상황
             return usrService.doCheckJoin(usrDto, bindingResult);
         }
+    }
+    
+    
+    @RequestMapping("/usr/doLogout")
+    @ResponseBody
+    public void doLogout(HttpSession httpSession){  //현재 return값은 없지만 추후 이미 로그아웃 되어 있는 상태등 오류 메세지를 return하도록 수정 필요
+        boolean isLoginedId = false;
+        if(httpSession.getAttribute("loginedUserId") == null){
+            isLoginedId = true;
+        }
+        if(isLoginedId){
+            System.out.println(httpSession.getAttribute("loginedUserId"));
+            System.out.println("이미 로그아웃 되어 있습니다.");
+        }else{
+            System.out.println(httpSession.getAttribute("loginedUserId"));
+            httpSession.removeAttribute("loginedUserId");
+            System.out.println("로그아웃 되었습니다.");
+        }
+
     }
 
 
