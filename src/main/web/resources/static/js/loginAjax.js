@@ -117,9 +117,10 @@ $("#try-login").click(function () {
         dataType: "json",   //dataType : "html", "json", "text"
         contentType: "application/json; charset=utf-8",
         success: function (res) {
-            alert("success");
-            console.log("응답");
-            console.log(res);
+            // alert("success");
+            // console.log("응답");
+            // console.log(res);
+
 
             if (res['success'] === 200) {
                 swal('로그인 성공!', res.name + "님 로그인 되었습니다.", 'success')
