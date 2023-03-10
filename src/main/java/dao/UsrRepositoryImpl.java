@@ -5,6 +5,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UsrRepositoryImpl implements  UsrRepository {
 
@@ -32,6 +34,10 @@ public class UsrRepositoryImpl implements  UsrRepository {
 
     public String findUserNameByUserId(String userId){
         return sqlSession.selectOne("dao.UsrRepositoryImpl.findUserNameByUserId", userId);
+    }
+
+    public List<UsrDto> getAllUserFromDB(){ //DB에 있는 모든 회원을 List에 담아 return한다.
+        return sqlSession.selectList("dao.UsrRepositoryImpl.getAllUserFromDB");
     }
 
 }

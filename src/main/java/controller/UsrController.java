@@ -4,6 +4,7 @@ import dto.UsrDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import service.UsrService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j //log사용(로그를 남기는 것)
@@ -117,7 +119,11 @@ public class UsrController {
     //현재 로그인 되어있는 세션의 아이디로 회원정보를 찾을 수 있기 때문에 따로 넘겨줄 매개변수는 없다.
     //필요한 작업 : 로그인 성공시 해당 주소로 url변경 필요
     @RequestMapping("/usr/main")
-    public String doMain(){
+    public String doMain(Model model){
+        List<UsrDto> users = usrService.getAllUserFromDB();
+        model.addAttribute("users", users); //메인화면 애서 회원 이름, 지출내역 공개 여부에 대한 정보를 보여주어야 하기대문에 객체를 넘겨준다.
+//        System.out.println("전체 유저");
+//        System.out.println(users);
         return "thymeleaf/content/main";
     }
 

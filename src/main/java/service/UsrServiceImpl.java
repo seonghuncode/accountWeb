@@ -244,6 +244,10 @@ public class UsrServiceImpl implements UsrService {
 
     }
 
+    public List<UsrDto> getAllUserFromDB(){
+        return usrRepository.getAllUserFromDB();
+    }
+
 
 
 

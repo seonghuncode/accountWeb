@@ -39,6 +39,10 @@
         where user_id = #{userId}
     </select>
 
+    <select id="getAllUserFromDB" resultType="map">
+        select * from `user`
+    </select>
+
 
 
 </mapper>
