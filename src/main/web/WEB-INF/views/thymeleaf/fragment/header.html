@@ -3,7 +3,7 @@
 
 
 <!-- header의 경우 내비게이션바와 같이 다른 페이지 에서도 항상 공통적으로 나오는 것들을 모아두는 역할 -->
-<header th:fragment="headerFragment">
+<header th:fragment="headerFragment(pageName)">
 
 
     <nav class="navbar navbar-expand-lg bg-light all_nav">
@@ -37,6 +37,8 @@
             </div>
         </div>
     </nav>
+
+    <h3 class="pageName" th:text="${pageName}"></h3>
 
     <script src="/resources/static/js/navAjax.js"></script>
 

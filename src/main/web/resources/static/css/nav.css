@@ -25,3 +25,10 @@
 .logout_nav{
     float: right;
 }
+
+.pageName{  /* 페이지 이름CSS */
+    display: flex;
+    width: 90%;
+    margin: 0px auto; /*지정한 width가 가운데로 오기 위해 필요*/
+    margin-top: 40px;
+}
