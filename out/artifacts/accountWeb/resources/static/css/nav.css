@@ -32,3 +32,10 @@
     margin: 0px auto; /*지정한 width가 가운데로 오기 위해 필요*/
     margin-top: 40px;
 }
+
+.mainPage_tale_Srot{ /* 메인화면의 table 정렬 시키기  */
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 60px;
+    text-align: center;
+}

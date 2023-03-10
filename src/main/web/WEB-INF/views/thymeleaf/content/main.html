@@ -4,14 +4,44 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<!-- config fragment 사용, 공통적으로 필요한 head안의 것들을 불러온다 -->
-<th:block th:replace="thymeleaf/fragment/config :: configFragment('메인화면')" ></th:block>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('메인화면')"></th:block>
 </head>
 <body>
+
 <!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
 <header th:replace="thymeleaf/fragment/header :: headerFragment('메인화면')"></header>
 
-
+<!-- 회원 정보를 불러와 테이블로 보여준다. -->
+<!-- 메인 페이지로 넘어올때 DB에 있는 전체 회원을 객체에 담아 보내주도록 수정(예전 프로젝트 참고) -->
+<!-- 순서 : DB에서 회원 테이블이 끝날때 까지 반복문 -> 첫행을 제외하고 반복문을 돌려 테이블에 회원 정보 보여주기 -> 성공하면 페이징 기능 -> 검색기능 -->
+<div class="mainPage_tale_Srot">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">번호</th>
+            <th scope="col">이름</th>
+            <th scope="col">지출내역</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
