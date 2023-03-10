@@ -32,6 +32,13 @@
             <version>3.0.11.RELEASE</version>
         </dependency>
 
+        <!-- thymeleaf layout(footer, header를 나누기 위한 의존성 주입) -->
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
         <!-- 스프링 리로드 / (현재 톰캣 vm option에서 경로를 인식하지 못 해서 사용X) -->
         <dependency>
             <groupId>org.springframework</groupId>

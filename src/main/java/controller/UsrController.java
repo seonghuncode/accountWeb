@@ -90,22 +90,35 @@ public class UsrController {
     }
     
     
-    @RequestMapping("/usr/doLogout")
+    //내비게이션 바에서 -> 로그아웃 버튼 클릭 -> 유효성 검사 -> 결과 리턴 -> 프론트단에서 처리
+    @RequestMapping(value = "/usr/doLogout",  method = {RequestMethod.GET})
     @ResponseBody
-    public void doLogout(HttpSession httpSession){  //현재 return값은 없지만 추후 이미 로그아웃 되어 있는 상태등 오류 메세지를 return하도록 수정 필요
-        boolean isLoginedId = false;
-        if(httpSession.getAttribute("loginedUserId") == null){
-            isLoginedId = true;
-        }
-        if(isLoginedId){
-            System.out.println(httpSession.getAttribute("loginedUserId"));
-            System.out.println("이미 로그아웃 되어 있습니다.");
-        }else{
-            System.out.println(httpSession.getAttribute("loginedUserId"));
-            httpSession.removeAttribute("loginedUserId");
-            System.out.println("로그아웃 되었습니다.");
-        }
+    public Map<String, Object> doLogout(HttpSession httpSession){  //현재 return값은 없지만 추후 이미 로그아웃 되어 있는 상태등 오류 메세지를 return하도록 수정 필요
 
+//        boolean isLoginedId = false;
+//        if(httpSession.getAttribute("loginedUserId") == null){
+//            isLoginedId = true;
+//        }
+//        //로그아웃이 되어 있다면 실질적으로 로그아웃 버튼을 클릭할 상황은 없지만 일단 만들어 놓음
+//        if(isLoginedId){
+//            System.out.println(httpSession.getAttribute("loginedUserId"));
+//            System.out.println("이미 로그아웃 되어 있습니다.");
+//        }else{
+//            System.out.println(httpSession.getAttribute("loginedUserId"));
+//            httpSession.removeAttribute("loginedUserId");
+//            System.out.println("로그아웃 되었습니다.");
+//        }
+
+        return usrService.doLogout(httpSession);
+
+    }
+
+
+    //현재 로그인 되어있는 세션의 아이디로 회원정보를 찾을 수 있기 때문에 따로 넘겨줄 매개변수는 없다.
+    //필요한 작업 : 로그인 성공시 해당 주소로 url변경 필요
+    @RequestMapping("/usr/main")
+    public String doMain(){
+        return "thymeleaf/content/main";
     }
 
 

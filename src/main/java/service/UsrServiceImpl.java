@@ -219,6 +219,32 @@ public class UsrServiceImpl implements UsrService {
     }
 
 
+    public Map<String, Object> doLogout(HttpSession httpSession){
+
+        //String을 json형태로 return하기 위한 방법
+        Map result = new HashMap<String, Object>();
+
+        boolean isLoginedId = false;
+        if(httpSession.getAttribute("loginedUserId") == null){
+            isLoginedId = true;
+        }
+        //로그아웃이 되어 있다면 실질적으로 로그아웃 버튼을 클릭할 상황은 없지만 일단 만들어 놓음
+        if(isLoginedId){
+            System.out.println(httpSession.getAttribute("loginedUserId"));
+            System.out.println("이미 로그아웃 되어 있습니다.");
+            result.put("status", "이미 로그아웃 되어 있습니다.");
+        }else{
+            System.out.println(httpSession.getAttribute("loginedUserId"));
+            httpSession.removeAttribute("loginedUserId");
+            System.out.println("로그아웃 되었습니다.");
+            result.put("status", "로그아웃 되었습니다.");
+        }
+
+        return result;
+
+    }
+
+
 
 
 

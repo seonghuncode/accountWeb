@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<!-- config fragment 사용, 공통적으로 필요한 head안의 것들을 불러온다 -->
+<th:block th:replace="thymeleaf/fragment/config :: configFragment('메인화면')" ></th:block>
+</head>
+<body>
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment"></header>
+
+
+
+</body>
+</html>

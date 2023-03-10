@@ -128,7 +128,7 @@ $("#try-login").click(function () {
                         successForm(); //기존에 에러 메세지가 있다면 모두 지워준다.
                         // console.log(res);
                         // console.log("성공");
-                        //location.href = '/';  //메인화면 디자인 해서 주소 바꾸기
+                        location.href = '/usr/main';  //메인화면 디자인 해서 주소 바꾸기
                     })
             } else {
                 validation(res);

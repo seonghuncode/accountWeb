@@ -20,4 +20,6 @@ public interface UsrService {
     public Map<String, Object> doCheckUserId(UsrDto usrDto, BindingResult bindingResult);
     
     public Map<String, Object> doCheckLogin(UsrDto usrDto, BindingResult bindingResult, HttpSession httpSession);  //로그인 하는 로직
+
+    public Map<String, Object> doLogout( HttpSession httpSession);
 }
