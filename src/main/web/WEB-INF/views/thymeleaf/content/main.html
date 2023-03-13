@@ -17,6 +17,7 @@
 <!-- 순서 : DB에서 회원 테이블이 끝날때 까지 반복문 -> 첫행을 제외하고 반복문을 돌려 테이블에 회원 정보 보여주기 -> 성공하면 페이징 기능 -> 검색기능 -->
 <div class="mainPage_tale_Srot">
     <table class="table">
+
         <thead>
         <tr>
             <th scope="col">번호</th>
@@ -24,22 +25,22 @@
             <th scope="col">지출내역</th>
         </tr>
         </thead>
-        <tbody>
+
+
+        <tbody th:each="user, num : ${users}">  <!-- num은 반복문을 처리 상태변수 접근을 위해 사용 된다. -->
+
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
+            <th scope="row">[[${num.count}]]</th>
+            <td th:text="${user.name}">Mark</td>
+            <td>
+                <a href="@{/usr/showTransaction(userId=${user.userId})}"> <!-- th:href로 파라미터를 넘길 경우 오류 발생 -->
+                    <!-- 해당 아이콘 클릭 -> 해당 유저 아이디를 다음 페이지로 넘겨 -> 해당 회원의 거래내역을 보여줌 -->
+                    <i class="bi bi-box-arrow-in-right"></i>
+                </a>
+            </td>
         </tr>
         </tbody>
+
     </table>
 </div>
 
