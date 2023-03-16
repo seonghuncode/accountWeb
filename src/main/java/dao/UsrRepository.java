@@ -1,9 +1,11 @@
 package dao;
 
+import dto.Criteria;
 import dto.UsrDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UsrRepository {
@@ -20,4 +22,9 @@ public interface UsrRepository {
     public String findUserNameByUserId(String userId);
 
     public List<UsrDto> getAllUserFromDB();
+    
+    //페이징 기능을 위한 역할
+    public List<Map<String, Object>> selectBoardList(Criteria cri);
+
+    public int countUsrListTotal();
 }

@@ -2,6 +2,7 @@ package service;
 
 
 import dao.UsrRepository;
+import dto.Criteria;
 import dto.UsrDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -246,6 +247,21 @@ public class UsrServiceImpl implements UsrService {
 
     public List<UsrDto> getAllUserFromDB(){
         return usrRepository.getAllUserFromDB();
+    }
+
+
+
+    //페이징 기능을 위한 역할
+    //BoardServiceImpl
+    @Override
+    public List<Map<String, Object>> selectBoardList(Criteria cri) {
+        return usrRepository.selectBoardList(cri);
+    }
+
+
+    @Override
+    public int countUsrListTotal(){
+        return usrRepository.countUsrListTotal();
     }
 
 

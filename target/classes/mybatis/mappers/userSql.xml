@@ -4,7 +4,7 @@
 <mapper namespace="dao.UsrRepository">
 
     <!-- 이메일 중복 여부를 확인 하기 위한 sql -->
-    <select id="getCheckExistEmail" parameterType="String"  resultType="String">
+    <select id="getCheckExistEmail" parameterType="String" resultType="String">
         select email
         from `user`
         where email = #{eamil}
@@ -20,11 +20,11 @@
     <insert id="join" parameterType="dto.UsrDto">
         insert into `user`
         set `name` = #{name},
-        email = #{email},
-        user_id = #{userId},
-        `password` = #{password},
-        view_yn = #{view_yn},
-        create_date = now()
+            email = #{email},
+            user_id = #{userId},
+            `password` = #{password},
+            view_yn = #{view_yn},
+            create_date = now()
     </insert>
 
     <select id="getUserPassword" parameterType="String" resultType="String">
@@ -40,9 +40,30 @@
     </select>
 
     <select id="getAllUserFromDB" resultType="map">
-        select * from `user`
+        select *
+        from `user`
     </select>
 
+
+    <!-- 페이징 기능을 위한 역할  (cdata는 문장을 문자열로 인식하게 한다) -->
+    <select id="selectBoardList" resultType="hashmap" parameterType="hashmap">
+    <![CDATA[
+        SELECT *
+        FROM `user`
+        WHERE view_yn = 'yes'
+        ORDER BY id ASC
+            LIMIT #{pageStart}, #{perPageNum}
+        ]]>
+</select>
+
+    <!-- DB에 존재 하는 전체 회원의 수를 구하는 sql문 / 메인화면에서 보여줄 회원의 수만 필요하기 때문에 view_yn=yes인 데이터만 카운트 한다 -->
+    <select id="countUsrListTotal" resultType="Integer">
+  <![CDATA[
+        SELECT count(*)
+        FROM `user`
+        WHERE view_yn = 'yes'
+        ]]>
+    </select>
 
 
 </mapper>

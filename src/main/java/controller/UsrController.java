@@ -1,5 +1,7 @@
 package controller;
 
+import dto.Criteria;
+import dto.PageMaker;
 import dto.UsrDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import service.UsrService;
 
 import javax.servlet.http.HttpSession;
@@ -51,8 +54,8 @@ public class UsrController {
 //        System.out.println(usrService.doCheckLogin(usrDto, bindingResult));
 //        System.out.println("==============");
 
-       
-        return  usrService.doCheckLogin(usrDto, bindingResult, httpSession);
+
+        return usrService.doCheckLogin(usrDto, bindingResult, httpSession);
     }
 
 
@@ -90,12 +93,12 @@ public class UsrController {
             return usrService.doCheckJoin(usrDto, bindingResult);
         }
     }
-    
-    
+
+
     //내비게이션 바에서 -> 로그아웃 버튼 클릭 -> 유효성 검사 -> 결과 리턴 -> 프론트단에서 처리
-    @RequestMapping(value = "/usr/doLogout",  method = {RequestMethod.GET})
+    @RequestMapping(value = "/usr/doLogout", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> doLogout(HttpSession httpSession){  //현재 return값은 없지만 추후 이미 로그아웃 되어 있는 상태등 오류 메세지를 return하도록 수정 필요
+    public Map<String, Object> doLogout(HttpSession httpSession) {  //현재 return값은 없지만 추후 이미 로그아웃 되어 있는 상태등 오류 메세지를 return하도록 수정 필요
 
 //        boolean isLoginedId = false;
 //        if(httpSession.getAttribute("loginedUserId") == null){
@@ -117,17 +120,30 @@ public class UsrController {
 
 
     //현재 로그인 되어있는 세션의 아이디로 회원정보를 찾을 수 있기 때문에 따로 넘겨줄 매개변수는 없다.
-    //필요한 작업 : 로그인 성공시 해당 주소로 url변경 필요
     @RequestMapping("/usr/main")
-    public String doMain(Model model){
-        List<UsrDto> users = usrService.getAllUserFromDB();
-        model.addAttribute("users", users); //메인화면 애서 회원 이름, 지출내역 공개 여부에 대한 정보를 보여주어야 하기대문에 객체를 넘겨준다.
-//        System.out.println("전체 유저");
-//        System.out.println(users);
-        return "thymeleaf/content/main";
+    public ModelAndView doMain(Model model, Criteria cri) throws Exception {
+        //현재 전체 회원을 보내주는 것이 아니라 페이징 기능을 사용하기 때문에 페이지에 해당하는 화원만 프론트로 보내주면 되기 때문에 전체 회원을 불러오는 기능은 사용X
+//        List<UsrDto> users = usrService.getAllUserFromDB();
+//        model.addAttribute("users", users); //메인화면 애서 회원 이름, 지출내역 공개 여부에 대한 정보를 보여주어야 하기대문에 객체를 넘겨준다.
+//        return "thymeleaf/content/main";
+
+        ModelAndView mav = new ModelAndView("thymeleaf/content/main");
+
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCri(cri);
+        pageMaker.setTotalCount(usrService.countUsrListTotal());  //DB에서 전체 데이터 갯수를 가지고 오는 것으로 수정 필요
+
+        List<Map<String, Object>> list = usrService.selectBoardList(cri);
+        mav.addObject("list", list);
+        mav.addObject("pageMaker", pageMaker);
+        //현재 페이지 버튼의 색상을 다르게 하기 위해 현재 페이지를 클라이언트로 넘겨준다
+        int nowPage = cri.getPage();
+        mav.addObject("nowPage", nowPage);
+
+
+        return mav;
+
     }
-
-
 
 
 

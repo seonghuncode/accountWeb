@@ -1,5 +1,6 @@
 package service;
 
+import dto.Criteria;
 import dto.UsrDto;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -25,4 +26,10 @@ public interface UsrService {
     public Map<String, Object> doLogout( HttpSession httpSession);
 
     public List<UsrDto> getAllUserFromDB();
+
+    //페이징 기능을 하는 역할
+    List<Map<String, Object>> selectBoardList(Criteria cri);
+
+    //DB에서 전체 회원수를 가지고 오는 메서드
+    int countUsrListTotal();
 }
