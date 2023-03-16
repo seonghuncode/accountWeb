@@ -1,41 +1,50 @@
-.all_nav{
+.all_nav {
     display: flex;
     width: 90%;
-    background-color:#F8F9FA;
+    background-color: #F8F9FA;
     margin: 0px auto; /*지정한 width가 가운데로 오기 위해 필요*/
     margin-top: 40px;
     border-radius: 20px;
 }
 
-.up_and_down{ /* 내비게이션바 위아래 간격 좁히기 */
+.up_and_down { /* 내비게이션바 위아래 간격 좁히기 */
     margin-top: -7px;
     margin-bottom: -7px;
 }
 
-.side_nav{ /*내비게이션바에서 양옆 margin*/
+.side_nav { /*내비게이션바에서 양옆 margin*/
     padding-left: 30px;
     padding-right: 30px;
 }
 
-.distance{ /* 회원정보, 거래내역, 통계 부분 간격 주기 */
+.distance { /* 회원정보, 거래내역, 통계 부분 간격 주기 */
     margin-left: 15px;
     margin-right: 15px;
 }
 
-.logout_nav{
+.logout_nav {
     float: right;
 }
 
-.pageName{  /* 페이지 이름CSS */
+.pageName { /* 페이지 이름CSS */
     display: flex;
     width: 90%;
     margin: 0px auto; /*지정한 width가 가운데로 오기 위해 필요*/
     margin-top: 40px;
 }
 
-.mainPage_tale_Srot{ /* 메인화면의 table 정렬 시키기  */
+.mainPage_tale_Srot { /* 메인화면의 table 정렬 시키기  */
     width: 90%;
     margin: 0px auto;
     margin-top: 60px;
     text-align: center;
+}
+
+.pagingState { /* 페이징 버튼 위치 맞추기 */
+    width: 90%;
+    margin: 0px auto;
+    /*text-align: right;*/
+    /*float: right;*/
+    /*justify-content: right;*/
+
 }
