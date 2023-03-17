@@ -26,5 +26,9 @@ public interface UsrRepository {
     //페이징 기능을 위한 역할
     public List<Map<String, Object>> selectBoardList(Criteria cri);
 
-    public int countUsrListTotal();
+    public int countUsrListTotal();  //view
+
+    public int getAllUserCnt();
+
+    int getNoUserCnt();
 }

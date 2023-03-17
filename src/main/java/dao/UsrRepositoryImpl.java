@@ -53,6 +53,13 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return (Integer) sqlSession.selectOne("dao.UsrRepositoryImpl.countUsrListTotal");
     }
 
+    public int getAllUserCnt(){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.getAllUserCnt");
+    }
+
+    public int getNoUserCnt(){
+        return sqlSession.selectOne("dao.UserRepositoryImpl.getNoUserCnt");
+    }
 
 
 }

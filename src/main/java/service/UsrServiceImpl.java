@@ -264,7 +264,15 @@ public class UsrServiceImpl implements UsrService {
         return usrRepository.countUsrListTotal();
     }
 
+    @Override
+    public int getAllUserCnt(){
+        return usrRepository.getAllUserCnt();
+    }
 
+    @Override
+    public int getNoUserCnt(){
+        return usrRepository.getNoUserCnt();
+    }
 
 
 

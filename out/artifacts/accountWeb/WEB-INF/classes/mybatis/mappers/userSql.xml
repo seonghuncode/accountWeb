@@ -65,6 +65,17 @@
         ]]>
     </select>
 
+    <select id="getAllUserCnt" resultType="Integer">
+        SELECT count(*)
+        FROM  `user`
+    </select>
+
+    <select id="getNoUserCnt" resultType="Integer">
+        SELECT count(*)
+        FROM `user`
+        WHERE view_yn = 'no'
+    </select>
+
 
 </mapper>
 

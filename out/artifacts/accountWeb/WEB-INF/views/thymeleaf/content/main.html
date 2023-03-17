@@ -47,8 +47,17 @@
 
 
 
+<!-- 회원 view_yn에 따른 회원 수 정보 -->
+<div class="pagingState">  <!-- pagingState : 회원수 정보 + 패이징 버튼의 위치를 width를 지정해 내비게이션바와 테이블의 위치를 맞추기 위한 css -->
+    <div style="float: left"> <!-- 회원 정보의 경우 왼쪽에 위치 -->
+        &#8251;회원</br>
+        전체회원 : ([[${allUser}]]) / 공개 회원 : ([[${userYesCnt}]]) / 비공개 회원 : ([[${userNoCnt}]])
+    </div>
+
+
 <!-- 페이징 기능 -->
-<nav aria-label="Page navigation example" class="pagingState"> <!-- pagingState는 nav.css에 전체 width길이를 테이블과 네비게이션바와 넓이와 같게 하기 위한 설정 -->
+<nav aria-label="Page navigation example" >
+    <!-- pagingState는 nav.css에 전체 width길이를 테이블과 네비게이션바와 넓이와 같게 하기 위한 설정 -->
     <!-- 이전 버튼 -->
     <ul class="pagination" style="float: right">  <!-- 페이징 버튼이 왼쪽에 위치하도록 css적용 -->
         <div th:if="${pageMaker.prev }">
@@ -65,11 +74,13 @@
         <!-- 이전, 다음 버튼 사이 숫자들 -->
         <div th:each="pageNum : ${#numbers.sequence(pageMaker.startPage , pageMaker.endPage )}">
             <!-- 페이지의 시작 번호와 끝 번호를 이용해 페이지에 뿌려준다 -->
-            <li th:if="${nowPage == pageNum}" class="page-item active" aria-current="page">  <!-- 만약 현재 페이지 == 버튼 숫자가 동일하다면 색상 지정 -->
+            <li th:if="${nowPage == pageNum}" class="page-item active" aria-current="page">
+                <!-- 만약 현재 페이지 == 버튼 숫자가 동일하다면 색상 지정 -->
                 <a class="page-link" th:href="@{/usr/main(page = ${pageNum})}"><i
                         class="fa">[[${pageNum}]]</i></a>
             </li>
-            <li th:unless="${nowPage == pageNum}" class="page-item">  <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 -->
+            <li th:unless="${nowPage == pageNum}" class="page-item">
+                <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 -->
                 <a class="page-link" th:href="@{/usr/main(page = ${pageNum})}"><i
                         class="fa">[[${pageNum}]]</i></a>
             </li>
@@ -86,7 +97,7 @@
         </div>
     </ul>
 </nav>
-
+</div>
 
 <!-- 페이징 기능 설명
 현재 Criterial, PageMaker DTO파일

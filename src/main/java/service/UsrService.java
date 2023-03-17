@@ -30,6 +30,12 @@ public interface UsrService {
     //페이징 기능을 하는 역할
     List<Map<String, Object>> selectBoardList(Criteria cri);
 
-    //DB에서 전체 회원수를 가지고 오는 메서드
+    //DB에서 전체 회원수를 가지고 오는 메서드(view_yn=yes인경우만)
     int countUsrListTotal();
+
+    //DB전체 회원수
+    int getAllUserCnt();
+    
+    //viewyn = no인 전체 회원의 수
+    int getNoUserCnt();
 }

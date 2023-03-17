@@ -43,8 +43,6 @@
 .pagingState { /* 페이징 버튼 위치 맞추기 */
     width: 90%;
     margin: 0px auto;
-    /*text-align: right;*/
-    /*float: right;*/
-    /*justify-content: right;*/
+    margin-top: 60px;
 
 }

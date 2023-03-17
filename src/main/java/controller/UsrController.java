@@ -140,6 +140,14 @@ public class UsrController {
         int nowPage = cri.getPage();
         mav.addObject("nowPage", nowPage);
 
+        //회원수에 대한 정보를 넘기기 위한 부분(전체회원,공개회원,비공개 회원)
+        int allUser = usrService.getAllUserCnt();
+        mav.addObject("allUser", allUser);  // DB에 존재하는 전체 회원의 수
+        int userYesCnt = usrService.countUsrListTotal();
+        mav.addObject("userYesCnt", userYesCnt); //view_yn=yes인 회원의 수
+        int userNoCnt = usrService.getNoUserCnt();
+        mav.addObject("userNoCnt", userNoCnt);
+
 
         return mav;
 
