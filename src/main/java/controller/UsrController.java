@@ -9,14 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import service.UsrService;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,7 +129,7 @@ public class UsrController {
 
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCri(cri);
-        pageMaker.setTotalCount(usrService.countUsrListTotal());  //DB에서 전체 데이터 갯수를 가지고 오는 것으로 수정 필요
+        pageMaker.setTotalCount(usrService.countUsrListTotal());  
 
         List<Map<String, Object>> list = usrService.selectBoardList(cri);
         mav.addObject("list", list);
@@ -139,6 +137,9 @@ public class UsrController {
         //현재 페이지 버튼의 색상을 다르게 하기 위해 현재 페이지를 클라이언트로 넘겨준다
         int nowPage = cri.getPage();
         mav.addObject("nowPage", nowPage);
+
+//        System.out.println("list입니다.");
+//        System.out.println(list);
 
         //회원수에 대한 정보를 넘기기 위한 부분(전체회원,공개회원,비공개 회원)
         int allUser = usrService.getAllUserCnt();
@@ -150,10 +151,34 @@ public class UsrController {
 
 
         return mav;
-
     }
 
 
+    //메인 페이지 에서 검색 기능을 수행하는 controller -> 비동기 통신 필요 -> ajax처리
+    //동작 과정 : 클라이언트 검색어 입력 -> 버튼 클릭 -> js ajax를 통해 controller로 검색어 전달 -> controller에서 해당 검색어에 대한 정보만 return -> ajax에서 success or error처리
+    @GetMapping("/usr/doSearch")
+    @ResponseBody
+    public List<Map<String, Object>> doSearch(@RequestParam("search") String search, Model model) {
+        System.out.println(search);  //클라이언트에서 받는 것 까지는 성공 > 다음으로 json형식으로 return해주면 된다.
+
+        //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
+        List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(search);
+        //model.addAttribute("allUser", searchUsers);  //검색어에 대한 회원들만 클라이언트로 넘긴다.
+        System.out.println(searchUsers);
+        //문제 : DB에서 검색에 대한 회원만 불러오지만, 클라이언트로 넘기면 값이 제대로 넘어가지 않음
+       //return type변경???
+
+
+
+
+
+        Map result = new HashMap<String, Object>();  //Map은 선언 시 <key, value>로 값을 넣는다. (key로 식별하고 value에 사용할 값을 넣는 방식), key=value형식으로 데이터 저장
+        result.put("test1", "test1");
+        result.put("test2", "test2");
+
+        return searchUsers;
+
+    }
 
 
 }

@@ -38,4 +38,7 @@ public interface UsrService {
     
     //viewyn = no인 전체 회원의 수
     int getNoUserCnt();
+    
+    //사용자가 입력한 검색어에 대한 회원만 받아오는 역할
+    List<Map<String, Object>> getUsersFromSearch(String search);
 }

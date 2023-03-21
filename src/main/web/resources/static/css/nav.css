@@ -4,7 +4,7 @@
     background-color: #F8F9FA;
     margin: 0px auto; /*지정한 width가 가운데로 오기 위해 필요*/
     margin-top: 40px;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .up_and_down { /* 내비게이션바 위아래 간격 좁히기 */
@@ -44,5 +44,18 @@
     width: 90%;
     margin: 0px auto;
     margin-top: 60px;
-
 }
+
+.searchState1{  /* 메인페이지 에서 검색기능에 대한 css */
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 50px;
+    margin-bottom: 120px;
+}
+
+.searchState2{  /* 메인페이지 에서 검색기능에 대한 css */
+    float: right;
+}
+
+
+
