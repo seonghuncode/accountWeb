@@ -129,7 +129,7 @@ public class UsrController {
 
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCri(cri);
-        pageMaker.setTotalCount(usrService.countUsrListTotal());  
+        pageMaker.setTotalCount(usrService.countUsrListTotal());
 
         List<Map<String, Object>> list = usrService.selectBoardList(cri);
         mav.addObject("list", list);
@@ -154,6 +154,10 @@ public class UsrController {
     }
 
 
+
+
+
+
     //메인 페이지 에서 검색 기능을 수행하는 controller -> 비동기 통신 필요 -> ajax처리
     //동작 과정 : 클라이언트 검색어 입력 -> 버튼 클릭 -> js ajax를 통해 controller로 검색어 전달 -> controller에서 해당 검색어에 대한 정보만 return -> ajax에서 success or error처리
     @GetMapping("/usr/doSearch")
@@ -165,11 +169,8 @@ public class UsrController {
         List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(search);
         //model.addAttribute("allUser", searchUsers);  //검색어에 대한 회원들만 클라이언트로 넘긴다.
         System.out.println(searchUsers);
-        //문제 : DB에서 검색에 대한 회원만 불러오지만, 클라이언트로 넘기면 값이 제대로 넘어가지 않음
-       //return type변경???
-
-
-
+        //문제 : 클라이언트로 넘겨주면 화면에 뜨고 바로 재로딩 되고 사라짐
+        //로그인 하면 메인 화면 / doSearch 두개로 나누어 지기때문에 문제??
 
 
         Map result = new HashMap<String, Object>();  //Map은 선언 시 <key, value>로 값을 넣는다. (key로 식별하고 value에 사용할 값을 넣는 방식), key=value형식으로 데이터 저장
@@ -179,6 +180,7 @@ public class UsrController {
         return searchUsers;
 
     }
+
 
 
 }

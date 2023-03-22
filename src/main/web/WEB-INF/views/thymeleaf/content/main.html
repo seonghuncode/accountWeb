@@ -18,7 +18,7 @@
     <form class="d-flex searchState2" role="search"> <!-- d-flex는 input,button이 한줄로 나오도록 하는 css -->
         <input class="form-control me-2" type="search" placeholder="회원이름" aria-label="Search" id="searchText">
         <!-- 버튼안에 글자를 영어로 입력하면 가로로 잘 나오는데 한글로 입력하면 세로로 나옴 -> width를 지정해 주어야 세로로 나온다 -->
-        <button class="btn btn-outline-success" type="submit" style="width: 120px;" id="doSearch">
+        <button class="btn btn-outline-success" type="button" style="width: 120px;" id="doSearch">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                  viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
@@ -28,19 +28,15 @@
     </form>
 </div>
 
-<!-- 검색어에 대한 데이터들만 보여준다.  > 성공시 기존 회원정보를 보여주는 테이블과 병합 시키기-->
-<div>
-    <table id="main_table">
-        <tr>
-            <th scope="col">번호</th>
-            <th scope="col">이름</th>
-            <th scope="col">지출내역</th>
-        </tr>
-    </table>
-</div>
+<!-- 검색어에 대한 데이터들만 보여준다.  > 성공시 기존 회원정보를 보여주는 테이블과 병합 시키기 (if / else if)-->
+
+
 
 <!-- 검색 기능 ajax처리를 위해 js 호출 -->
 <script src="/resources/static/js/searchAjax.js"></script>
+
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
 <!-- 회원 정보를 불러와 테이블로 보여준다. ------------------------------------------------------------------------------------------------------------------------------>
 <!-- 메인 페이지로 넘어올때 DB에 있는 전체 회원을 객체에 담아 보내주도록 수정(예전 프로젝트 참고) -->
@@ -48,7 +44,7 @@
 <div class="mainPage_tale_Srot">
     <table class="table">
 
-        <thead>
+        <thead id="thead">
         <tr>
             <th scope="col">번호</th>
             <th scope="col">이름</th>
@@ -58,7 +54,7 @@
 
 
         <!--        <tbody th:each="user, num : ${users}">  &lt;!&ndash; num은 반복문을 처리 상태변수 접근을 위해 사용 된다. &ndash;&gt;-->
-        <tbody th:each="user : ${list}"> <!-- 위의 경우 전체 회원, 이 코드의 경우 특정 페이지에 있는 데이터만 보여준다 -->
+        <tbody th:each="user : ${list}" id="info"> <!-- 위의 경우 전체 회원, 이 코드의 경우 특정 페이지에 있는 데이터만 보여준다 -->
 
         <tr>
             <th scope="row">[[${user.id}]]</th>

@@ -20,23 +20,27 @@ $("#doSearch").click(function () {
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
 
-            //이부분에 usr/doSearch에서 받은 해당 검색어에 대한 데이터들만 테이블에 넣어 주는 작업을 해야 한다.  --> 함수로 빼서 실행
-            // for (let i = 0; i < data.length; i++) {
-            //     var tag = "<tr>" +
-            //         "<td>" + data[i].id + "</td>" +
-            //         "<td>" + data[i].name + "</td>" +
-            //         "<td>" + <i className="bi bi-box-arrow-in-right"></i> + "</td>" +
-            //         "</tr>"
-            //
-            //     $("#main_table").append(tag);
-            // }
+            $('#info > tr').empty();  //기존 전체 회원정보를 지원다.(처음 메인화면으로 넘어 왔을때 보여주는 리스트)
+            $('#search*').empty(); //검색기능으로 불러왔던 데이터를 지우고 아래서 새로운 검색어에 대한 리스트를 보여준다.
+            data.forEach(function(item){
+                str='<tr id="search">'
+                str += "<th >"+item.id+"</th>";
+                str+="<td>"+item.name+"</td>";
+                str+="<td>"+item.view_yn+"</td>";
+                str+="</tr>"
+                // $('#main_table').append(str);
+                // $('#main_table').append(str);
+                $('#thead').append(str);
+            })
 
-            //controller에서 List로 return했기 때문에 반복문을 통해 값을 하나씩 꺼내야 한다.
-            $(data).each(function(){
-                console.log(this.id + " " + this.name + " " + this.view_yn);
-            });
+            //controller에서 List로 return했기 때문에 반복문을 통해 값을 하나씩 꺼내야 한다.(console.log확인용)
+            // $(data).each(function(){
+            //     console.log(this.id + " " + this.name + " " + this.view_yn);
+            // });
 
-            alert('success');
+
+
+            // alert('success');
 
         }, error: function () {
             alert("error");
