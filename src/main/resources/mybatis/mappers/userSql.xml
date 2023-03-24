@@ -78,15 +78,20 @@
 
 
     <!-- 사용자가 입력한 검색어를 매개변수로 받아 쿼리 작성 하는 방법-->
-    <select id="getUsersFromSearch" resultType="hashmap" parameterType="String">
+    <select id="getUsersFromSearch" resultType="hashmap" parameterType="hashmap">
         SELECT *
         FROM `user`
         WHERE `name` LIKE CONCAT('%', #{search}, '%') AND view_yn = 'yes'
-
+        ORDER BY id ASC
+            LIMIT #{pageStart}, #{perPageNum}
     </select>
-<!--    ORDER BY id ASC-->
-<!--    LIMIT #{pageStart}, #{perPageNum}-->
 
+
+    <select id="countSearchUsrListTotal" resultType="Integer" parameterType="String">
+        SELECT count(*)
+        FROM `user`
+        WHERE `name` LIKE CONCAT('%', #{search}, '%') AND view_yn = 'yes'
+    </select>
 
 
 

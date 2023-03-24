@@ -275,8 +275,12 @@ public class UsrServiceImpl implements UsrService {
     }
 
     //메인화면에서 사용자가 입력한 검색어에 대한 회원만 불러오는 역할
-    public List<Map<String, Object>> getUsersFromSearch(String search){
-        return usrRepository.getUsersFromSearch(search);
+    public List<Map<String, Object>> getUsersFromSearch(Criteria cri){
+        return usrRepository.getUsersFromSearch(cri);
+    }
+
+    public int countSearchUsrListTotal(String search){
+        return usrRepository.countSearchUsrListTotal(search);
     }
 
 

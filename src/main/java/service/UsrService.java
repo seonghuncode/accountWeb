@@ -40,5 +40,8 @@ public interface UsrService {
     int getNoUserCnt();
     
     //사용자가 입력한 검색어에 대한 회원만 받아오는 역할
-    List<Map<String, Object>> getUsersFromSearch(String search);
+    List<Map<String, Object>> getUsersFromSearch(Criteria cri);
+
+    //검색 회원에 대한 전체 수
+    int countSearchUsrListTotal(String search);
 }

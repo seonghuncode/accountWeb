@@ -34,5 +34,7 @@ public interface UsrRepository {
     
     
     //사용자가 입력한 검색어에 대한 회원 정보만 받아오는 역할
-    public List<Map<String, Object>> getUsersFromSearch(String search);
+    public List<Map<String, Object>> getUsersFromSearch(Criteria cri);
+
+    int countSearchUsrListTotal(String search);
 }

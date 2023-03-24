@@ -170,13 +170,14 @@ public class UsrController {
 
         PageMaker pageMaker = new PageMaker();  //페이징 기능을 위해 선언(페이지 번호 관련)
         pageMaker.setCri(cri);
-        pageMaker.setTotalCount(usrService.countUsrListTotal());  //DB에 있는 총 회원수를 넣어 준다.
-
+        pageMaker.setTotalCount(usrService.countSearchUsrListTotal(search));  //검색어에 해당하는 DB회원수 메서드 만들어서 수정
+        //System.out.println(usrService.countSearchUsrListTotal(search));
         int nowPage = cri.getPage();
 
        //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
         //mybatis에서 두개의 파라미터를 넘길 경우 map에 넣어 보내야 한다??
-        List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(search);
+        cri.setSearch(search);
+        List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(cri);
 
         //Map은 선언 시 <key, value>로 값을 넣는다. (key로 식별하고 value에 사용할 값을 넣는 방식), key=value형식으로 데이터 저장
         //클라이언트로 전송해야할 데이터가 1.검색어에대한 회원 정보 2. 페이징 관련 3. 현재 페이지 정보를 보내야 하기때문에 key, value를 통해 나누어 보내준다.

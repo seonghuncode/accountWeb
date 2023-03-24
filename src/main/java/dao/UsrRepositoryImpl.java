@@ -62,8 +62,12 @@ public class UsrRepositoryImpl implements  UsrRepository {
     }
     
     //사용자가 입력한 검색어에 해당하는 회원들만 DB에서 불러오는 역할
-    public List<Map<String, Object>> getUsersFromSearch(String search){
-        return sqlSession.selectList("dao.UsrRepositoryImpl.getUsersFromSearch", search);
+    public List<Map<String, Object>> getUsersFromSearch( Criteria cri){
+        return sqlSession.selectList("dao.UsrRepositoryImpl.getUsersFromSearch", cri);
+    }
+
+    public int countSearchUsrListTotal(String search){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.countSearchUsrListTotal", search);
     }
 
 

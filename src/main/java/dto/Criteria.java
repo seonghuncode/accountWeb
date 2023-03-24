@@ -6,6 +6,17 @@ public class Criteria {
     private int page;  //현재 페이지 번호
     private int perPageNum; //한 페이지당 보여줄 게시물의 갯수
 
+    //검색어와 Criteal을 모두 DB에 전달해주기 위해선느
+    //String search, Criteria cri를 한번에 보낼수가 없기 때문에 String search를 Crtierial에 추가 해준다.
+    private String search;
+    public String getSearch(){
+       return search;
+    }
+    public void setSearch(String search){
+        this.search = search;
+    }
+
+
     public int getPageStart() {  //특정 페이지의 게시글 시작 번호, 게시글 시작 행 번호
         //현재 페이지 게시글 시작 번호 = (현재 페이지 번호 - 1) * 페이지당 보여줄 게시글 갯수
         //(3-1)* 5=10 ==> 3페이지 에서 시작할 게시글 시작 행 번호를 의미
