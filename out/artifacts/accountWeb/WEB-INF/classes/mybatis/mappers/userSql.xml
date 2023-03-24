@@ -81,8 +81,13 @@
     <select id="getUsersFromSearch" resultType="hashmap" parameterType="String">
         SELECT *
         FROM `user`
-        WHERE `name` LIKE CONCAT('%', #{search}, '%')
+        WHERE `name` LIKE CONCAT('%', #{search}, '%') AND view_yn = 'yes'
+
     </select>
+<!--    ORDER BY id ASC-->
+<!--    LIMIT #{pageStart}, #{perPageNum}-->
+
+
 
 
 </mapper>

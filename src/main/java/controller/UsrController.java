@@ -127,11 +127,11 @@ public class UsrController {
 
         ModelAndView mav = new ModelAndView("thymeleaf/content/main");
 
-        PageMaker pageMaker = new PageMaker();
+        PageMaker pageMaker = new PageMaker();  //페이징 기능을 위해 선언(페이지 번호 관련)
         pageMaker.setCri(cri);
-        pageMaker.setTotalCount(usrService.countUsrListTotal());
+        pageMaker.setTotalCount(usrService.countUsrListTotal());  //DB에 있는 총 회원수를 넣어 준다.
 
-        List<Map<String, Object>> list = usrService.selectBoardList(cri);
+        List<Map<String, Object>> list = usrService.selectBoardList(cri);  //전체 회원 정보를 DB에서 불러온다.
         mav.addObject("list", list);
         mav.addObject("pageMaker", pageMaker);
         //현재 페이지 버튼의 색상을 다르게 하기 위해 현재 페이지를 클라이언트로 넘겨준다
@@ -141,7 +141,7 @@ public class UsrController {
 //        System.out.println("list입니다.");
 //        System.out.println(list);
 
-        //회원수에 대한 정보를 넘기기 위한 부분(전체회원,공개회원,비공개 회원)
+        //회원수에 대한 정보를 넘기기 위한 부분(화면 하단 전체회원,공개회원,비공개 회원을 보여주기 위한 용도)
         int allUser = usrService.getAllUserCnt();
         mav.addObject("allUser", allUser);  // DB에 존재하는 전체 회원의 수
         int userYesCnt = usrService.countUsrListTotal();
@@ -162,23 +162,30 @@ public class UsrController {
     //동작 과정 : 클라이언트 검색어 입력 -> 버튼 클릭 -> js ajax를 통해 controller로 검색어 전달 -> controller에서 해당 검색어에 대한 정보만 return -> ajax에서 success or error처리
     @GetMapping("/usr/doSearch")
     @ResponseBody
-    public List<Map<String, Object>> doSearch(@RequestParam("search") String search, Model model) {
-        System.out.println(search);  //클라이언트에서 받는 것 까지는 성공 > 다음으로 json형식으로 return해주면 된다.
+    public Map doSearch(@RequestParam("search") String search, Criteria cri) throws Exception {
+        //System.out.println(search);  //클라이언트에서 받는 것 까지는 성공 > 다음으로 json형식으로 return해주면 된다.
 
-        //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
+
+
+
+        PageMaker pageMaker = new PageMaker();  //페이징 기능을 위해 선언(페이지 번호 관련)
+        pageMaker.setCri(cri);
+        pageMaker.setTotalCount(usrService.countUsrListTotal());  //DB에 있는 총 회원수를 넣어 준다.
+
+        int nowPage = cri.getPage();
+
+       //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
+        //mybatis에서 두개의 파라미터를 넘길 경우 map에 넣어 보내야 한다??
         List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(search);
-        //model.addAttribute("allUser", searchUsers);  //검색어에 대한 회원들만 클라이언트로 넘긴다.
-        System.out.println(searchUsers);
-        //문제 : 클라이언트로 넘겨주면 화면에 뜨고 바로 재로딩 되고 사라짐
-        //로그인 하면 메인 화면 / doSearch 두개로 나누어 지기때문에 문제??
 
+        //Map은 선언 시 <key, value>로 값을 넣는다. (key로 식별하고 value에 사용할 값을 넣는 방식), key=value형식으로 데이터 저장
+        //클라이언트로 전송해야할 데이터가 1.검색어에대한 회원 정보 2. 페이징 관련 3. 현재 페이지 정보를 보내야 하기때문에 key, value를 통해 나누어 보내준다.
+        Map result = new HashMap<String, Object>();
+        result.put("userInfo", searchUsers); //검색어에 해당하는 회원 정보를 넘겨준다.
+        result.put("pageMaker", pageMaker); //페이징 관련 해서 ajax로 데이터 넘겨 주기
+        result.put("nowPage", nowPage);  //페이징 관련 해서 ajax로 데이터 넘겨 주기
 
-        Map result = new HashMap<String, Object>();  //Map은 선언 시 <key, value>로 값을 넣는다. (key로 식별하고 value에 사용할 값을 넣는 방식), key=value형식으로 데이터 저장
-        result.put("test1", "test1");
-        result.put("test2", "test2");
-
-        return searchUsers;
-
+        return result;
     }
 
 
