@@ -162,7 +162,7 @@ public class UsrController {
     //동작 과정 : 클라이언트 검색어 입력 -> 버튼 클릭 -> js ajax를 통해 controller로 검색어 전달 -> controller에서 해당 검색어에 대한 정보만 return -> ajax에서 success or error처리
     @GetMapping("/usr/doSearch")
     @ResponseBody
-    public Map doSearch(@RequestParam("search") String search, Criteria cri) throws Exception {
+    public Map doSearch(@RequestParam(value="search") String search, Criteria cri) throws Exception {
         //System.out.println(search);  //클라이언트에서 받는 것 까지는 성공 > 다음으로 json형식으로 return해주면 된다.
 
 

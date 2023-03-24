@@ -1,6 +1,7 @@
 $("#doSearch").click(function () {
 
-    //검색어에 대한 회원 정보를 불러와 화면에 추가 해주는 함수
+
+    //검색어에 대한 회원 정보를 불러와 화면에 추가 해주는 함수--------------------------------------------------------------------------------------------
     function showSearchData(data) {
         //controller로 부터 받아온 검색어에 대한 회원 정보를 화면 테이블을 수정 해주는 코드
         $('#info > tr').empty();  //기존 전체 회원정보를 지원다.(처음 메인화면으로 넘어 왔을때 보여주는 리스트)
@@ -15,17 +16,18 @@ $("#doSearch").click(function () {
         })
     }
 
-    //검색어에 대한 페이징 기능을 수행하는 함수
-    function showPaging(data) {
-    // 페이징 관련해서 controller에서 받아온 데이터로 수정 해주는 작업
+    //검색어에 대한 페이징 기능을 수행하는 함수------------------------------------------------------------------------------------------------------------------
+     function showPaging(data, search) {
+        // 페이징 관련해서 controller에서 받아온 데이터로 수정 해주는 작업
         //html : 기존에 있던 태그를 지우고 새로 추가 append : 기존의 태그를 남겨 두고 다음에 추가
         $('#pagingFn > ul').empty();  //기존 페이징 버튼들 모두 제거
         //$('#newPaging*').empty();
 
+
         if (data.pageMaker.prev) {
             $('#pagingFn > ul').append(
                 ' <li class="page-item">' +
-                '<a class="page-link" href="/usr/main?page=' + data.pageMaker.startPage + '-1"  aria-label="Previous"> ' +
+                '<a class="page-link" href="/usr/main?page=' + data.pageMaker.startPage + '-1"  aria-label="Previous" id="doSearch"> ' +
                 ' <span aria-hidden="true">&laquo;</span>' +
                 ' </a>' +
                 '  </li>' +
@@ -33,23 +35,25 @@ $("#doSearch").click(function () {
         }
 
         for (var pageNum = data.pageMaker.startPage; pageNum <= data.pageMaker.endPage; pageNum++) {
-
             if (data.nowPage == pageNum) {
                 $('#pagingFn > ul').append(
                     ' <li class="page-item active" aria-current="page">' +
                     // <!-- 만약 현재 페이지 == 버튼 숫자가 동일하다면 색상 지정 -->
-                    '  <a class="page-link" href="/usr/main?page=' + pageNum + '">' +
+                    '  <a class="page-link" href="/usr/main?page=' + pageNum + '" id="doSearch">' +
                     '<i class="fa">' + pageNum + '</i>' + '</a>' +
                     ' </li>'
                 )
             } else {
                 $('#pagingFn > ul').append(
                     '<li class="page-item">' +   //여기까지 수정
-                    // <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 -->
-                    ' <a class="page-link" href="/usr/main?page=' + pageNum + '">' + '<i class="fa">' + pageNum + '</i>' + '</a>' +
+                    // <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 / 페이지 이동시 검색어, 검색 페이지를 controller로 넘겨준다 -->
+                    // ' <a type="button" class="page-link" href="/usr/doSearch?search=' + search + '&' + 'page=' + pageNum + '" id="movePage">' + '<i class="fa">' + pageNum + '</i>' + '</a>' +
+                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," +  pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
                     '  </li>'
                 )
             }
+            // console.log("pageNum : " + pageNum);
+            // console.log(search)
         }
 
 
@@ -63,9 +67,10 @@ $("#doSearch").click(function () {
             )
         }
 
+
     }
 
-    
+
     let search = {
         search: $("#searchText").val(),   //input태그의 사용자가 입력한 값을 담는 변수
     };
@@ -86,7 +91,8 @@ $("#doSearch").click(function () {
 
             showSearchData(data);  //검색어에 대한 회원 정보 테이블
 
-            showPaging(data); //검색어에 대한 페이징 기능
+            showPaging(data, search.search); //검색어에 대한 페이징 기능
+
 
             console.log(data); //controller로 부터 받아온 데이터 확인
             //controller에서 List로 return했기 때문에 반복문을 통해 값을 하나씩 꺼내야 한다.(console.log확인용)
@@ -101,3 +107,13 @@ $("#doSearch").click(function () {
     })
 
 })
+
+
+//===============================================================
+
+function movePage(search,pageNum) {
+    console.log("search : " + search);
+    console.log("pageNum : " + pageNum);
+}
+
+
