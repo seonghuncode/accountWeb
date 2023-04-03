@@ -1,0 +1,32 @@
+/* 특정 회원 거래내역 보는 페이지 에서 검색 조건 부분에 해당하는 CSS */
+
+.frame { /* body태그 부분 내비게이션바와 위치 맞추는 CSS */
+    display: flex;
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 40px;
+}
+
+.search_select {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+.search_btn {
+    width: 100%;
+}
+
+.vertical_center { /* 수직 중앙 위치로 만드는 */
+    vertical-align: middle;
+}
+
+
+/* 특정 회원의 거래내역 페이지 에서 월에 대한 정보 요약 부분 CSS */
+
+.month_summery {
+    padding: 10px;
+    margin-left: auto;
+    float: right;
+    width: 40%;
+}

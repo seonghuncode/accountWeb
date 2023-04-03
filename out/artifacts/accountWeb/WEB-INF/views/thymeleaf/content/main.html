@@ -58,7 +58,7 @@
             <th scope="row">[[${user.id}]]</th>
             <td th:text="${user.name}"></td> <!-- ${user.name} 에러?? -->
             <td>
-                <a href="@{/usr/showTransaction(userId=${user.userId})}"> <!-- th:href로 파라미터를 넘길 경우 오류 발생 -->
+                <a th:href="@{/transaction/showTransaction(userId=${user.user_id})}"> <!-- 거래내역 페이지에 사용자가 클릭한 회원 아이디를 함꼐 보내준다 --->
                     <!-- 해당 아이콘 클릭 -> 해당 유저 아이디를 다음 페이지로 넘겨 -> 해당 회원의 거래내역을 보여줌 -->
                     <i class="bi bi-box-arrow-in-right"></i>
                 </a>

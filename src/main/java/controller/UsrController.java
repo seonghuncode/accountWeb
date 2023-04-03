@@ -154,19 +154,12 @@ public class UsrController {
     }
 
 
-
-
-
-
     //메인 페이지 에서 검색 기능을 수행하는 controller -> 비동기 통신 필요 -> ajax처리
     //동작 과정 : 클라이언트 검색어 입력 -> 버튼 클릭 -> js ajax를 통해 controller로 검색어 전달 -> controller에서 해당 검색어에 대한 정보만 return -> ajax에서 success or error처리
     @GetMapping("/usr/doSearch")
     @ResponseBody
-    public Map doSearch(@RequestParam(value="search") String search, Criteria cri) throws Exception {
+    public Map doSearch(@RequestParam(value = "search") String search, Criteria cri) throws Exception {
         //System.out.println(search);  //클라이언트에서 받는 것 까지는 성공 > 다음으로 json형식으로 return해주면 된다.
-
-
-
 
         PageMaker pageMaker = new PageMaker();  //페이징 기능을 위해 선언(페이지 번호 관련)
         pageMaker.setCri(cri);
@@ -174,7 +167,7 @@ public class UsrController {
         //System.out.println(usrService.countSearchUsrListTotal(search));
         int nowPage = cri.getPage();
 
-       //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
+        //사용자가 입력한 검색어에 해당한는 값들만 DB에서 찾아와 List에 담아준다.
         //mybatis에서 두개의 파라미터를 넘길 경우 map에 넣어 보내야 한다??
         cri.setSearch(search);
         List<Map<String, Object>> searchUsers = usrService.getUsersFromSearch(cri);
@@ -188,6 +181,7 @@ public class UsrController {
 
         return result;
     }
+
 
 
 
