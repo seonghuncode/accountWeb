@@ -25,6 +25,8 @@
     <bean id="usrServiceImpl" class="service.UsrServiceImpl" />
     <bean id="usrRepositoryImpl" class="dao.UsrRepositoryImpl"/>
     <bean id="SecurityConfig" class="util.SecurityConfig" />  <!-- passwordEncoder를 @Autowired로 사용하기 위함 -->
+    <bean id="transactionServiceImpl" class="service.TransactionServiceImpl"/>
+    <bean id="transactionRepositoryImpl" class="dao.TransactionRepositoryImpl" />
 
 
     <!--    정적자원 매핑 / 현재 경로 오류오 인해 web.xml에 spring 정적 리스서 설정을 통해 사용하고 있다.&ndash;&gt;-->
