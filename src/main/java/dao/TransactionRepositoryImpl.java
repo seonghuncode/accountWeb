@@ -16,7 +16,7 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectOne("dao.TransactionRepositoryImpl.getPrimaryId", userId);
     }
 
-    public int getTargetBudget(TransactionController.Transaction transaction){
+    public Integer getTargetBudget(TransactionController.Transaction transaction){
         return sqlSession.selectOne("dao.TransactionRepositoryImpl.getTargetBudget", transaction);
     }
 

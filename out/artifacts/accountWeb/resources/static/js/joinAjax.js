@@ -213,7 +213,7 @@ $("#try-join").click(function () {
 
             if (res['success'] === 200) {
                 //alert('회원가입이 완료 되었습니다.\n 로그인 페이지로 이동 합니다.');
-                swal('로그인 성공!',$("#name").val()+"님 회원가입 되었습니다.",'success')
+                swal('회원가입 성공!',$("#name").val()+"님 회원가입 되었습니다.",'success')
                     .then(function(){
                         location.href = '/usr/loginForm';
                     })

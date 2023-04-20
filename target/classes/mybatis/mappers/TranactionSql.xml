@@ -11,8 +11,9 @@
         WHERE user_id = #{userId};
     </select>
 
+
     <!-- 특정 회원 거래내역 에서 당월에 대한 예산액을 추출하는 코드 -->
-    <select id="getTargetBudget" resultType="int" parameterType="hashmap">
+    <select id="getTargetBudget" resultType="Integer" parameterType="hashmap">
         SELECT budget.price
         FROM budget
                  LEFT JOIN `user` ON budget.userId = user.id

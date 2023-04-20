@@ -8,6 +8,6 @@ public interface TransactionService {
 
     int getPrimaryId(String userId);
 
-    int getTargetBudget(TransactionController.Transaction transaction);
+    Integer getTargetBudget(TransactionController.Transaction transaction);
 
 }

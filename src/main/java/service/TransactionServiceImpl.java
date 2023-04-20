@@ -16,7 +16,7 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getPrimaryId(userId);
     }
 
-    public int getTargetBudget(TransactionController.Transaction transaction){
+    public Integer getTargetBudget(TransactionController.Transaction transaction){
         return transactionRepository.getTargetBudget(transaction);
     }
 }

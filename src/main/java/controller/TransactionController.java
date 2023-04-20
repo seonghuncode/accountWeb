@@ -54,8 +54,9 @@ public class TransactionController {
         //조건 : 선택한 특정 회원 + 당월 ==> 예산액
         transaction.setMonth(changeMonth);
         transaction.setUserId(userId);
-        int targetBuget = transactionService.getTargetBudget(transaction);
-        System.out.println(targetBuget);
+        //Integer로 받는 이유 : int의 경우 특정 사용자가 예산액을 지정하지 않은 경우 null값을 받을 수 없기 때문
+        Integer targetBuget = transactionService.getTargetBudget(transaction);
+//        System.out.println(targetBuget);
         model.addAttribute("targetBudget", targetBuget);
 
 

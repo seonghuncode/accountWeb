@@ -149,7 +149,7 @@ public class UsrController {
         int userNoCnt = usrService.getNoUserCnt();
         mav.addObject("userNoCnt", userNoCnt);
 
-
+//        System.out.println(mav);
         return mav;
     }
 
