@@ -67,9 +67,13 @@
                 <tr align="center">
                     <td th:if="${targetBudget} != null">[[${targetBudget}]]</td>
                     <td th:unless="${targetBudget} != null"> - </td> <!-- 예산값으로 null값을 받은 경우 -->
-                    <td>2500</td>
-                    <td>15000</td>
-                    <td>27500</td>
+
+                    <td th:if="${leftMoney} != -1">[[${leftMoney}]]</td>
+                    <td th:unless="${leftMoney} != -1"> - </td>
+
+                    <td>[[${incomeSum}]]</td>
+
+                    <td>[[${expendSum}]]</td>
                 </tr>
                 </tbody>
             </table>

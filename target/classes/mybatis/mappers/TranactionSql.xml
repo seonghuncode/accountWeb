@@ -21,5 +21,14 @@
           AND user.id =#{primaryId};
     </select>
 
+    <!-- map으로 받는 이유는 price, type에 대한 소비 내역이 여러개 이기 때문에 배열에 담겨 return되기 때문 -->
+    <select id="getTransactionValue" resultType="map" parameterType="hashmap">
+        SELECT `transaction`.type, `transaction`.price
+        FROM `transaction`
+                 LEFT JOIN `user` ON `transaction`.userId = user.id
+        WHERE MONTH (`transaction_date`)=#{month}
+          AND user.id =#{primaryId};
+    </select>
+
 
 </mapper>

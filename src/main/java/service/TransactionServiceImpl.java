@@ -5,6 +5,9 @@ import dao.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
@@ -19,4 +22,9 @@ public class TransactionServiceImpl implements TransactionService {
     public Integer getTargetBudget(TransactionController.Transaction transaction){
         return transactionRepository.getTargetBudget(transaction);
     }
+
+    public List<Map<String, Object>> getTransactionValue(TransactionController.Transaction transaction){
+        return transactionRepository.getTransactionValue(transaction);
+    }
+
 }
