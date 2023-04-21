@@ -14,11 +14,11 @@
 <!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
 
 
-<div > <!-- 검색 조건 + 특정월 통계 + 일별 거래내역 부분 ----------------------------------------------------------------------->
+<div> <!-- 검색 조건 + 특정월 통계 + 일별 거래내역 부분 ----------------------------------------------------------------------->
 
     <div class="frame"> <!-- 검색 조건 + 특정월 예산에 대한 정보 -->
         <div style="float: left; width: 40%"> <!-- 검색 조건 부분 -->
-            <table class="table">
+            <table class="table" style="font-size: small">
                 <thead>
 
                 <tr align="center" bgcolor="white">
@@ -52,9 +52,10 @@
             </table>
         </div>
 
-        <div class="month_summery"> <!-- 특정월 통계 ---------------------------------------------------------------------------------------------->
+        <div class="month_summery">
+            <!-- 특정월 통계 ---------------------------------------------------------------------------------------------->
             <div> &#91;검색월 기준 형황 &#93;</div>
-            <table class="table">
+            <table class="table" style="font-size: small">
                 <thead>
                 <tr align="center" bgcolor="#dcdcdc">
                     <th>목표 예산</th>
@@ -66,10 +67,10 @@
                 <tbody>
                 <tr align="center">
                     <td th:if="${targetBudget} != null">[[${targetBudget}]]</td>
-                    <td th:unless="${targetBudget} != null"> - </td> <!-- 예산값으로 null값을 받은 경우 -->
+                    <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
 
                     <td th:if="${leftMoney} != -1">[[${leftMoney}]]</td>
-                    <td th:unless="${leftMoney} != -1"> - </td>
+                    <td th:unless="${leftMoney} != -1"> -</td>
 
                     <td>[[${incomeSum}]]</td>
 
@@ -81,13 +82,79 @@
     </div>
 
 
+    <!-- 검색 조건, 검색월 기준 현황 정보 아래 선 -->
     <hr class="frame" style="margin-top: 5px;">
+
+    <div class="circleFrame">
+        <div>
+            <div class="circle1"></div>
+            수입
+        </div>
+        <div>
+            <div class="circle2"></div>
+            지출
+        </div>
+    </div>
+
+    <!-- 지출 내역 보여주는 테이블 ------------------------------------------------------------------------------------------------------------>
+    <!--
+     1. 일별로 지출 내역을 보여준다
+     ==> 테이블을 반복문(페이지 에서 해당 월을 받아서 31~show일 까지 최근 순으로 보여주기 위해 돌리면서 해당일이 있으면 테이블 출력)
+     (7일씩 데이터를 보여주기 위해 변수 int show = 31-7;을 선언하고 하단 더보기 버튼을 클릭하면 -7을 해서 보여지는 데이터의 갯수를 늘린다. )
+     (만약 31~24 -> 10~1로 더보기 버튼을 클릭해도 아무데이터가 없다면 -7을 해서 데이터가 출력될때 까지 -7 ==> show가 1이 아니라는 조건 and조건 추가)
+     ==> tbody태그 부분 반복문(존재 하는 데이터가 끝날 때까지지
+     -->
+    <div class="moneyFrame">
+        <table class="table table-hover" style="text-align: center; font-size: small">
+            <thead>
+            <tr style="background-color: #FDF5E6">
+                <th colspan="2" style="text-align: left; padding-left: 15px">23.04.22(토)</th>
+                <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입1000 지출5000)</th>
+            </tr>
+            <tr style="background-color: #FDF5E6">
+                <th scope="col">번호</th>
+                <th scope="col">분류명</th>
+                <th scope="col">매모</th>
+                <th scope="col">거래</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 7일치 더보기 아이콘 + 맨위로 버튼 ----------------------------------------------------------------------------------------------------------------->
+    <div class="btn-frame">
+        <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"></path>
+            </svg>
+            7일치 내역 더보기
+        </button>
+
+        <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; float: right">맨위로</button>
+    </div>
 
 
 </div>
-
-
-
 
 
 </body>

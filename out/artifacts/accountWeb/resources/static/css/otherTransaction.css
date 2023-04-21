@@ -23,10 +23,53 @@
 
 
 /* 특정 회원의 거래내역 페이지 에서 월에 대한 정보 요약 부분 CSS */
-
 .month_summery {
     padding: 10px;
     margin-left: auto;
     float: right;
     width: 40%;
+}
+
+
+/* 특정 회원 페이지 에서 수입, 지출에 대한 색을 표현 해주는 코드 */
+.circleFrame{
+    display: flex;
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 15px;
+}
+
+.circle1{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    display: inline-flex;
+    margin-right: 5px;
+}
+
+.circle2{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: blue;
+    display: inline-flex;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+/* 지출 내역에 대한 테이블 CSS */
+.moneyFrame{
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+/* 7일치 더보기 버튼, 맨위로 가기 버튼에 대한 CSS */
+.btn-frame{
+    width: 90%;
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
