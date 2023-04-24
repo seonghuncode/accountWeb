@@ -28,4 +28,8 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionValue", transaction);
     }
 
+    public List<Map<String, Object>> getTransactionHistory(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionHistory", transaction);
+    }
+
 }

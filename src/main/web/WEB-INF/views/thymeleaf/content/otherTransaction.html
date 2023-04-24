@@ -66,15 +66,17 @@
                 </thead>
                 <tbody>
                 <tr align="center">
-                    <td th:if="${targetBudget} != null">[[${targetBudget}]]</td>
+                    <!-- 목표 예산액에 대한 1000단위 마다 컴마로 표현하기 위한 방법 -->
+                    <td th:if="${targetBudget} != null"
+                        th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}"></td>
                     <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
 
-                    <td th:if="${leftMoney} != -1">[[${leftMoney}]]</td>
+                    <td th:if="${leftMoney} != -1" th:text="${#numbers.formatInteger(leftMoney, 0, 'COMMA')}"></td>
                     <td th:unless="${leftMoney} != -1"> -</td>
 
-                    <td>[[${incomeSum}]]</td>
+                    <td th:text="${#numbers.formatInteger(incomeSum, 0, 'COMMA')}"></td>
 
-                    <td>[[${expendSum}]]</td>
+                    <td th:text="${#numbers.formatInteger(expendSum, 0, 'COMMA')}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -105,10 +107,13 @@
      ==> tbody태그 부분 반복문(존재 하는 데이터가 끝날 때까지지
      -->
     <div class="moneyFrame">
-        <table class="table table-hover" style="text-align: center; font-size: small">
+        <!-- 테이블을 일별로 만들기 위해서 제일 바깥쪽에서는 내림차순으로 정력 되어 있는 테이블에 대한 일을 꺼낸다  -->
+        <table class="table table-hover" style="text-align: center; font-size: small"
+               th:each="transactionDate : ${distinctTransactionHistory}">
             <thead>
             <tr style="background-color: #FDF5E6">
-                <th colspan="2" style="text-align: left; padding-left: 15px">23.04.22(토)</th>
+                <th colspan="2" style="text-align: left; padding-left: 15px">[[${transactionDate.transaction_date}]]
+                </th>
                 <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입1000 지출5000)</th>
             </tr>
             <tr style="background-color: #FDF5E6">
@@ -119,26 +124,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
+            <tr th:each="history : ${transactionHistory}">
+                <!-- 최상위 에서 도는 반복문의 날짜와 여기서 도는 반복문의 날짜가 같은 것만 출력 -->
+                <div th:if="${#strings.equals(history.transaction_date, transactionDate.transaction_date)}">
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </div>
             </tr>
             </tbody>
         </table>
     </div>
+
 
     <!-- 7일치 더보기 아이콘 + 맨위로 버튼 ----------------------------------------------------------------------------------------------------------------->
     <div class="btn-frame">

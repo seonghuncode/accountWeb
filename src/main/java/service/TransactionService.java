@@ -15,4 +15,8 @@ public interface TransactionService {
 
     List<Map<String, Object>> getTransactionValue(TransactionController.Transaction transaction);
 
+    List<Map<String, Object>> getTransactionHistory(TransactionController.Transaction transaction);
+
+    List<Map<String, Object>> getDistinctTransactionHistory(List<Map<String, Object>> transactionHistory);
+
 }

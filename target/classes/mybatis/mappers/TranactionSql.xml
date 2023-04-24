@@ -12,7 +12,7 @@
     </select>
 
 
-    <!-- 특정 회원 거래내역 에서 당월에 대한 예산액을 추출하는 코드 -->
+    <!-- 특정 회원 거래내역 에서 당월에 대한 예산액을 추출하는 코드  (목표예산액) -->
     <select id="getTargetBudget" resultType="Integer" parameterType="hashmap">
         SELECT budget.price
         FROM budget
@@ -21,13 +21,25 @@
           AND user.id =#{primaryId};
     </select>
 
-    <!-- map으로 받는 이유는 price, type에 대한 소비 내역이 여러개 이기 때문에 배열에 담겨 return되기 때문 -->
+    <!-- map으로 받는 이유는 price, type에 대한 소비 내역이 여러개 이기 때문에 배열에 담겨 return되기 때문 (내역이 수입인지 지출인지 받아오는 데이터)-->
     <select id="getTransactionValue" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.price
         FROM `transaction`
                  LEFT JOIN `user` ON `transaction`.userId = user.id
         WHERE MONTH (`transaction_date`)=#{month}
           AND user.id =#{primaryId};
+    </select>
+
+    <!-- 메인페이지 에서 특정 회원 거래내역을 클릭할 경우 특정회원에 대한 거래 내역 정보를 가지고 오는 부분 -->
+    <!-- 거래 내역을 내림차순으로 가지고 온다 >> 최근 거래내역 부터 보여주기 위함 -->
+    <select id="getTransactionHistory" resultType="map" parameterType="hashmap">
+        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month}
+        ORDER BY `transaction`.transaction_date DESC;
     </select>
 
 

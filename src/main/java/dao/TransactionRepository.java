@@ -14,4 +14,6 @@ public interface TransactionRepository {
     Integer getTargetBudget(TransactionController.Transaction transaction);
 
     List<Map<String, Object>> getTransactionValue(TransactionController.Transaction transaction);
+
+    List<Map<String, Object>> getTransactionHistory(TransactionController.Transaction transaction);
 }
