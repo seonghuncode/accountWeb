@@ -19,4 +19,10 @@ public interface TransactionService {
 
     List<Map<String, Object>> getDistinctTransactionHistory(List<Map<String, Object>> transactionHistory);
 
+    List<Map<String, Object>> getDayCntExpend(TransactionController.Transaction transaction);
+
+    List<Map<String, Object>> getDayCntIncome(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDailyTotalData(List<Map<String, Object>>  distinctTransactionHistory, List<Map<String, Object>>  dayCntExpend,List<Map<String, Object>>   dayCntIncome);
+
 }

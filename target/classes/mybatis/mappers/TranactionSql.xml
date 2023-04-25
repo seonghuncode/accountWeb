@@ -42,5 +42,27 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <select id="getDayCntExpend" resultType="map" parameterType="hashmap">
+        SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '지출'
+        GROUP BY transaction_date
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
+
+    <select id="getDayCntIncome" resultType="map" parameterType="hashmap">
+        SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '수입'
+        GROUP BY transaction_date
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
+
 
 </mapper>

@@ -16,4 +16,8 @@ public interface TransactionRepository {
     List<Map<String, Object>> getTransactionValue(TransactionController.Transaction transaction);
 
     List<Map<String, Object>> getTransactionHistory(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntExpend(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntIncome(TransactionController.Transaction transaction);
 }

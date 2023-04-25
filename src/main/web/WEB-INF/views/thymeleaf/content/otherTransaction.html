@@ -106,15 +106,18 @@
      (만약 31~24 -> 10~1로 더보기 버튼을 클릭해도 아무데이터가 없다면 -7을 해서 데이터가 출력될때 까지 -7 ==> show가 1이 아니라는 조건 and조건 추가)
      ==> tbody태그 부분 반복문(존재 하는 데이터가 끝날 때까지지
      -->
+
     <div class="moneyFrame">
         <!-- 테이블을 일별로 만들기 위해서 제일 바깥쪽에서는 내림차순으로 정력 되어 있는 테이블에 대한 일을 꺼낸다  -->
         <table class="table table-hover" style="text-align: center; font-size: small"
-               th:each="transactionDate : ${distinctTransactionHistory}">
+               th:each="transactionDate, index : ${getDailyTotalData}" >
+<!--               th:each="transactionDate, index : ${distinctTransactionHistory}" >-->
             <thead>
             <tr style="background-color: #FDF5E6">
-                <th colspan="2" style="text-align: left; padding-left: 15px">[[${transactionDate.transaction_date}]]
+                <th colspan="2" style="text-align: left; padding-left: 15px">
+                    [[${transactionDate.transaction_date}]] ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
                 </th>
-                <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입1000 지출5000)</th>
+                <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : [[${transactionDate.dayCntIncome}]] 지출 : [[${transactionDate.dayCntExpend}]] ) </th>
             </tr>
             <tr style="background-color: #FDF5E6">
                 <th scope="col">번호</th>

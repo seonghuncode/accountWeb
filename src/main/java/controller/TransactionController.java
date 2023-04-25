@@ -101,9 +101,24 @@ public class TransactionController {
         List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
         distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
         model.addAttribute("distinctTransactionHistory", distinctTransactionHistory);
-        
-        //필요 추가 작업 : 일별로 나눈 테이블 안에 데이터 넣어주기(ex. id,분류명, 메모,거래,번호 + 일별 수입 총 합계, 일별 총 지출 합계를 구해서 distinctTransactionHistory여기에 넣어주기)
 
+        //일별 총 합계 수입, 총 하계 지출 내역에 대한 정보를 받아오는 로직
+        List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpend(transaction); //일별 총 지출 내역 합계
+//        System.out.println(dayCntExpend);
+//        model.addAttribute("dayCntExpend",dayCntExpend);
+        List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncome(transaction); //일별 총 수입 내역 합계
+//        model.addAttribute("dayCntIncome", dayCntIncome);
+//        System.out.println(dayCntIncome);
+
+        //기존 특정 메인 페이지 에서 테이블을 일별로 보여주기 위한 데이터가 날짜, 일별 지출 총 합, 일별 수입 총 합으로 나누어져  따로 불러와서 사용하는데 어려움이 있어
+        //==>3개의 데이터를 하나의 map List로 합치는 작업을 해주었다.
+        //==>특정 회원의 지출 내역을 볼때 테이블을 입렬로 나타낼 경우 일별 날짜, 총 지출 합계, 총 수입 합계를 하나의 객체에 담아 클라이언트로 보내야 한다
+        List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+//        model.addAttribute("combinedList",getDailyTotalData);
+//        System.out.println("============");
+//        System.out.println(getDailyTotalData);
+//        System.out.println("============");
+        model.addAttribute("getDailyTotalData", getDailyTotalData);
 
 
         //DB에서 메인화면에서 클릭한 특정 회원의 아이디를 통해 -> 해당 회원의 목표 예산, 남은 목표예산, 수입 합계, 지출 합계를 받아와 넘겨준다.
