@@ -74,9 +74,9 @@
                     <td th:if="${leftMoney} != -1" th:text="${#numbers.formatInteger(leftMoney, 0, 'COMMA')}"></td>
                     <td th:unless="${leftMoney} != -1"> -</td>
 
-                    <td th:text="${#numbers.formatInteger(incomeSum, 0, 'COMMA')}"></td>
+                    <td style="color: red" th:text="${#numbers.formatInteger(incomeSum, 0, 'COMMA')}"></td>
 
-                    <td th:text="${#numbers.formatInteger(expendSum, 0, 'COMMA')}"></td>
+                    <td style="color: blue" th:text="${#numbers.formatInteger(expendSum, 0, 'COMMA')}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -117,7 +117,7 @@
                 <th colspan="2" style="text-align: left; padding-left: 15px">
                     [[${transactionDate.transaction_date}]] ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
                 </th>
-                <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : [[${transactionDate.dayCntIncome}]] 지출 : [[${transactionDate.dayCntExpend}]] ) </th>
+                <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span> 지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> ) </th>
             </tr>
             <tr style="background-color: #FDF5E6">
                 <th scope="col">번호</th>
@@ -127,13 +127,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="history : ${transactionHistory}">
+            <tr th:each="history, index : ${transactionHistory}">
                 <!-- 최상위 에서 도는 반복문의 날짜와 여기서 도는 반복문의 날짜가 같은 것만 출력 -->
                 <div th:if="${#strings.equals(history.transaction_date, transactionDate.transaction_date)}">
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row">[[${index.count}]]</th>
+                    <td>[[${history.name}]]</td>
+                    <td>[[${history.memo}]]</td>
+                    <td th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
                 </div>
             </tr>
             </tbody>
