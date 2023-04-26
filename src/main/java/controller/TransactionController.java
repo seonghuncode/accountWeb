@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import service.TransactionService;
 
 import java.time.LocalDate;
@@ -118,18 +121,34 @@ public class TransactionController {
 //        System.out.println("============");
 //        System.out.println(getDailyTotalData);
 //        System.out.println("============");
+        //들어있는 데이터 예시 : [{transaction_date=2023-04-22, dayCntExpend=13500, dayCntIncome=8000}, {transaction_date=2023-04-21, dayCntExpend=13500, dayCntIncome=8000}, {transaction_date=2021-04-29, dayCntExpend=40000, dayCntIncome=40000}, {transaction_date=2021-04-22, dayCntExpend=0, dayCntIncome=16000}, {transaction_date=2021-04-16, dayCntExpend=40000, dayCntIncome=40000}]
         model.addAttribute("getDailyTotalData", getDailyTotalData);
 
 
-        //DB에서 메인화면에서 클릭한 특정 회원의 아이디를 통해 -> 해당 회원의 목표 예산, 남은 목표예산, 수입 합계, 지출 합계를 받아와 넘겨준다.
-        //1. userId에 대한 primary key값을 찾는다.
-        //2. 예산액 테이블에서 외래키가 primary key값인 값을 찾아온다.
-        //3. 거래내역 테이블에서 외래키가 primary key와 같으면서 type이 수입 / 지출인 것을 모두 각각 불러와 합해준다.
-        //4. 전체 예산에서 지출 총 합계를 빼준다.
-        //(transaction에 대한 service, repository를 다시 만들어 주기 위해서는 dispathcer-servlet에 등록을 해주어야 한다.)
+        //현재 메인화면 -> 특정 회원의 지출 내역에 들어갈 경우 존재하는 일 수를 전부 보여준다(문제 : 데이터가 많을 경우 페이지가 스크롤 양이 늘어나 가독성이 떨어진다.)
+        //해결 방안 : transactionService.getDateCnt(getDailyTotalData)
+        //전체 DB에 존재 하는 일수를 구해서 일수가 3보다 작다면 가지고 있는 전체 데이터를 클라이언트로 보낸다.
+        //만약 전체 일수가 3을 넘는다면 클라인언트로 3을 return해준다.
+        //이후 클라이언트 에서 7일치 더보기 버튼을 클릭할 경우 ajax를 통해 /showTransaction/dateCnt와 통신해 최대 보여줄 일수를 return받아 클라이언트 수정
+        int dateCnt = transactionService.getDateCnt(getDailyTotalData);
+        model.addAttribute("dateCnt", dateCnt);
 
 
         return "thymeleaf/content/otherTransaction";
+    }
+
+
+    //메인 페이지 에서 특정 회원을 클릭해서 특정회원의 거래내역 페이지로 들어가면 처음 최대 3일치의 데이터를 테이블로 보여준다.
+    //이때 하단의 7일치 내역 더보기를 클릭 하면 가지고 있는 데이터에 7일치를 추가적으로 보여주기위해 +7을 해주는 로직
+    // (이때 데이터 전체 일수의 갯수 < +3을 해준 값이 클경우 반복문의 마지막 조건을 데이터 일수의 전체 갯수로 변경을 해준다.)
+    @RequestMapping(value = "/showTransaction/dateCnt", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> dateCnt(@RequestParam int dateCnt) {
+
+//        System.out.println(dateCnt);
+        Map<String, Object> map = transactionService.getDateCnt2(dateCnt);
+
+        return map;
     }
 
 

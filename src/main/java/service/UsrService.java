@@ -44,4 +44,5 @@ public interface UsrService {
 
     //검색 회원에 대한 전체 수
     int countSearchUsrListTotal(String search);
+
 }

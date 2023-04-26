@@ -17,6 +17,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    //특정 회원 지출 내역에서 해당 회원이 실제 DB에 가지고 있는 전체 지출 일수의 갯수를 저장하고 있다.(getDateCnt2에서 사용)
+    private  int originDateCnt;
 
     public int getPrimaryId(String userId) {
         return transactionRepository.getPrimaryId(userId);
@@ -147,6 +149,44 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return getDailyTotalData;
+    }
+
+
+    //처음 특정 회원 지출 내역에서 한 페이지에 최대 일수 테이블을 3개만 보여주기 위해 존재하는 로직
+    public int getDateCnt(List<Map<String, Object>> getDailyTotalData){
+
+
+        int dateCnt = 0;
+        for(int i = 0; i < getDailyTotalData.size(); i++){
+            dateCnt++;
+        }
+        
+        originDateCnt = dateCnt; //전역변수로 getDateCnt2메소드 에서도 사용이 가능하도록 지정
+        
+        //System.out.println(dateCnt);
+        if(dateCnt < 3){  //한페이지 에 3일치 데이터를 보여 줄 예정인데 데이터가 3개보다 작다면 전체 0,1,2의 갖고 있는 데이터를 전부 보여주기 위함
+            return dateCnt;
+        }else{  //데이터가 3개 이상이라면 3을 return해 주어 3개의 데이터만 보이도록 한다.
+            return 3;
+        }
+
+    }
+
+    //특정 회원 지출 내역 페이지에서 추후 사용자가 7일치 내역 더보기 버튼을 클릭할 경우 한페이지에 보여줄 테이블 갯수릐 최대치를 변경해서 return해주는 로직
+    public Map<String, Object> getDateCnt2(int dateCnt){
+
+        int changeDateCnt = dateCnt+7;
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        if(originDateCnt > changeDateCnt){ //기존의 보여지는 페이지 일수의 합이 실제 해당 회원이 가지고 있는 일수 데이터 보다 작을 경우 +7한 값 return
+            map.put("changeDateCnt", changeDateCnt);
+        }else if(originDateCnt <= changeDateCnt){ //+7한 값이 실제 해당 회원이 갖고 있는 데이터를 넘어갈 경우 전체 회원의 갯수를return
+            map.put("changeDateCnt", originDateCnt);
+            map.put("lastPage", 1); //더이상 볼 데이터가 없다는 것을 알려주기 위해
+        }
+//        System.out.println(originDateCnt);
+
+        return map;
     }
 
 

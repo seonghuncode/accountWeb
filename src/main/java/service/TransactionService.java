@@ -25,4 +25,9 @@ public interface TransactionService {
 
     List<Map<String,Object>> getDailyTotalData(List<Map<String, Object>>  distinctTransactionHistory, List<Map<String, Object>>  dayCntExpend,List<Map<String, Object>>   dayCntIncome);
 
+    int getDateCnt(List<Map<String, Object>> getDailyTotalData);
+
+    Map<String, Object> getDateCnt2(int dateCnt);
+
+
 }
