@@ -107,44 +107,46 @@
      ==> tbody태그 부분 반복문(존재 하는 데이터가 끝날 때까지지
      -->
 
-
-    <div class="moneyFrame" id="topTable">
-        <!-- 테이블을 일별로 만들기 위해서 제일 바깥쪽에서는 내림차순으로 정력 되어 있는 테이블에 대한 일을 꺼낸다  -->
-        <!--        <table class="table table-hover" style="text-align: center; font-size: small"-->
-        <!--               th:each="transactionDate, index : ${getDailyTotalData}">-->
-        <table class="table table-hover" style="text-align: center; font-size: small"
-               th:each="transactionDate, index : ${getDailyTotalData}">
-            <show-cnt id="more7days" th:if="${index.count}<=${dateCnt}"> <!-- 컨트롤러 에서 받아오는 보여주고 싶은 dateCnt까지만 테이블을 생성해서 보여줘라 -->
-                <thead>
-                <tr style="background-color: #FDF5E6">
-                    <th colspan="2" style="text-align: left; padding-left: 15px">
-                        [[${transactionDate.transaction_date}]]
-                        ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
-                    </th>
-                    <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
-                        지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
-                    </th>
-                </tr>
-                <tr style="background-color: #FDF5E6">
-                    <th scope="col">번호</th>
-                    <th scope="col">분류명</th>
-                    <th scope="col">매모</th>
-                    <th scope="col">거래</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="history, index : ${transactionHistory}">
-                    <!-- 최상위 에서 도는 반복문의 날짜와 여기서 도는 반복문의 날짜가 같은 것만 출력 -->
-                    <div th:if="${#strings.equals(history.transaction_date, transactionDate.transaction_date)}">
-                        <th scope="row">[[${index.count}]]</th>
-                        <td>[[${history.name}]]</td>
-                        <td>[[${history.memo}]]</td>
-                        <td th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
-                    </div>
-                </tr>
-                </tbody>
-            </show-cnt>
-        </table>
+    <div id="topTable">
+        <div class="moneyFrame">
+            <!-- 테이블을 일별로 만들기 위해서 제일 바깥쪽에서는 내림차순으로 정력 되어 있는 테이블에 대한 일을 꺼낸다  -->
+            <!--        <table class="table table-hover" style="text-align: center; font-size: small"-->
+            <!--               th:each="transactionDate, index : ${getDailyTotalData}">-->
+            <table class="table table-hover" style="text-align: center; font-size: small"
+                   th:each="transactionDate, index : ${getDailyTotalData}">
+                <show-cnt id="more7days" th:if="${index.count}<=${dateCnt}">
+                    <!-- 컨트롤러 에서 받아오는 보여주고 싶은 dateCnt까지만 테이블을 생성해서 보여줘라 -->
+                    <thead>
+                    <tr style="background-color: #FDF5E6">
+                        <th colspan="2" style="text-align: left; padding-left: 15px">
+                            [[${transactionDate.transaction_date}]]
+                            ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
+                        </th>
+                        <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
+                            지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
+                        </th>
+                    </tr>
+                    <tr style="background-color: #FDF5E6">
+                        <th scope="col">번호</th>
+                        <th scope="col">분류명</th>
+                        <th scope="col">매모</th>
+                        <th scope="col">거래</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="history, index : ${transactionHistory}">
+                        <!-- 최상위 에서 도는 반복문의 날짜와 여기서 도는 반복문의 날짜가 같은 것만 출력 -->
+                        <div th:if="${#strings.equals(history.transaction_date, transactionDate.transaction_date)}">
+                            <th scope="row">[[${index.count}]]</th>
+                            <td>[[${history.name}]]</td>
+                            <td>[[${history.memo}]]</td>
+                            <td th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                        </div>
+                    </tr>
+                    </tbody>
+                </show-cnt>
+            </table>
+        </div>
     </div>
 
 
@@ -166,16 +168,14 @@
 </div>
 
 
-
 <!-- 7일치 내역 더 보기 버튼을 클릭할 경우, 자바스크립트로 타임리프 객체 넘기는 방법 -->
 <script type="text/javascript" th:inline="javascript">
     var dateCnt = [[${dateCnt}]];
+    var transactionHistory = [[${transactionHistory}]];
+    var getDailyTotalData = [[${getDailyTotalData}]];
     //console.log(username);
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
-
-
-
 
 
 </body>
