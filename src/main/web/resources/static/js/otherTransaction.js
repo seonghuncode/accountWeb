@@ -40,7 +40,7 @@ $("#show_more").click(function () {
             var today = new Date(transactionDate.transaction_date).getDay();
 
             if((index+1) <= changeDateCnt){
-                console.log("만들어지는 테이블 갯수")
+                // console.log("만들어지는 테이블 갯수")
                 theadHtml += '<table class="table table-hover" style="text-align: center; font-size: small">';
                 theadHtml += '<thead>';
                 theadHtml += '<tr style="background-color: #FDF5E6">';
@@ -75,11 +75,11 @@ $("#show_more").click(function () {
         dataType: "json",   //dataType : "html", "json", "text"
         contentType: "application/json; charset=utf-8",
         success: function (res) {
-            console.log(res);
+            // console.log(res);
 
             let changeDate = res['changeDateCnt'];
             showMore(changeDate);
-            console.log(changeDate);
+            // console.log(changeDate);
 
             if (res['lastPage'] === 1) {
                 swal('※알림', "마지막 지출 내역 입니다.", 'info')
@@ -96,3 +96,12 @@ $("#show_more").click(function () {
 
 
 });
+
+
+//맨위로 이동하는 버튼을 클릭하면 페이지 상단으로 이동시키는 로직
+$("#moveTopBtn").click(function () {
+
+    // console.log("상단 이동")
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+
+})

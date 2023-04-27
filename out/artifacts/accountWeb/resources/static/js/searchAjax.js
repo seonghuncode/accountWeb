@@ -17,7 +17,7 @@ $("#doSearch").click(function () {
     }
 
     //검색어에 대한 페이징 기능을 수행하는 함수------------------------------------------------------------------------------------------------------------------
-     function showPaging(data, search) {
+    function showPaging(data, search) {
         // 페이징 관련해서 controller에서 받아온 데이터로 수정 해주는 작업
         //html : 기존에 있던 태그를 지우고 새로 추가 append : 기존의 태그를 남겨 두고 다음에 추가
         $('#pagingFn > ul').empty();  //기존 페이징 버튼들 모두 제거
@@ -27,7 +27,7 @@ $("#doSearch").click(function () {
         if (data.pageMaker.prev) {
             $('#pagingFn > ul').append(
                 ' <li class="page-item">' +
-                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + ","  +  (data.pageMaker.startPage -1) + ')"  id="move" aria-label="Previous">' + ' <span aria-hidden="true">&laquo;</span>'  + '</button>' +
+                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," + (data.pageMaker.startPage - 1) + ')"  id="move" aria-label="Previous">' + ' <span aria-hidden="true">&laquo;</span>' + '</button>' +
                 '  </li>' +
                 '   </div>')
         }
@@ -37,14 +37,14 @@ $("#doSearch").click(function () {
                 $('#pagingFn > ul').append(
                     ' <li class="page-item active" aria-current="page">' +
                     // <!-- 만약 현재 페이지 == 버튼 숫자가 동일하다면 색상 지정 -->
-                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," +  pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
+                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," + pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
                     ' </li>'
                 )
             } else {
                 $('#pagingFn > ul').append(
                     '<li class="page-item">' +   //여기까지 수정
                     // <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 / 페이지 이동시 검색어, 검색 페이지를 controller로 넘겨준다 -->
-                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," +  pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
+                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," + pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
                     '  </li>'
                 )
             }
@@ -56,7 +56,7 @@ $("#doSearch").click(function () {
         if (data.pageMaker.next && data.pageMaker.endPage > 0) {
             $('#pagingFn > ul').append(
                 ' <li class="page-item">' +
-                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," +  (data.pageMaker.endPage+1) + ')"  id="move" aria-label="Next">' + '  <span aria-hidden="true">&raquo;</span>' + '</button>' +
+                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," + (data.pageMaker.endPage + 1) + ')"  id="move" aria-label="Next">' + '  <span aria-hidden="true">&raquo;</span>' + '</button>' +
                 ' </li>'
             )
         }
@@ -105,7 +105,7 @@ $("#doSearch").click(function () {
 //===============================================================>>>>메인 페이지 에서 검색 버튼 누르고 이후 페이징 버튼 클릭시 기능
 
 //페이징 버튼을 클릭하면 해당 페이지 번호에 대한 번호와 검색어를 매개변수로 넘겨준다.
-function movePage(search,pageNum) {
+function movePage(search, pageNum) {
 
     // console.log("search : " + search);
     // console.log("pageNum : " + pageNum);
@@ -136,7 +136,7 @@ function movePage(search,pageNum) {
         if (data.pageMaker.prev) {
             $('#pagingFn > ul').append(
                 ' <li class="page-item">' +
-                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + ","  +  (data.pageMaker.startPage -1) + ')"  id="move" aria-label="Previous">' + ' <span aria-hidden="true">&laquo;</span>'  + '</button>' +
+                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," + (data.pageMaker.startPage - 1) + ')"  id="move" aria-label="Previous">' + ' <span aria-hidden="true">&laquo;</span>' + '</button>' +
                 '  </li>' +
                 '   </div>')
         }
@@ -146,14 +146,14 @@ function movePage(search,pageNum) {
                 $('#pagingFn > ul').append(
                     ' <li class="page-item active" aria-current="page">' +
                     // <!-- 만약 현재 페이지 == 버튼 숫자가 동일하다면 색상 지정 -->
-                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," +  pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
+                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," + pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
                     ' </li>'
                 )
             } else {
                 $('#pagingFn > ul').append(
                     '<li class="page-item">' +   //여기까지 수정
                     // <!-- 현재 페이지 == 버튼번호가 같은 경우가 아니라면 색을 채우지 말고 보여줘라 / 페이지 이동시 검색어, 검색 페이지를 controller로 넘겨준다 -->
-                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," +  pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
+                    ' <button type="button" class="page-link" onclick="movePage( \'' + search + '\'' + "," + pageNum + ')"  id="move">' + '<i class="fa">' + pageNum + '</i>' + '</button>' +
                     '  </li>'
                 )
             }
@@ -165,7 +165,7 @@ function movePage(search,pageNum) {
         if (data.pageMaker.next && data.pageMaker.endPage > 0) {
             $('#pagingFn > ul').append(
                 ' <li class="page-item">' +
-                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," +  (data.pageMaker.endPage+1) + ')"  id="move" aria-label="Next">' + '  <span aria-hidden="true">&raquo;</span>' + '</button>' +
+                ' <button type="button" class="page-link" onclick="movePage(\'' + search + '\'' + "," + (data.pageMaker.endPage + 1) + ')"  id="move" aria-label="Next">' + '  <span aria-hidden="true">&raquo;</span>' + '</button>' +
                 ' </li>'
             )
         }
@@ -173,12 +173,12 @@ function movePage(search,pageNum) {
     }
 
 
-
-
     $.ajax({
         url: "/usr/doSearch",
-        data: {search: search,
-                page : pageNum},  //JSON.stringify(search)
+        data: {
+            search: search,
+            page: pageNum
+        },  //JSON.stringify(search)
         type: "get",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
@@ -198,5 +198,8 @@ function movePage(search,pageNum) {
 
 
 }
+
+
+
 
 
