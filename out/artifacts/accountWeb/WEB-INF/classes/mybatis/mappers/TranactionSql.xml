@@ -37,8 +37,8 @@
         FROM `transaction`
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
-                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
-        WHERE MONTH (`transaction_date`)=#{month}
+                           ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{month} AND `user`.id = #{primaryId}
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
@@ -47,8 +47,8 @@
         FROM `transaction`
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
-                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
-        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '지출'
+                           ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '지출' AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -58,8 +58,8 @@
         FROM `transaction`
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
-                           ON `transaction`.userId = `user`.id AND `user`.id = #{primaryId}
-        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '수입'
+                           ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '수입' AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
