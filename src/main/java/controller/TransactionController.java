@@ -57,7 +57,7 @@ public class TransactionController {
 
         int primaryId = transactionService.getPrimaryId(userId);
         transaction.setPrimaryId(primaryId);
-        //System.out.println("프리마리키 아이디" + primaryId);
+//        System.out.println("프리마리키 아이디" + primaryId);
 
         //검색월 기준에서 목표 예산을 불러오는 부분(당월이 default이기 때문에 당월에 대한 데이터를 넣어준다.)
         //조건 : 선택한 특정 회원 + 당월 ==> 예산액

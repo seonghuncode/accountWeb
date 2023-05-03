@@ -84,7 +84,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Map<String, Object>> getDailyTotalData(List<Map<String, Object>> distinctTransactionHistory, List<Map<String, Object>> dayCntExpend, List<Map<String, Object>> dayCntIncome) {
 
         List<Map<String, Object>> getDailyTotalData = new ArrayList<>();
-//        System.out.println(distinctTransactionHistory);
+//        System.out.println("distinctTransactionHistory" + distinctTransactionHistory);
         //필요한 데이터 날짜, 지출 합계, 수입 합계
         for (int i = 0; i < distinctTransactionHistory.size(); i++) {
 

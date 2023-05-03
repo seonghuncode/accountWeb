@@ -105,3 +105,77 @@ $("#moveTopBtn").click(function () {
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 
 })
+
+
+
+//특정 회원의 지출내역 화면에서 radio button에 대한 검색 조건에 따라 화면 설정 하는 javascript부분
+//step1 : 우선 radio button에 따라 검색 조건 디자인을 변경해주는 부분
+$(".search_select").click(function () {
+
+    //현재 어떤 radio button이 선택 되어 있는지 받아온다.
+    var checkVal = $('input[name=search]:checked').val();
+    // console.log(checkVal);
+
+    if(checkVal === "이번 달"){
+        // console.log("이번 달");
+        $('#whichRadio > th').remove();
+        $('#whichRadio > td').remove();
+        $('#whichRadio').append(
+            '<th style="background-color: #dcdcdc">당월</th>' +
+            '<td>' +
+            year +
+            '년' +
+            month +
+            '월' +
+            '</td>'
+        );
+    }else if(checkVal === "월별검색"){ //타임리프 에서 받아야 할 데이터 : 연도, 월, 분류명
+        // console.log("월별검색");
+        // $('#whichRadio > th,td').empty();
+        $('#whichRadio > th').remove();
+        $('#whichRadio > td').remove();
+        $('#whichRadio').append(
+            '<th style="background-color: #dcdcdc">월 선택</th>' +
+            '<td>' +
+            '<input type="month" id="selectMonth" />' +
+            '</td>'
+        );
+    }else if(checkVal === "기간별검색"){
+        // console.log("기간별검색");
+        $('#whichRadio > th').remove();
+        $('#whichRadio > td').remove();
+        $('#whichRadio').append(
+            '<th style="background-color: #dcdcdc; vertical-align: middle">기간 선택</th>' +
+            '<td>' +
+            '시작일 : <input type="date" name="startDate" id="startDate">' +
+            '</br>' +
+            '종료일 : <input type="date" name="endDate" id="endDate">' +
+            '</td>'
+        );
+    }
+
+})
+
+//특정 회원의 지출내역 화면에서 radio button에 대한 검색 조건에 따라 화면 설정 하는 javascript부분
+//step2 : step1에서 바뀐 디자인에 사용자가 데이터를 입력 or 선택 하고 검색 버튼을 클릭하면 지출 내역 데이터를 바꾸어 주는 부분
+//발생 가능 상황 : 월 선택, 검색어 / 기간 데이터, 검색어 / 이번달, 검색어에 대한 결과
+$('#searchBtn').click(function(){
+
+    var checkVal = $('input[name=search]:checked').val();
+    console.log("click button!!");
+
+    if(checkVal === "이번 달"){
+        console.log();
+    }else if(checkVal === "월별검색"){
+        // console.log($('#selectMonth').val());
+        let date = $('#selectMonth').val();
+        let year = date.split('-')[0]; //사용자가 선택한 연도
+        let month = date.split('-')[1]; //사용자가 선택한 월
+        // console.log("year : " + year + " month : " + month);
+        let sortName = $('#sortName').val(); //사용자가 입력한 분류명
+        // console.log(sortName);
+        
+    }else if(checkVal === "기간별검색"){
+        console.log();
+    }
+})

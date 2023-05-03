@@ -33,18 +33,18 @@
                 </thead>
                 <tbody>
 
-                <tr align="center">
+                <tr align="center" id="whichRadio">
                     <th style="background-color: #dcdcdc">당월</th>
                     <td>[[${year}]]년[[${month}]]월</td>
                 </tr>
                 <tr align="center" class="vertical_center">
                     <th style="background-color: #dcdcdc">조건 추가(선택사항)</th>
                     <td><input class="form-control form-control-sm" type="text" placeholder="분류명 입력"
-                               aria-label="default input example"></td>
+                               aria-label="default input example" id="sortName"></td>
                 </tr>
                 <tr align="center">
                     <th colspan="2">
-                        <button type="button" class="btn btn-outline-success search_btn">검색</button>
+                        <button type="button" class="btn btn-outline-success search_btn" id="searchBtn">검색</button>
                     </th>
                 </tr>
 
@@ -170,10 +170,15 @@
 
 <!-- 7일치 내역 더 보기 버튼을 클릭할 경우, 자바스크립트로 타임리프 객체 넘기는 방법 -->
 <script type="text/javascript" th:inline="javascript">
+    // 지출 내역 테이블에 대해 7일치 내역 더보기 버튼을 클릭했을 경우 함수 에서 사용
     var dateCnt = [[${dateCnt}]];
     var transactionHistory = [[${transactionHistory}]];
     var getDailyTotalData = [[${getDailyTotalData}]];
     //console.log(username);
+
+    //검색 조건에 대한 radio button에 따라 화면을 보여줄때 사용하는 data
+    var year = [[${year}]];
+    var month = [[${month}]];
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
 
