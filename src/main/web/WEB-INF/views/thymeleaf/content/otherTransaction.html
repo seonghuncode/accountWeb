@@ -24,9 +24,9 @@
                 <tr align="center" bgcolor="white">
                     <th style="background-color: #dcdcdc">검색조건</th>
                     <td>
-                        <input class="search_select" type="radio" name="search" value="월별검색">월별겁색
-                        <input class="search_select" type="radio" name="search" value="기간별검색">기간별검색
-                        <input class="search_select" type="radio" name="search" value="이번 달" checked="checked">이번 달
+                        <input class="search_select" type="radio" name="search" value="월별검색" id="firstSearch">월별겁색
+                        <input class="search_select" type="radio" name="search" value="기간별검색" id="secondSearch">기간별검색
+                        <input class="search_select" type="radio" name="search" value="이번 달" id="thirdSearch">이번 달
                     </td>
                 </tr>
 
@@ -179,6 +179,7 @@
     //검색 조건에 대한 radio button에 따라 화면을 보여줄때 사용하는 data
     var year = [[${year}]];
     var month = [[${month}]];
+    var userId = [[${userId}]];
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
 

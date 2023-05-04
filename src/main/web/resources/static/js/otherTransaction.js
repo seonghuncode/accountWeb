@@ -163,19 +163,110 @@ $('#searchBtn').click(function(){
 
     var checkVal = $('input[name=search]:checked').val();
     console.log("click button!!");
+    let userId1 = userId; //타임리프에서 받아온 userId값을 저장하는 변수 (저장하고 사용하지 않으면 페이지 이동 or 뒤로가기시 null값이 들어가 오류 발생)
 
     if(checkVal === "이번 달"){
-        console.log();
+        // console.log();
+        location.href = '/transaction/showTransaction?userId=' + userId1; //이번달을 선택한고 검색 버튼을 클릭하면 해당 회원의 아이디값을 해당 url로 넘겨 준다.
     }else if(checkVal === "월별검색"){
         // console.log($('#selectMonth').val());
-        let date = $('#selectMonth').val();
+        let date = $('#selectMonth').val(); //사용자가 radio button중 월별검색 에서 선택한 날짜
         let year = date.split('-')[0]; //사용자가 선택한 연도
         let month = date.split('-')[1]; //사용자가 선택한 월
         // console.log("year : " + year + " month : " + month);
         let sortName = $('#sortName').val(); //사용자가 입력한 분류명
         // console.log(sortName);
-        
+
+        console.log(userId1);
+        location.href = '/transaction/showTransaction/whichSelect?userId=' + userId1 + '&selectYear=' + year + '&selectMonth=' + month;
+        //서버에 요청하는 부분-------------------------------------------
+        //ajax로 할경우 너무 복잡 해짐???
+        // let searchData = {
+        //     "data" : data,
+        //     "year" : year,
+        //     "month" : month
+        // };
+        //
+        // $.ajax({
+        //     url: "/transaction/showTransaction/whichSelect",
+        //     data: searchData, //data: info, JSON.stringify(info)
+        //     type: "get",
+        //     dataType: "json",   //dataType : "html", "json", "text"
+        //     contentType: "application/json; charset=utf-8",
+        //     success: function (res) {
+        //         // console.log(res);
+        //
+        //
+        //     },
+        //     error: function () {
+        //         alert("error")
+        //     }
+        // });
+        //서버에 요청하는 부분-------------------------------------------
+
     }else if(checkVal === "기간별검색"){
         console.log();
     }
+
+
+
+
+
 })
+
+
+
+
+
+//페이지에 따라 radio button 체크 박스 설정하기
+const target1 = document.getElementById('firstSearch');
+const target2 = document.getElementById('secondSearch');
+const target3 = document.getElementById('thirdSearch');
+
+
+//현재 페이지를 locahost:8085다음 ?전까지 불러온다
+const nowPage = window.location.pathname;
+// console.log("현재 페이지 : " + nowPage);
+
+if (nowPage === "/transaction/showTransaction") {
+    target1.checked = false;
+    target2.checked = false;
+    target3.checked = true;
+    $('#whichRadio > th').remove();
+    $('#whichRadio > td').remove();
+    $('#whichRadio').append(
+        '<th style="background-color: #dcdcdc">당월</th>' +
+        '<td>' +
+        year +
+        '년' +
+        month +
+        '월' +
+        '</td>'
+    );
+} else if (nowPage === "/transaction/showTransaction/whichSelect") {
+    target1.checked = true;
+    target2.checked = false;
+    target3.checked = false;
+    $('#whichRadio > th').remove();
+    $('#whichRadio > td').remove();
+    $('#whichRadio').append(
+        '<th style="background-color: #dcdcdc">월 선택</th>' +
+        '<td>' +
+        '<input type="month" id="selectMonth" />' +
+        '</td>'
+    );
+} else if (nowPage === "") {
+    target1.checked = false;
+    target2.checked = true;
+    target3.checked = false;
+    $('#whichRadio > th').remove();
+    $('#whichRadio > td').remove();
+    $('#whichRadio').append(
+        '<th style="background-color: #dcdcdc; vertical-align: middle">기간 선택</th>' +
+        '<td>' +
+        '시작일 : <input type="date" name="startDate" id="startDate">' +
+        '</br>' +
+        '종료일 : <input type="date" name="endDate" id="endDate">' +
+        '</td>'
+    );
+}

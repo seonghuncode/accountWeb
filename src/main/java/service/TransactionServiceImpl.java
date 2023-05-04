@@ -5,6 +5,7 @@ import dao.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,6 +188,28 @@ public class TransactionServiceImpl implements TransactionService {
 //        System.out.println(originDateCnt);
 
         return map;
+    }
+
+    public String getThisYear(){
+
+        LocalDate now = LocalDate.now();
+        int year = now.getYear(); //ex. 2023
+        String changeYear = String.valueOf(year).substring(2); //ex. 23
+
+        return changeYear;
+    }
+
+    public String getThisMonth(){
+
+        LocalDate now = LocalDate.now();
+        int month = now.getMonthValue();  //ex. 3
+        String changeMonth = String.format("%02d", month); //ex. 03
+
+        return changeMonth;
+    }
+
+    public List<Map<String, Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction){
+        return transactionRepository.getTransactionHistoryByMonth(transaction);
     }
 
 

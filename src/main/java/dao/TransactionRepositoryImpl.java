@@ -40,4 +40,8 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCentIncome", transaction);
     }
 
+    public List<Map<String, Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionHistoryByMonth", transaction);
+    }
+
 }

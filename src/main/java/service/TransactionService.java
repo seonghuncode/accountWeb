@@ -29,5 +29,11 @@ public interface TransactionService {
 
     Map<String, Object> getDateCnt2(int dateCnt);
 
+    String getThisYear();
+
+    String getThisMonth();
+
+    List<Map<String, Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction);
+
 
 }

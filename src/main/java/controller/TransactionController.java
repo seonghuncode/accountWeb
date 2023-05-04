@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.TransactionService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,12 @@ public class TransactionController {
     //마이바티스에 매개변수로 넘겨주어야 하는 값이 2개이상 이기 때문에 객체에 담아 한번에 넘겨주는 방식
     //메인페이지 에서 사용자가 특정 회원을 클릭하면 해당 회원에 대한 정보를 갖고 있어야 조인해서 데이터를 찾을 수 있따.
     public class Transaction {
-        int primaryId;
-        String userId;
-        String month;
+        int primaryId; //현재 지출 내역의 회원 아이디의 primary key
+        String userId; //현재 지출 내역의 회원 아이디
+        String year; //현재 연도
+        String month; //현재 월
+        String selectYear; //사용자가 radio button에서 선택한 연도
+        String selectMonth; //사용자가 radio button에서 선택한 월
     }
 
 
@@ -37,16 +39,13 @@ public class TransactionController {
 
 
     //{/usr/showTransaction(userId=${user.userId})}"
+    //메인 화면에서 특정 회원을 클릭할 경우 해당 회원의 아이디를 매개변수로 받아와 해당 회원의 지출 내역을 보여주는 controller
     @RequestMapping("/showTransaction")
     public String showTransaction(Model model, String userId) {
 
         //현재 날짜 구하는 부분
-        LocalDate now = LocalDate.now();
-        int year = now.getYear(); //ex. 2023
-        String changeYear = String.valueOf(year).substring(2); //ex. 23
-
-        int month = now.getMonthValue();  //ex. 3
-        String changeMonth = String.format("%02d", month); //ex. 03
+        String changeYear = transactionService.getThisYear();
+        String changeMonth = transactionService.getThisMonth();
 
         model.addAttribute("year", changeYear);
         model.addAttribute("month", changeMonth);
@@ -61,6 +60,7 @@ public class TransactionController {
 
         //검색월 기준에서 목표 예산을 불러오는 부분(당월이 default이기 때문에 당월에 대한 데이터를 넣어준다.)
         //조건 : 선택한 특정 회원 + 당월 ==> 예산액
+        transaction.setYear(changeYear);
         transaction.setMonth(changeMonth);
         transaction.setUserId(userId);
         //Integer로 받는 이유 : int의 경우 특정 사용자가 예산액을 지정하지 않은 경우 null값을 받을 수 없기 때문
@@ -95,6 +95,11 @@ public class TransactionController {
 
 
         //지출 내역에 대한 전체 데이터를 불러오는 부분(transaction table 이랑 sort테이블 조인 + user테이블과 조인)
+//        System.out.println("====================");
+//        System.out.println(transaction.getMonth());
+//        System.out.println(transaction.getYear());
+//        System.out.println(transaction.getPrimaryId());
+//        System.out.println("====================");
         List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistory(transaction);
         model.addAttribute("transactionHistory", transactionHistory);
 //        System.out.println(transactionHistory);
@@ -134,6 +139,28 @@ public class TransactionController {
         model.addAttribute("dateCnt", dateCnt);
 
 
+        //특정 회원의 지출 내역 화면 에서 당월 radio button을 선택할 경우 이페이지로 회원의 userId를 같이 넘겨 주기 위해서 보내주어야 한다.
+        model.addAttribute("userId", userId);
+
+
+//        //targetBuget
+//        System.out.println("targetBuget : " + targetBuget);
+//        //leftMoney
+//        System.out.println("leftMoney : " + leftMoney);
+//        //incomeSum
+//        System.out.println("incomeSum : " + incomeSum);
+//        //expendSum
+//        System.out.println("expendSum : " + expendSum);
+//        //getDailyTotalData
+//        System.out.println("getDailyTotalData : " + getDailyTotalData);
+//        //dateCnt
+//        System.out.println("dateCnt : " + dateCnt);
+//        //transactionHistory
+//        System.out.println("transactionHistory : " + transactionHistory);
+//        //transactionValue
+//        System.out.println("transactionValue : " +  transactionValue);
+
+
         return "thymeleaf/content/otherTransaction";
     }
 
@@ -150,6 +177,103 @@ public class TransactionController {
 
         return map;
     }
+
+
+
+    //특정 회원 지출 내역 에서 사용자가 월별검색, 기간별 검색, 이번달 중 선택한 radio button에 따라 해당 data만 DB에서 모아 return해주는 작업을 해준다.
+    @RequestMapping(value = "/showTransaction/whichSelect")
+//    public String whichSelect(@RequestParam Map<String, Object> param, Model model){
+    public String whichSelect(Model model, String userId, String selectYear, String selectMonth){
+
+//        //사용자가 radio button중 월별 검색을 클릭하고 요청하는 경우 받는 데이터
+//        String userId = (String) param.get("userId");
+//        String selectYear = (String) param.get("year");
+//        String selectMonth = (String) param.get("month");
+
+        //Parameter로 받아야 하는데이터
+        //userId + 선택한 연도, 선택한 원 or 시작(연도,월,일), 종료(년,월,일)
+
+        //thymeleaf/content/otherTransaction 해당 페이지로 보내주어야 하는 데이터>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //year, month, targetBuget, leftMoney, incomeSum, expendSum, getDailyTotalData, dateCnt, transactionHistory
+
+        //추후 DB에 접근하여 데이터를 얻어올 경우 join을 할때 해당 userId릐 primary key를 찾기 위함
+        Transaction transaction = new Transaction();
+        int primaryId = transactionService.getPrimaryId(userId);
+        transaction.setPrimaryId(primaryId);
+
+        //year
+        model.addAttribute("year", String.valueOf(selectYear).substring(2));
+        //month
+        model.addAttribute("month", selectMonth);
+
+        //transaction객체에 DB에 접근해서 조건을 줄때 필요한 해당 userId, Year, Month값을 넣어 두어야 한다.
+        transaction.setYear(selectYear);
+        transaction.setMonth(selectMonth);
+        transaction.setUserId(userId);
+
+        //targetBudget -> null or 예산액
+        Integer targetBudget = transactionService.getTargetBudget(transaction);
+        model.addAttribute("targetBudget", targetBudget);
+
+        //transactionValue -> [{price=8000, type=수입}, {price=8000, type=지출}, {price=8000, type=수입}, {price=8000, type=지출},......
+        //incomeSum -> 총 수입액, expendSum -> 총 지출액
+        List<Map<String, Object>> transactionValue = transactionService.getTransactionValue(transaction); //현재 받아온 데이터는 map형태 -> key,value로 구성 되어 있다.
+        int incomeSum = 0; //수입 총액
+        int expendSum = 0; //지출 총액
+        for (Map<String, Object> item : transactionValue) {
+            if (item.get("type").equals("지출")) {
+                expendSum += (int) item.get("price");
+            } else if (item.get("type").equals("수입")) {
+                incomeSum += (int) item.get("price");
+            }
+        }
+        model.addAttribute("incomeSum", incomeSum);
+        model.addAttribute("expendSum", expendSum);
+
+        //leftMoney -> -1 or 예산액 - 총 지출액
+        Integer leftMoney = -1;
+        if (targetBudget != null) { //사용자가 예산값을 지정해 두어 null값이 아니라면
+            leftMoney = targetBudget - expendSum; //월 목표 예산에서 - 월 총 소비
+        }
+        model.addAttribute("leftMoney", leftMoney);
+
+        //transactionHistory
+        // -> [{transaction_date=2021-05-31, price=8000, name=기타, memo=이자, type=수입}, {transaction_date=2021-05-31, price=8000, .......
+        transaction.setSelectYear(String.valueOf(selectYear).substring(2));
+        transaction.setSelectMonth(selectMonth);
+
+//        System.out.println(transaction.getUserId());
+//        System.out.println(transaction.getSelectYear());
+//        System.out.println(transaction.getMonth());
+
+        if(true){
+            //1. 사용자가 radio button을 월별 검색으로 했을 경우 해당 year, month에 해당하는 데이터만 불러온다.
+            List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByMonth(transaction);
+//            System.out.println(transactionHistory);
+            model.addAttribute("transactionHistory", transactionHistory);
+
+            //getDailyTotalData
+            // -> [{transaction_date=2021-05-31, dayCntExpend=80000, dayCntIncome=80000}, {transaction_date=2021-05-29, dayCntExpend=80000, dayCntIncome=80000}, {transaction_date=2021-05-16, dayCntExpend=80000, dayCntIncome=80000}]
+            List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
+            distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
+
+            List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpend(transaction); //일별 총 지출 내역 합계
+            List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncome(transaction); //일별 총 수입 내역 합계
+            List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+            model.addAttribute("getDailyTotalData", getDailyTotalData);
+
+
+            //dateCnt -> 존재하는 날짜 갯수
+            int dateCnt = transactionService.getDateCnt(getDailyTotalData);
+            model.addAttribute("dateCnt", dateCnt);
+
+        }
+
+
+
+        return "thymeleaf/content/otherTransaction";
+    }
+
 
 
 }

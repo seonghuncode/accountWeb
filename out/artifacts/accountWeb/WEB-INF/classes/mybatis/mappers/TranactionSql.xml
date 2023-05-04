@@ -17,7 +17,7 @@
         SELECT budget.price
         FROM budget
                  LEFT JOIN `user` ON budget.userId = user.id
-        WHERE MONTH (`month`)=#{month}
+        WHERE MONTH (`month`)=#{month} AND DATE_FORMAT(`month`,'%y')=#{year}
           AND user.id =#{primaryId};
     </select>
 
@@ -38,7 +38,7 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{month} AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month}  AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{year}
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
@@ -64,5 +64,14 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <select id="getTransactionHistoryByMonth" resultType="map" parameterType="hashmap">
+        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{selectMonth} AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{selectYear}
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
 
 </mapper>
