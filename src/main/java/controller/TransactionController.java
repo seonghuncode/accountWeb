@@ -267,6 +267,12 @@ public class TransactionController {
             int dateCnt = transactionService.getDateCnt(getDailyTotalData);
             model.addAttribute("dateCnt", dateCnt);
 
+            //페이지가 리로딩 되어 다음 요청을 할때 userId가 필요하므로 보내주어야 된다.
+            model.addAttribute("userId", userId);
+            //월별 검색에서 사용자가 입력한 연도와 월을 넘겨주어애 input type=month에 value값으로 해당 연,월을 보내기 위해 넘겨준다.
+            model.addAttribute("selectYear", selectYear);
+            model.addAttribute("selectMonth", selectMonth);
+
         }
 
 

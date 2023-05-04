@@ -137,7 +137,7 @@ $(".search_select").click(function () {
         $('#whichRadio').append(
             '<th style="background-color: #dcdcdc">월 선택</th>' +
             '<td>' +
-            '<input type="month" id="selectMonth" />' +
+            '<input type="month" id="selectMonth"/>' +
             '</td>'
         );
     }else if(checkVal === "기간별검색"){
@@ -247,14 +247,16 @@ if (nowPage === "/transaction/showTransaction") {
     target1.checked = true;
     target2.checked = false;
     target3.checked = false;
+
     $('#whichRadio > th').remove();
     $('#whichRadio > td').remove();
     $('#whichRadio').append(
         '<th style="background-color: #dcdcdc">월 선택</th>' +
         '<td>' +
-        '<input type="month" id="selectMonth" />' +
+        '<input name="inputValue" type="month" id="selectMonth" value="" />' +
         '</td>'
     );
+    $('input[name=inputValue]').attr('value',selectYear + "-" + selectMonth); //valuer값에 타임리프에서 보내준 사용자가 선택한 년,월의 값을 넣는다.
 } else if (nowPage === "") {
     target1.checked = false;
     target2.checked = true;
