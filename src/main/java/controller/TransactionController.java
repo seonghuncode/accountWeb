@@ -31,6 +31,7 @@ public class TransactionController {
         String month; //현재 월
         String selectYear; //사용자가 radio button에서 선택한 연도
         String selectMonth; //사용자가 radio button에서 선택한 월
+        String sortName; //사용자가 입력한 분류명을 담는 변수
     }
 
 
@@ -183,7 +184,7 @@ public class TransactionController {
     //특정 회원 지출 내역 에서 사용자가 월별검색, 기간별 검색, 이번달 중 선택한 radio button에 따라 해당 data만 DB에서 모아 return해주는 작업을 해준다.
     @RequestMapping(value = "/showTransaction/whichSelect")
 //    public String whichSelect(@RequestParam Map<String, Object> param, Model model){
-    public String whichSelect(Model model, String userId, String selectYear, String selectMonth){
+    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName){
 
 //        //사용자가 radio button중 월별 검색을 클릭하고 요청하는 경우 받는 데이터
 //        String userId = (String) param.get("userId");
@@ -191,7 +192,7 @@ public class TransactionController {
 //        String selectMonth = (String) param.get("month");
 
         //Parameter로 받아야 하는데이터
-        //userId + 선택한 연도, 선택한 원 or 시작(연도,월,일), 종료(년,월,일)
+        //userId + 선택한 연도, 선택한 원 or 시작(연도,월,일), 종료(년,월,일) + 현재 선택된 radio button 종류 + 검색한 분류명
 
         //thymeleaf/content/otherTransaction 해당 페이지로 보내주어야 하는 데이터>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //year, month, targetBuget, leftMoney, incomeSum, expendSum, getDailyTotalData, dateCnt, transactionHistory
@@ -210,6 +211,12 @@ public class TransactionController {
         transaction.setYear(selectYear);
         transaction.setMonth(selectMonth);
         transaction.setUserId(userId);
+        if(sortName.trim().length() > 0){  //사용자가 입력한 분류명이 길이가 공백을 제외하고 0보다 클경우에만 넣어준다.
+            transaction.setSortName(sortName); //사용자가 검색하고 싶은 분류명을 담는다.
+//        System.out.println(transaction.getSortName());
+        }else {
+            transaction.setSortName("");
+        }
 
         //targetBudget -> null or 예산액
         Integer targetBudget = transactionService.getTargetBudget(transaction);
@@ -237,7 +244,7 @@ public class TransactionController {
         }
         model.addAttribute("leftMoney", leftMoney);
 
-        //transactionHistory
+        //transactionHistory -> 실질적으로 원한는 전체 데이터를 DB에서 가지고 와서 담는 객체?
         // -> [{transaction_date=2021-05-31, price=8000, name=기타, memo=이자, type=수입}, {transaction_date=2021-05-31, price=8000, .......
         transaction.setSelectYear(String.valueOf(selectYear).substring(2));
         transaction.setSelectMonth(selectMonth);
@@ -246,13 +253,14 @@ public class TransactionController {
 //        System.out.println(transaction.getSelectYear());
 //        System.out.println(transaction.getMonth());
 
-        if(true){
+        if(typeRadio.equals("searchMonth")){
             //1. 사용자가 radio button을 월별 검색으로 했을 경우 해당 year, month에 해당하는 데이터만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByMonth(transaction);
+//            System.out.println(sortName);
 //            System.out.println(transactionHistory);
             model.addAttribute("transactionHistory", transactionHistory);
 
-            //getDailyTotalData
+            //getDailyTotalData -> transactionHistory에서 필요로 하는 데이터를 가공해서 클라이언트로 보내줄 데이터를 담는 List?
             // -> [{transaction_date=2021-05-31, dayCntExpend=80000, dayCntIncome=80000}, {transaction_date=2021-05-29, dayCntExpend=80000, dayCntIncome=80000}, {transaction_date=2021-05-16, dayCntExpend=80000, dayCntIncome=80000}]
             List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
             distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
@@ -272,6 +280,7 @@ public class TransactionController {
             //월별 검색에서 사용자가 입력한 연도와 월을 넘겨주어애 input type=month에 value값으로 해당 연,월을 보내기 위해 넘겨준다.
             model.addAttribute("selectYear", selectYear);
             model.addAttribute("selectMonth", selectMonth);
+            model.addAttribute("sortName", sortName);
 
         }
 

@@ -162,8 +162,10 @@ $(".search_select").click(function () {
 $('#searchBtn').click(function(){
 
     var checkVal = $('input[name=search]:checked').val();
-    console.log("click button!!");
+    // console.log("click button!!");
     let userId1 = userId; //타임리프에서 받아온 userId값을 저장하는 변수 (저장하고 사용하지 않으면 페이지 이동 or 뒤로가기시 null값이 들어가 오류 발생)
+    //controller로 데이터를 보냈을때 해당 데이터가 radio button이 월별검색으로 선택된 데이터라는 것을 알려주기 위해 넘기는 변수
+    let typeRadio;
 
     if(checkVal === "이번 달"){
         // console.log();
@@ -175,35 +177,44 @@ $('#searchBtn').click(function(){
         let month = date.split('-')[1]; //사용자가 선택한 월
         // console.log("year : " + year + " month : " + month);
         let sortName = $('#sortName').val(); //사용자가 입력한 분류명
-        // console.log(sortName);
+        //controller로 데이터를 보냈을때 해당 데이터가 radio button이 월별검색으로 선택된 데이터라는 것을 알려주기 위해 넘기는 변수
+        typeRadio = "searchMonth";
 
-        console.log(userId1);
-        location.href = '/transaction/showTransaction/whichSelect?userId=' + userId1 + '&selectYear=' + year + '&selectMonth=' + month;
-        //서버에 요청하는 부분-------------------------------------------
-        //ajax로 할경우 너무 복잡 해짐???
-        // let searchData = {
-        //     "data" : data,
-        //     "year" : year,
-        //     "month" : month
-        // };
-        //
-        // $.ajax({
-        //     url: "/transaction/showTransaction/whichSelect",
-        //     data: searchData, //data: info, JSON.stringify(info)
-        //     type: "get",
-        //     dataType: "json",   //dataType : "html", "json", "text"
-        //     contentType: "application/json; charset=utf-8",
-        //     success: function (res) {
-        //         // console.log(res);
-        //
-        //
-        //     },
-        //     error: function () {
-        //         alert("error")
-        //     }
-        // });
-        //서버에 요청하는 부분-------------------------------------------
+        // 1. controller로 어떤 데이터인지 알려주기 위한 변수 보내주기 2.특정 월을 선택하지 않으면 alert경고 보내기기  3. 검색가 입력되면 mabatis에 조건문 달아주기
+        // console.log("분류명 : " + sortName);
+        // console.log("date : " + date);
+        // alert('stop');
 
+        if(date.trim().length === 0){
+            swal('알림!', "검색을 위해 월을 선택해 주세요.", 'warning')
+        }else{
+            // console.log(userId1);
+            location.href = '/transaction/showTransaction/whichSelect?userId=' + userId1 + '&selectYear=' + year + '&selectMonth=' + month + '&typeRadio=' + typeRadio + '&sortName=' + sortName;
+            //서버에 요청하는 부분-------------------------------------------
+            //ajax로 할경우 너무 복잡 해짐???
+            // let searchData = {
+            //     "data" : data,
+            //     "year" : year,
+            //     "month" : month
+            // };
+            //
+            // $.ajax({
+            //     url: "/transaction/showTransaction/whichSelect",
+            //     data: searchData, //data: info, JSON.stringify(info)
+            //     type: "get",
+            //     dataType: "json",   //dataType : "html", "json", "text"
+            //     contentType: "application/json; charset=utf-8",
+            //     success: function (res) {
+            //         // console.log(res);
+            //
+            //
+            //     },
+            //     error: function () {
+            //         alert("error")
+            //     }
+            // });
+            //서버에 요청하는 부분-------------------------------------------
+        }
     }else if(checkVal === "기간별검색"){
         console.log();
     }
@@ -257,6 +268,35 @@ if (nowPage === "/transaction/showTransaction") {
         '</td>'
     );
     $('input[name=inputValue]').attr('value',selectYear + "-" + selectMonth); //valuer값에 타임리프에서 보내준 사용자가 선택한 년,월의 값을 넣는다.
+
+    //사용자가 분류명을 했을경우 입력한 분류명을 검색창에 유지시키기 위한 로직
+    // console.log("값 : " + sortName);
+    let sort = sortName;
+    //설명 : 사용자가 데이터를 입력하고 컨틀롤러로 사용자가 입력한 분류명을 전송 -> controller에서 클라이언트로 해당 분류명을 함께 전송
+    //-> 만약 분류명이 있다면 검색 input에 해당 분류명을 placeholder에 두고 없다면 분류명 입력을 placeholder 문구로 사용
+    if(!sort){  
+        $('#whichSortName > th').remove();
+        $('#whichSortName > td').remove();
+        $('#whichSortName').append(
+            '<th style="background-color: #dcdcdc">조건 추가(선택사항)</th>' +
+            '<td>' +
+            '<input class="form-control form-control-sm" type="text" placeholder="분류명 입력" aria-label="default input example" id="sortName">' +
+            '</td>'
+        );
+    }else if(sort){
+        $('#whichSortName > th').remove();
+        $('#whichSortName > td').remove();
+        $('#whichSortName').append(
+            '<th style="background-color: #dcdcdc">조건 추가(선택사항)</th>' +
+            '<td>' +
+            '<input name="inputValue2" class="form-control form-control-sm" type="text" placeholder="" aria-label="default input example" id="sortName">' +
+            '</td>'
+        );
+        $('input[name=inputValue2]').attr('placeholder', "분류명을 입력");
+        $('input[name=inputValue2]').attr('value', sort);
+    }
+
+
 } else if (nowPage === "") {
     target1.checked = false;
     target2.checked = true;

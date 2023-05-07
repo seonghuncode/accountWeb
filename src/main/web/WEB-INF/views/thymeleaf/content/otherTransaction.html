@@ -24,7 +24,7 @@
                 <tr align="center" bgcolor="white">
                     <th style="background-color: #dcdcdc">검색조건</th>
                     <td>
-                        <input class="search_select" type="radio" name="search" value="월별검색" id="firstSearch">월별겁색
+                        <input class="search_select" type="radio" name="search" value="월별검색" id="firstSearch">월별검색
                         <input class="search_select" type="radio" name="search" value="기간별검색" id="secondSearch">기간별검색
                         <input class="search_select" type="radio" name="search" value="이번 달" id="thirdSearch">이번 달
                     </td>
@@ -37,7 +37,7 @@
                     <th style="background-color: #dcdcdc">당월</th>
                     <td>[[${year}]]년[[${month}]]월</td>
                 </tr>
-                <tr align="center" class="vertical_center">
+                <tr align="center" class="vertical_center" id="whichSortName">
                     <th style="background-color: #dcdcdc">조건 추가(선택사항)</th>
                     <td><input class="form-control form-control-sm" type="text" placeholder="분류명 입력"
                                aria-label="default input example" id="sortName"></td>
@@ -182,6 +182,7 @@
     var userId = [[${userId}]];
     var selectYear = [[${selectYear}]]; //사용자가 선택한 연도를 보내주어야 다음 페이지 에서 해당 값으로 value값을 유지 가능
     var selectMonth = [[${selectMonth}]]; //사용자가 선택한 월을 보내주어야 다음 페이지 에서 해당 값으로 value값을 유지 가능
+    var sortName = [[${sortName}]];
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
 
