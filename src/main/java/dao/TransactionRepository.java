@@ -22,4 +22,14 @@ public interface TransactionRepository {
     List<Map<String,Object>> getDayCntIncome(TransactionController.Transaction transaction);
 
     List<Map<String,Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntExpendBySearchMonth(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntIncomeBySearchMonth(TransactionController.Transaction transaction);
+
+    List<Map<String, Object>> getTransactionHistoryByPeriod(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntExpendByPeriod(TransactionController.Transaction transaction);
+
+    List<Map<String,Object>> getDayCntIncomeByPeriod(TransactionController.Transaction transaction);
 }

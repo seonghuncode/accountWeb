@@ -32,6 +32,8 @@ public class TransactionController {
         String selectYear; //사용자가 radio button에서 선택한 연도
         String selectMonth; //사용자가 radio button에서 선택한 월
         String sortName; //사용자가 입력한 분류명을 담는 변수
+        String startDate; //기간별 검색에서 시작인을 담는 변수
+        String endDate; //기간별 검색에서 종료일을 담는 변수
     }
 
 
@@ -178,13 +180,12 @@ public class TransactionController {
 
         return map;
     }
-
-
+    
 
     //특정 회원 지출 내역 에서 사용자가 월별검색, 기간별 검색, 이번달 중 선택한 radio button에 따라 해당 data만 DB에서 모아 return해주는 작업을 해준다.
     @RequestMapping(value = "/showTransaction/whichSelect")
 //    public String whichSelect(@RequestParam Map<String, Object> param, Model model){
-    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName){
+    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName, String startDate, String endDate){
 
 //        //사용자가 radio button중 월별 검색을 클릭하고 요청하는 경우 받는 데이터
 //        String userId = (String) param.get("userId");
@@ -243,17 +244,21 @@ public class TransactionController {
             leftMoney = targetBudget - expendSum; //월 목표 예산에서 - 월 총 소비
         }
         model.addAttribute("leftMoney", leftMoney);
+        
 
-        //transactionHistory -> 실질적으로 원한는 전체 데이터를 DB에서 가지고 와서 담는 객체?
-        // -> [{transaction_date=2021-05-31, price=8000, name=기타, memo=이자, type=수입}, {transaction_date=2021-05-31, price=8000, .......
-        transaction.setSelectYear(String.valueOf(selectYear).substring(2));
-        transaction.setSelectMonth(selectMonth);
+        //여기서 부터 JS에서 typeRadio변수에 담긴 값이 특정 월, 기간별, 당월에 따라 클라이언트로 보내지는 데이터가 다르게 분류하는 로직
+        if(typeRadio.equals("searchMonth")){
+
+            //transactionHistory -> 실질적으로 원한는 전체 데이터를 DB에서 가지고 와서 담는 객체?
+            // -> [{transaction_date=2021-05-31, price=8000, name=기타, memo=이자, type=수입}, {transaction_date=2021-05-31, price=8000, .......
+            transaction.setSelectYear(String.valueOf(selectYear).substring(2));
+            transaction.setSelectMonth(selectMonth);
 
 //        System.out.println(transaction.getUserId());
 //        System.out.println(transaction.getSelectYear());
 //        System.out.println(transaction.getMonth());
-
-        if(typeRadio.equals("searchMonth")){
+            
+            
             //1. 사용자가 radio button을 월별 검색으로 했을 경우 해당 year, month에 해당하는 데이터만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByMonth(transaction);
 //            System.out.println(sortName);
@@ -265,8 +270,9 @@ public class TransactionController {
             List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
             distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
 
-            List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpend(transaction); //일별 총 지출 내역 합계
-            List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncome(transaction); //일별 총 수입 내역 합계
+            //특정월에 대한 총 지출, 총 수입에 대한 데이터만 가지고 와야 한다
+            List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpendBySearchMonth(transaction); //일별 총 지출 내역 합계
+            List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncomeBySearchMonth(transaction); //일별 총 수입 내역 합계
             List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
             model.addAttribute("getDailyTotalData", getDailyTotalData);
 
@@ -281,6 +287,43 @@ public class TransactionController {
             model.addAttribute("selectYear", selectYear);
             model.addAttribute("selectMonth", selectMonth);
             model.addAttribute("sortName", sortName);
+            model.addAttribute("typeRadio", typeRadio); //해당 데이터를 타임리프에서 js넘겨 페이지가 재로딩 되더라도 이전 페이지가 어떠한 radio button이었는지 알 수 있기 위해서 보내준다.
+        }
+        else if(typeRadio.equals("searchPeriod")){
+//            System.out.println(startDate);
+//            System.out.println(endDate);
+            transaction.setStartDate(startDate);
+            transaction.setEndDate(endDate);
+
+            //사용자가 기간별 검색을 수행했기 때문에 해당 기간에 대한 모든 데이터들만 불러온다.
+            List<Map<String,Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
+            model.addAttribute("transactionHistory", transactionHistory);
+
+            //transactionHistory에서 필요한 데이터만 가공해서 담는다.
+            List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
+            distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
+
+            //특정 기간의 일별 총 수입, 총 지출에 대한 데이터만 가지고 와야 한다.
+            List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpendByPeriod(transaction); //일별 총 지출 내역 합계
+            List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncomeByPeriod(transaction); //일별 총 수입 내역 합계
+            List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+            model.addAttribute("getDailyTotalData", getDailyTotalData);
+
+//            System.out.println(transactionHistory);
+//            System.out.println(dayCntExpend);
+//            System.out.println(dayCntIncome);
+//            System.out.println(getDailyTotalData);
+
+            int dateCnt = transactionService.getDateCnt(getDailyTotalData);
+            model.addAttribute("dateCnt", dateCnt);
+
+            //페이지가 리로딩 되어 다음 요청을 할때 userId가 필요하므로 보내주어야 된다.
+            model.addAttribute("userId", userId);
+            //월별 검색에서 사용자가 입력한 연도와 월을 넘겨주어애 input type=month에 value값으로 해당 연,월을 보내기 위해 넘겨준다.
+            model.addAttribute("startDate", startDate);
+            model.addAttribute("endDate", endDate);
+            model.addAttribute("sortName", sortName);
+            model.addAttribute("typeRadio", typeRadio); //해당 데이터를 타임리프에서 js넘겨 페이지가 재로딩 되더라도 이전 페이지가 어떠한 radio button이었는지 알 수 있기 위해서 보내준다.
 
         }
 

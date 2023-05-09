@@ -44,4 +44,24 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionHistoryByMonth", transaction);
     }
 
+    public List<Map<String,Object>> getDayCntExpendBySearchMonth(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCntExpendBySearchMonth", transaction);
+    }
+
+    public List<Map<String,Object>> getDayCntIncomeBySearchMonth(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCntIncomeBySearchMonth", transaction);
+    }
+
+    public List<Map<String, Object>> getTransactionHistoryByPeriod(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionHistoryByPeriod", transaction);
+    }
+
+    public List<Map<String,Object>> getDayCntExpendByPeriod(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCntExpendByPeriod", transaction);
+    }
+
+    public List<Map<String,Object>> getDayCntIncomeByPeriod(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCntIncomeByPeriod", transaction);
+    }
+
 }

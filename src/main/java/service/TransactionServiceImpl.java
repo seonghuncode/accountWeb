@@ -212,5 +212,29 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getTransactionHistoryByMonth(transaction);
     }
 
+    //일별 총 지출 합계를 가지고 오는 로직 (특정월 검색)
+    public List<Map<String, Object>> getDayCntExpendBySearchMonth(TransactionController.Transaction transaction) {
+        return transactionRepository.getDayCntExpendBySearchMonth(transaction);
+    }
+
+    //일별 총 수입 합계를 가지고 오는 로직 (특정월 검색)
+    public List<Map<String, Object>> getDayCntIncomeBySearchMonth(TransactionController.Transaction transaction) {
+        return transactionRepository.getDayCntIncomeBySearchMonth(transaction);
+    }
+
+    public  List<Map<String, Object>> getTransactionHistoryByPeriod(TransactionController.Transaction transaction){
+        return transactionRepository.getTransactionHistoryByPeriod(transaction);
+    }
+
+
+    //일별 총 지출 합계를 가지고 오는 로직 (기간별 검색)
+    public List<Map<String, Object>> getDayCntExpendByPeriod(TransactionController.Transaction transaction) {
+        return transactionRepository.getDayCntExpendByPeriod(transaction);
+    }
+
+    //일별 총 수입 합계를 가지고 오는 로직 (기간별 검색)
+    public List<Map<String, Object>> getDayCntIncomeByPeriod(TransactionController.Transaction transaction) {
+        return transactionRepository.getDayCntIncomeByPeriod(transaction);
+    }
 
 }
