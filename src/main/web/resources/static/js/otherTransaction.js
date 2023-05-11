@@ -167,7 +167,16 @@ $('#searchBtn').click(function () { // ==> 각 검색 조건에 있어 어떠한
 
     if (checkVal === "이번 달") {
         // console.log();
-        location.href = '/transaction/showTransaction?userId=' + userId1; //이번달을 선택한고 검색 버튼을 클릭하면 해당 회원의 아이디값을 해당 url로 넘겨 준다.
+        let sortName = $('#sortName').val();
+        // console.log(year, month);
+        if(sortName.trim().length === 0){
+            // console.log(sortName.trim().length); //사용자가 분류명을 입력하지 않은 경우
+            location.href = '/transaction/showTransaction?userId=' + userId1;
+        }else if(sortName.trim().length != 0){ //사용자가 분류명을 입력한 경우
+            // console.log(sortName.trim().length);
+            location.href = '/transaction/showTransaction?userId=' + userId1 + "&sortName=" + sortName;
+        }
+
     } else if (checkVal === "월별검색") {
         // console.log($('#selectMonth').val());
         let date = $('#selectMonth').val(); //사용자가 radio button중 월별검색 에서 선택한 날짜
@@ -238,6 +247,33 @@ if (nowPage === "/transaction/showTransaction") {
         '월' +
         '</td>'
     );
+
+    //해당 url에서 페이지가 리로딩 되어 나타날때 이전에 사용자가 분류명을 입력했다면 해당 분류명을 input 태그에 유지 아닐경우 빈칸으로 유지
+    let sort = sortName;
+    // console.log(sort);
+
+    if (!sort) {
+        $('#whichSortName > th').remove();
+        $('#whichSortName > td').remove();
+        $('#whichSortName').append(
+            '<th style="background-color: #dcdcdc">조건 추가(선택사항)</th>' +
+            '<td>' +
+            '<input class="form-control form-control-sm" type="text" placeholder="분류명 입력" aria-label="default input example" id="sortName">' +
+            '</td>'
+        );
+    } else if (sort) {
+        $('#whichSortName > th').remove();
+        $('#whichSortName > td').remove();
+        $('#whichSortName').append(
+            '<th style="background-color: #dcdcdc">조건 추가(선택사항)</th>' +
+            '<td>' +
+            '<input name="inputValue2" class="form-control form-control-sm" type="text" placeholder="" aria-label="default input example" id="sortName">' +
+            '</td>'
+        );
+        $('input[name=inputValue2]').attr('placeholder', "분류명을 입력");
+        $('input[name=inputValue2]').attr('value', sort);
+    }
+
 } else if (nowPage === "/transaction/showTransaction/whichSelect" && typeRadio1 === "searchMonth") {
     // console.log(typeRadio1);
     target1.checked = true;

@@ -39,6 +39,9 @@
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{month}  AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{year}
+        <if test='!sortName.equals("") and !sortName.equals("-1")'>
+            AND sort.name LIKE CONCAT('%',#{sortName},'%')
+        </if>
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 

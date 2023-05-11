@@ -43,8 +43,8 @@ public class TransactionController {
 
     //{/usr/showTransaction(userId=${user.userId})}"
     //메인 화면에서 특정 회원을 클릭할 경우 해당 회원의 아이디를 매개변수로 받아와 해당 회원의 지출 내역을 보여주는 controller
-    @RequestMapping("/showTransaction")
-    public String showTransaction(Model model, String userId) {
+    @RequestMapping("/showTransaction") //sortName의 경우 값이 없을 경우 오류가 나기 때문에 defaultValue로 값을 안받을 경우도 처리해주어야 된다
+    public String showTransaction(Model model, String userId, @RequestParam(value = "sortName", required = false, defaultValue = "nothing")String sortName) {
 
         //현재 날짜 구하는 부분
         String changeYear = transactionService.getThisYear();
@@ -66,6 +66,18 @@ public class TransactionController {
         transaction.setYear(changeYear);
         transaction.setMonth(changeMonth);
         transaction.setUserId(userId);
+
+
+        //만약 사용자가 이번달에 해당 하는 지출 내역을 보고 싶은데 검색어를 입력 했다면
+        if(!(sortName.equals("nothing"))){
+//            System.out.println(sortName);
+            transaction.setSortName(sortName);
+            model.addAttribute("sortName", sortName);
+//            System.out.println(transaction.getSortName());
+        }else{ //메인 페이지에서 요청이 올경우 sortName에 null값이 들어가 mybatis에서 오류가 나기 때문에 특정 값을 넣어 준다.
+            transaction.setSortName("-1");
+        }
+
         //Integer로 받는 이유 : int의 경우 특정 사용자가 예산액을 지정하지 않은 경우 null값을 받을 수 없기 때문
         Integer targetBuget = transactionService.getTargetBudget(transaction);
 //        System.out.println(targetBuget);
@@ -102,6 +114,7 @@ public class TransactionController {
 //        System.out.println(transaction.getMonth());
 //        System.out.println(transaction.getYear());
 //        System.out.println(transaction.getPrimaryId());
+//        System.out.println(transaction.getSortName());
 //        System.out.println("====================");
         List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistory(transaction);
         model.addAttribute("transactionHistory", transactionHistory);
