@@ -84,10 +84,18 @@
     </div>
 
 
-    <!-- 검색 조건, 검색월 기준 현황 정보 아래 선 -->
+    <!-- 검색 조건, 검색월 기준 현황 정보 아래 선 + 수입,지출 색상 표현 ------------------------------------------------------------------------>
     <hr class="frame" style="margin-top: 5px;">
 
+    <!-- 수입,지출 색상 구분 + 만약 해당 지출내역 페이지가 현재 로그인한 회원의 것이라면 수정, 삭제, 관리 버튼 추가 -->
     <div class="circleFrame">
+
+        <div th:if="${#strings.equals(nowLoginUserId, userId)}">
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;">분류명 관리</button>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;">예산액 수정</button>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; margin-right: 5px;">거래 내역 추가</button>
+        </div>
+
         <div>
             <div class="circle1"></div>
             수입
@@ -96,6 +104,7 @@
             <div class="circle2"></div>
             지출
         </div>
+
     </div>
 
     <!-- 지출 내역 보여주는 테이블 ------------------------------------------------------------------------------------------------------------>
@@ -122,15 +131,20 @@
                             [[${transactionDate.transaction_date}]]
                             ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
                         </th>
-                        <th colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
+                        <th th:if="!(${#strings.equals(nowLoginUserId, userId)})" colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
                             지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
-                        </th>
+                        </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 다를 경우는 colspan="2"로 지정 -->
+                        <th th:unless="!(${#strings.equals(nowLoginUserId, userId)})" colspan="4" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
+                            지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
+                        </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 같을 경우는 colspan="4"로 지정 -->
                     </tr>
                     <tr style="background-color: #FDF5E6">
                         <th scope="col">번호</th>
                         <th scope="col">분류명</th>
                         <th scope="col">메모</th>
                         <th scope="col">거래</th>
+                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">수정</th> <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
+                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">삭제</th> <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
                     </tr>
                     </thead>
                     <tbody>
@@ -141,6 +155,16 @@
                             <td>[[${history.name}]]</td>
                             <td>[[${history.memo}]]</td>
                             <td th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                            <!-- 로그인한 회원의 지출 내역일 경우 -->
+<!--                            <td th:if="${#strings.equals(nowLoginUserId, userId)}">-->
+<!--                                <button type="button" class="btn btn-outline-secondary" style="border: none; width: 3px; height: 3px">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">-->
+<!--                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"></path>-->
+<!--                                    </svg>-->
+<!--                                    <span class="visually-hidden">Button</span>-->
+<!--                                </button>-->
+<!--                            </td>-->
+<!--                            <td th:if="${#strings.equals(nowLoginUserId, userId)}"></td>-->
                         </div>
                     </tr>
                     </tbody>

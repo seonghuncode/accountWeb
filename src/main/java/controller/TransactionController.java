@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.TransactionService;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,14 @@ public class TransactionController {
     //{/usr/showTransaction(userId=${user.userId})}"
     //메인 화면에서 특정 회원을 클릭할 경우 해당 회원의 아이디를 매개변수로 받아와 해당 회원의 지출 내역을 보여주는 controller
     @RequestMapping("/showTransaction") //sortName의 경우 값이 없을 경우 오류가 나기 때문에 defaultValue로 값을 안받을 경우도 처리해주어야 된다
-    public String showTransaction(Model model, String userId, @RequestParam(value = "sortName", required = false, defaultValue = "nothing")String sortName) {
+    public String showTransaction(Model model, String userId, @RequestParam(value = "sortName", required = false, defaultValue = "nothing")String sortName, HttpSession httpSession) {
+
+
+        //현재 로그인 되어 있는 회원의 ID를 세션에서 가지고 와서 담는 변수
+        String nowLoginUserId = (String)httpSession.getAttribute("loginedUserId");
+        //System.out.println(nowLoginUserId);
+        model.addAttribute("nowLoginUserId", nowLoginUserId);
+
 
         //현재 날짜 구하는 부분
         String changeYear = transactionService.getThisYear();
@@ -198,7 +206,15 @@ public class TransactionController {
     //특정 회원 지출 내역 에서 사용자가 월별검색, 기간별 검색, 이번달 중 선택한 radio button에 따라 해당 data만 DB에서 모아 return해주는 작업을 해준다.
     @RequestMapping(value = "/showTransaction/whichSelect")
 //    public String whichSelect(@RequestParam Map<String, Object> param, Model model){
-    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName, String startDate, String endDate){
+    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName, String startDate, String endDate, HttpSession httpSession){
+
+
+        //현재 로그인 되어 있는 회원의 ID를 세션에서 가지고 와서 담는 변수
+        String nowLoginUserId = (String)httpSession.getAttribute("loginedUserId");
+        //System.out.println(nowLoginUserId);
+        model.addAttribute("nowLoginUserId", nowLoginUserId);
+
+
 
 //        //사용자가 radio button중 월별 검색을 클릭하고 요청하는 경우 받는 데이터
 //        String userId = (String) param.get("userId");
@@ -311,6 +327,7 @@ public class TransactionController {
             //사용자가 기간별 검색을 수행했기 때문에 해당 기간에 대한 모든 데이터들만 불러온다.
             List<Map<String,Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
             model.addAttribute("transactionHistory", transactionHistory);
+            System.out.println(transactionHistory);
 
             //transactionHistory에서 필요한 데이터만 가공해서 담는다.
             List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();

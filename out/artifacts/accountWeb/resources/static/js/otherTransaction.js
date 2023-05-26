@@ -50,7 +50,7 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                 theadHtml += '<tr style="background-color: #FDF5E6">';
                 theadHtml += '<th scope="col">' + '번호' + '</th>';
                 theadHtml += '<th scope="col">' + '분류명' + '</th>';
-                theadHtml += '<th scope="col">' + '매모' + '</th>';
+                theadHtml += '<th scope="col">' + '메모' + '</th>';
                 theadHtml += '<th scope="col">' + '거래' + '</th>';
                 theadHtml += '</tr>';
                 theadHtml += '</thead>';
