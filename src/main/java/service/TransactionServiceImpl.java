@@ -237,4 +237,8 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getDayCntIncomeByPeriod(transaction);
     }
 
+    public List<Map<String, Object>> getSortListShow(TransactionController.Sort sort){
+        return transactionRepository.getSortListShow(sort);
+    }
+
 }

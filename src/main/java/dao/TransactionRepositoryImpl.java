@@ -64,4 +64,8 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepositoryImpl.getDayCntIncomeByPeriod", transaction);
     }
 
+    public List<Map<String, Object>> getSortListShow(TransactionController.Sort sort){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getSortListShow", sort);
+    }
+
 }

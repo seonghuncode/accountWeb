@@ -37,6 +37,19 @@ public class TransactionController {
         String endDate; //기간별 검색에서 종료일을 담는 변수
     }
 
+    @Getter
+    @Setter
+    //분류명 관리에서 현재 분류명을 불러오기 위해 필요한 데이터를 담는 클래스
+    public class Sort{
+        int primaryId; //특정 회원의 PK
+        String userid; //현재 로그인 되어있는 아이디
+        String year; //연도
+        String month; //월
+        String year2; //만약 기간별 검색일 경우 마지말 연도들 담는 변수
+        String month2; //만약 기간별 검색일 경우 마지막 월을 담는 변수
+
+    }
+
 
     @Autowired
     private TransactionService transactionService;
@@ -361,6 +374,57 @@ public class TransactionController {
 
         return "thymeleaf/content/otherTransaction";
     }
+
+
+
+    //지출 내역 페이지 에서 해당 페이지 작성자 == 현재 로그인 한 회원일 경우 분류명 관리 버튼 클릭시 보여줄 화면
+    @RequestMapping("/sortManage")
+    public String sortMange(String loginId, String year,String month, String year2, String month2, Model model){
+
+        //현재 연도, 월에 존재하는 전체 분류명을 선택
+        //필요한 데이터 : 현재 페이지로 넘어오면서(해당 페이지의 연,월), 로그인한 회원 아이디
+        //페이지로 넘겨줄 데이터 : 현재 존재 하는 분류명
+
+        //현재 로그인 되어있는 아이디의 PK값을 구한다
+        int primaryId = transactionService.getPrimaryId(loginId);
+
+        Sort sort = new Sort();
+        sort.setPrimaryId(primaryId);
+        sort.setUserid(loginId);
+        sort.setYear(year);
+        sort.setMonth(month);
+        if(year2 != null && month2 != null){
+            sort.setYear2(year2);
+            sort.setMonth2(month2);
+        }
+
+//        System.out.println(year);
+//        System.out.println(month);
+//        System.out.println(year2);
+//        System.out.println(month2);
+
+        //특정 조건을 만족하는 전체 분류명을 받아오는 메서드
+        List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
+//        System.out.println(sortList);
+
+        model.addAttribute("sortList", sortList);
+
+       return "thymeleaf/content/sortManage";
+    }
+
+
+    //분류명 관리 에서 분류명 추가에 대한 기능을 수행하는 로직(Ajax로 비동기 통신)
+    @RequestMapping(value = "/sortAddProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public String sortAddProcess(@RequestParam Map<String, Object> sortData){
+
+        //System.out.println(sortData);
+        //클라이언트 에서 받아온 추가할 분류명, 적용할 일에 대해 유효성 검사 진행 로직
+        
+        return "dfd" ;
+
+    }
+
 
 
 

@@ -74,3 +74,9 @@
     margin-bottom: 30px;
 }
 
+/*!* 지출내역 페이지 에서 class="bi bi-pen" 에 대해 사용자가 마우스를 가져다 대면 색상 변경 *!*/
+/*.icon_hover:hover{*/
+/*    color: blue;*/
+/*    size: 9px;*/
+/*}*/
+

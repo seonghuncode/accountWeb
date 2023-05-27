@@ -1,0 +1,9 @@
+/* 뷴류명 관리 페이지에 대한 CSS */
+.topFrameBySortManage{
+    display: flex;
+    justify-content: center;  /* 가로 기준 중앙 */
+    flex-direction: column;  /* 세로 기준 중앙 */
+    height:100vh;            /* flex-direction이랑 같이 사용해야 한다. */
+    width: 90%;               /* 100%를 주면 양쪽 끝에 붙는다. */
+    margin: 0px auto;          /* width비율에 따라 온쪽에 붙지 않고 중앙에 오기 위한 코드 */
+}
