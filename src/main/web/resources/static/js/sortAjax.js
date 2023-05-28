@@ -1,5 +1,5 @@
 // 사용자가 보고 있는 지출 내역 페이지가 현재 로그인한 회원의 지출내역 페이지 일때 분류명 관리 버튼을 클릭할 경우 팝업 형식으로 관리 페이지 띄우기
-$('#openPopUp').click(function (){
+$('#openPopUp').click(function () {
 
     // var _width = '650';
     // var _height = '380';
@@ -7,8 +7,8 @@ $('#openPopUp').click(function (){
     var _height = '480';
 
     // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
-    var _left = Math.ceil(( window.screen.width - _width )/2);
-    var _top = Math.ceil(( window.screen.height - _height )/2);
+    var _left = Math.ceil((window.screen.width - _width) / 2);
+    var _top = Math.ceil((window.screen.height - _height) / 2);
 
     //거래 내역 페이지 에서 받아오는 데이터
     var loginId = userId; //현재 로그인한 사용자 아이디
@@ -29,35 +29,39 @@ $('#openPopUp').click(function (){
 
 
     //사용자가 거래내역 페이지 에서 어떠한 검색 조건으로 검색을 하느냐에 따라 다른 값을 받기 때문에 선별
-    if(pageYear && pageMonth){
+    if (pageYear && pageMonth) {
         year1 = pageYear;
         month1 = pageMonth;
-    }else if(selectYear1 && selectMonth1){
+    } else if (selectYear1 && selectMonth1) {
         year1 = selectYear1;
         month1 = selectMonth1;
-    }else if(startDate1 &&  endDate1){
-        year1 =  startDate1.substr(2,2);
-        month1 = startDate1.substr(5,2);
+    } else if (startDate1 && endDate1) {
+        year1 = startDate1.substr(2, 2);
+        month1 = startDate1.substr(5, 2);
 
-        year2 = endDate1.substr(2,2);
-        month2 = endDate1.substr(5,2);
+        year2 = endDate1.substr(2, 2);
+        month2 = endDate1.substr(5, 2);
 
     }
 
-    window.open('/transaction/sortManage?loginId=' + loginId + '&year=' + year1 + '&month=' + month1 + '&year2=' + year2 + '&month2=' + month2, 'popup-test', 'width='+ _width +', height='+ _height +', left=' + _left + ', top='+ _top );
+    window.open('/transaction/sortManage?loginId=' + loginId + '&year=' + year1 + '&month=' + month1 + '&year2=' + year2 + '&month2=' + month2, 'popup-test', 'width=' + _width + ', height=' + _height + ', left=' + _left + ', top=' + _top);
 
 })
 
 
 //분류명 관리 에서 사용자가 분류명 추가를 진행하고 완료 버튼을 클릭했을 경우 로직
-$('#sortComplete').click(function (){
+$('#sortComplete').click(function () {
 
+
+    //버튼을 클릭하면 무조건 실행되는 부분------------------------------------------------------------------------------------------------------
+    //현재 로그인 되어있는 회원의 PK값
+    var loginId = primaryId;
 
     var sortDateWhichSelect = $('input[name=selAllOrMonth]:checked').val(); //선택된 라디오 버튼의 값
     var sortSelectValue; //선택된 라디오 버튼에 따라 해당 값을 담을 변수
-    if(sortDateWhichSelect == "특정월"){
+    if (sortDateWhichSelect == "특정월") {
         sortSelectValue = $("#monthLabel1").val();
-    }else{
+    } else {
         sortSelectValue = "항상";
     }
     //console.log(sortSelectValue);
@@ -65,9 +69,48 @@ $('#sortComplete').click(function (){
     // console.log($('.addSortLabel2').val())
 
     let sortData = {
-        "addSort": $(".addSortLabel2").val(), //사용자가 입력한 추가할 분류명
-        "sortDate": sortSelectValue  //선택된 라디오 버튼에 따라 해당 값 저장
+        "addSort": $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''), //사용자가 입력한 추가할 분류명(앞뒤 공백 제거)
+        "sortDate": sortSelectValue,  //선택된 라디오 버튼에 따라 해당 값 저장
+        "loginIdByPK": loginId,
+        "result": false          //결과값으로 result는 false로 보내서 문제 없이 진행이 되었다면 true로 반환 받는다.
     };
+
+    // console.log(sortData)
+
+    //상요자가 분류명을 입력 하지 않고 완료 버튼을 클릭한 경우 or 10글자 이상 작성한 경우
+    var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, '');
+    const sortCheck = document.getElementById('sortCheck');
+    if (sortName == "") {
+        sortCheck.style.color = "red";  //분류명이 빈값이라면 조건의 글자를 빨간색
+    } else {
+        sortCheck.style.color = "black"; //사용자가 입력을 했다면 다시 조건 글시를 검정색 으로
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    //분류명 추가 로직이 실패했을 경우 실행 되는 함수------------------------------------------------------------------------------------------
+    function failToAdd(data) {
+        // console.log("failToAdd : " + data.result);
+        var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+        var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''); //사용자가 입력한 분류명
+        var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+
+        if (data.result == "false") { //이미 존재하는 분류명이라면
+            sortValid.style.color = "red";
+
+            //실패 할 경우 성공했을때 나타난 성공 메세지 없애기
+            $('#addSortSuccess').text('');
+            addSortSuccess.style.color = "black";
+        } else if (data.result == "true") {
+            sortValid.style.color = "black";
+
+            //만약 분류명 추가가 성공적으로 완료 됬을 경우 사용자 에게 성공 알리기
+            $('#addSortSuccess').text('분류명 ' + sortName + ' 이(가) 성공적으로 추가 되었습니다.');
+            addSortSuccess.style.color = "blue";
+        }
+
+
+    }
 
     $.ajax({
         url: "/transaction/sortAddProcess",
@@ -77,17 +120,15 @@ $('#sortComplete').click(function (){
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
 
+            // console.log(data);
+            failToAdd(data); //분류명 추가를 실패했을 경우 사용자 에세 색상으로 오류 알리는 함수 + 성공시 알리기
 
-            showSearchData(data);  //검색어에 대한 회원 정보 테이블
-
-            showPaging(data, search); //검색어에 대한 페이징 기능
-            // console.log("페이징 버튼을 클릭 후 받아온 데이터")
-            // console.log(data); //controller로 부터 받아온 데이터 확인
 
         }, error: function () {
             alert("error");
         }
     })
+
 
 
 

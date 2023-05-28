@@ -387,6 +387,7 @@ public class TransactionController {
 
         //현재 로그인 되어있는 아이디의 PK값을 구한다
         int primaryId = transactionService.getPrimaryId(loginId);
+        model.addAttribute("primaryId", primaryId);
 
         Sort sort = new Sort();
         sort.setPrimaryId(primaryId);
@@ -416,12 +417,20 @@ public class TransactionController {
     //분류명 관리 에서 분류명 추가에 대한 기능을 수행하는 로직(Ajax로 비동기 통신)
     @RequestMapping(value = "/sortAddProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public String sortAddProcess(@RequestParam Map<String, Object> sortData){
+    public Map<String, Object> sortAddProcess(@RequestParam Map<String, Object> sortData){
 
-        //System.out.println(sortData);
-        //클라이언트 에서 받아온 추가할 분류명, 적용할 일에 대해 유효성 검사 진행 로직
-        
-        return "dfd" ;
+//        System.out.println("Controller " + sortData);
+
+        //사용자가 입력한 분류명이 존재하는지 확인하는 로직
+        String validSortName = transactionService.getSortAddProcess(sortData);
+
+        //클라이언트 에서 받아온 추가할 분류명, 적용할 일에 대해 유효성 검사와 동시에 데이터 삽입 하는 메서드
+        //(분류명의 경우 특정월에만 속하거나 전체에 속할 수 있다.). 항상 사용을 선택한 경우 저장시 made_date에 1111-12-12를 넣어 준다.
+        // 중요!! --> 분류명 테이블에 추가할때 분류명, 날짜 사용자 아이디, 거래내역 아이디(없을 경우 default -1) 함깨 저장해 주어야 한다
+        Map<String, Object> result = transactionService.tryAddSortName(sortData, validSortName);
+//        System.out.println(result);
+
+        return sortData;
 
     }
 

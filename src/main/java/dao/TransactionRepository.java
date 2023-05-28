@@ -34,4 +34,8 @@ public interface TransactionRepository {
     List<Map<String,Object>> getDayCntIncomeByPeriod(TransactionController.Transaction transaction);
 
     List<Map<String, Object>> getSortListShow(TransactionController.Sort sort);
+
+    String getCheckExistSortName(Map<String, Object> sortData);
+
+    int doAddSortName(Map<String, Object> sortData);
 }

@@ -17,7 +17,9 @@
         SELECT budget.price
         FROM budget
                  LEFT JOIN `user` ON budget.userId = user.id
-        WHERE MONTH (`month`)=#{month} AND DATE_FORMAT(`month`,'%y')=#{year}
+        WHERE MONTH (`month`)=#{month}
+          AND DATE_FORMAT(`month`
+            , '%y')=#{year}
           AND user.id =#{primaryId};
     </select>
 
@@ -35,10 +37,11 @@
     <select id="getTransactionHistory" resultType="map" parameterType="hashmap">
         SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
-                 LEFT JOIN `user`
-                           ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{month}  AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{year}
+        LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+        LEFT JOIN `user`
+        ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{month} AND `user`.id = #{primaryId} AND
+        DATE_FORMAT(`transaction_date`,'%y')=#{year}
         <if test='!sortName.equals("") and !sortName.equals("-1")'>
             AND sort.name LIKE CONCAT('%',#{sortName},'%')
         </if>
@@ -51,7 +54,9 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '지출' AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month}
+          AND `transaction`.type = '지출'
+          AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -62,7 +67,9 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{month} AND `transaction`.type = '수입' AND `user`.id = #{primaryId}
+        WHERE MONTH (`transaction_date`)=#{month}
+          AND `transaction`.type = '수입'
+          AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -70,10 +77,11 @@
     <select id="getTransactionHistoryByMonth" resultType="map" parameterType="hashmap">
         SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
-                 LEFT JOIN `user`
-                           ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{selectMonth} AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{selectYear}
+        LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+        LEFT JOIN `user`
+        ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{selectMonth} AND `user`.id = #{primaryId} AND
+        DATE_FORMAT(`transaction_date`,'%y')=#{selectYear}
         <if test='!sortName.equals("")'>
             AND sort.name LIKE CONCAT('%',#{sortName},'%')
         </if>
@@ -86,7 +94,11 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{selectMonth} AND `transaction`.type = '지출' AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{selectYear}
+        WHERE MONTH (`transaction_date`)=#{selectMonth}
+          AND `transaction`.type = '지출'
+          AND `user`.id = #{primaryId}
+          AND DATE_FORMAT(`transaction_date`
+            , '%y')=#{selectYear}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -97,7 +109,11 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE MONTH (`transaction_date`)=#{selectMonth}  AND `transaction`.type = '수입' AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{selectYear}
+        WHERE MONTH (`transaction_date`)=#{selectMonth}
+          AND `transaction`.type = '수입'
+          AND `user`.id = #{primaryId}
+          AND DATE_FORMAT(`transaction_date`
+            , '%y')=#{selectYear}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -108,7 +124,7 @@
         LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
         LEFT JOIN `user`
         ON `transaction`.userId = `user`.id
-        WHERE  (`transaction_date`) BETWEEN DATE(#{startDate}) AND DATE(#{endDate}) AND `user`.id = #{primaryId}
+        WHERE (`transaction_date`) BETWEEN DATE(#{startDate}) AND DATE(#{endDate}) AND `user`.id = #{primaryId}
         <if test='!sortName.equals("")'>
             AND sort.name LIKE CONCAT('%',#{sortName},'%')
         </if>
@@ -122,7 +138,10 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE(`transaction_date`) BETWEEN DATE(#{startDate}) AND DATE(#{endDate}) AND `transaction`.type = '지출' AND `user`.id = #{primaryId}
+        WHERE (`transaction_date`) BETWEEN DATE (#{startDate})
+          AND DATE (#{endDate})
+          AND `transaction`.type = '지출'
+          AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
@@ -133,27 +152,65 @@
                  LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
-        WHERE (`transaction_date`) BETWEEN DATE(#{startDate}) AND DATE(#{endDate}) AND `transaction`.type = '수입' AND `user`.id = #{primaryId}
+        WHERE (`transaction_date`) BETWEEN DATE (#{startDate})
+          AND DATE (#{endDate})
+          AND `transaction`.type = '수입'
+          AND `user`.id = #{primaryId}
         GROUP BY transaction_date
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
     <select id="getSortListShow" resultType="map" parameterType="hashmap">
-        SELECT sort.name, sort.create_date , `user`.name
+        SELECT sort.name, sort.made_date , `user`.name
         FROM sort
-                 LEFT JOIN `user`
-                           ON sort.userId = `user`.id
+        LEFT JOIN `user`
+        ON sort.userId = `user`.id
         WHERE
         <choose>
             <when test='year2.equals("") and month2.equals("")'>
-                MONTH(sort.create_date)=#{month} AND DATE_FORMAT(sort.create_date, '%y')=${year}
+                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year}
             </when>
             <otherwise>
-                MONTH(sort.create_date) IN (#{month} , #{month2}) AND DATE_FORMAT(sort.create_date, '%y') IN (${year}, #{year2})
+                MONTH(sort.made_date) IN (#{month} , #{month2}) AND DATE_FORMAT(sort.made_date, '%y') IN (${year},
+                #{year2})
             </otherwise>
         </choose>
 
     </select>
+
+    <!-- 사용자가 추가 하려는 분류명이 DB에 존재하는 분류명인지 체크하는 로직    -->
+    <select id="getCheckExistSortName" resultType="String" parameterType="hashmap">
+        SELECT EXISTS(
+        SELECT * FROM sort WHERE
+        <choose>
+            <when test='sortDate.equals("항상")'> <!-- 조건이 항상이라면 전체 테이블 에서 존재 하는지 찾는다 -->
+                `name` = #{addSort}
+            </when>
+            <otherwise> <!-- 만약 조건이 항상이 아니라 특정 날짜가 있다면 특정 월에만 존재 하는지 찾으면 된다 -->
+                `name` = #{addSort} and
+                MONTH(made_date) = SUBSTRING(#{sortDate}, 6,2) AND DATE_FORMAT(made_date, '%y') = SUBSTRING(#{sortDate},
+                3,2)
+            </otherwise>
+        </choose>
+        ) AS check_exist_sort_name;
+    </select>
+
+    <!-- 분류명을 추가해주는 쿼리 (분류명에서 날짜는 연,월만 선택하기 대문에 저장을 위해서는 일을 -00로 추가해 주어야 한다) -->
+    <!-- insert시 made_date의 type은 date이기 때문에 반드시 날자 형식으로 해야 오류가 발생하지 않는다 (1111-12-12는 항상을 의미)-->
+    <insert id="doAddSortName" parameterType="hashmap">
+        INSERT INTO sort (`name`,made_date,userId)
+        values(
+        <choose>
+            <when test='sortDate.equals("항상")'> <!-- 조건이 항상 -->
+                #{addSort}, '1111-12-12',#{loginIdByPK} );
+            </when>
+            <otherwise> <!-- 만약 조건이 항상이 아니라 특정 날짜가 있다면 -->
+                 #{addSort},
+                 concat(#{sortDate},'-01'),
+                 #{loginIdByPK} );
+            </otherwise>
+        </choose>
+    </insert>
 
 
 </mapper>

@@ -47,5 +47,9 @@ public interface TransactionService {
 
     List<Map<String, Object>> getSortListShow(TransactionController.Sort sort);
 
+    String getSortAddProcess(Map<String, Object> sortData);
+
+    Map<String, Object> tryAddSortName(Map<String, Object> sortData,String validSortName);
+
 
 }

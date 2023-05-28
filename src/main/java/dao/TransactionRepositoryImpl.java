@@ -68,4 +68,13 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepositoryImpl.getSortListShow", sort);
     }
 
+
+    public String getCheckExistSortName(Map<String, Object> sortData){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.getCheckExistSortName", sortData);
+    }
+
+    public int doAddSortName(Map<String, Object> sortData){
+        return sqlSession.insert("dao.TransactionRepository.doAddSortName", sortData);
+    }
+
 }

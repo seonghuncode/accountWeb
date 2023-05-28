@@ -241,4 +241,42 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getSortListShow(sort);
     }
 
+   //지출 내역 에서 분류명 관리에서 분류명명 추가를 완료 했을때 입력한 분류명이 DB에 존재하는지 확인하는 로직
+    public String getSortAddProcess(Map<String, Object> sortData){
+
+        //클라이언트로 부터 Ajax로 받은 값
+//        System.out.println(sortData.get("addSort")); // 추가할 분류명
+//        System.out.println(sortData.get("sortDate")); //적용할 월
+//        System.out.println(sortData.get("result")); //결과에 대한 값값
+
+        //추가하려고 하는 분류명이 존재 하는지 확인하는 로직
+        String checkExistSortName = transactionRepository.getCheckExistSortName(sortData);
+//        System.out.println("result >>> " + checkExistSortName );
+
+       return checkExistSortName;
+    }
+
+    //사용자가 분류명 관리에서 완료버튼을 클릭했을때 입력한 분류명이 DB에 존재 하지 않을 경우 해당 분류명을 DB에 추가하는 로직
+     public Map<String, Object> tryAddSortName(Map<String, Object> sortData, String validSortName){
+
+//         System.out.println("===================ServiceImpl");
+//         System.out.println(sortData);
+//         System.out.println(validSortName);
+//         System.out.println("=============================");
+        if(validSortName.equals("0")){  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
+            int doAddSortName = transactionRepository.doAddSortName(sortData);  //1이면 성공, 0이면 실패
+            //System.out.println("쿼리 결과 : " + doAddSortName);
+            sortData.put("result", "true");
+            if(doAddSortName != 1){
+                System.out.println("분류명 추가 쿼리 오류 발생");
+            }
+        }else{
+            sortData.put("result", "false");
+        }
+
+        return sortData;
+     }
+
+
+
 }

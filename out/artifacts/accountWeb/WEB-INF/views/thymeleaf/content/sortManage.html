@@ -36,13 +36,13 @@
             <div class="row mb-3">
                 <label for="addSortLabel1" class="col-sm-2 col-form-label">현재 분류명</label>
                 <div class="col-sm-10">
-                    <select class="form-select" size="3" aria-label="size 3 select example" id="addSortLabel1" >
+                    <select class="form-select" size="3" aria-label="size 3 select example" id="addSortLabel1">
                         <div th:each="sort : ${sortList}">
-<!--                            <option selected>Open this select menu</option>-->
-<!--                            <option value="1">One</option>-->
-<!--                            <option value="2">Two</option>-->
-<!--                            <option value="3">Three</option>-->
-<!--                            <option value="3">Three</option>-->
+                            <!--                            <option selected>Open this select menu</option>-->
+                            <!--                            <option value="1">One</option>-->
+                            <!--                            <option value="2">Two</option>-->
+                            <!--                            <option value="3">Three</option>-->
+                            <!--                            <option value="3">Three</option>-->
                             <option value="1" th:text="${sort.name}"></option>
                         </div>
                     </select>
@@ -54,8 +54,8 @@
                 <div class="col-sm-10">
                     <input type="text" class="form-control addSortLabel2" id="colFormLabel addSortLabel2"
                            placeholder="추가 할 분류명을 입력해 주세요.">
-                    <div style="font-size: small">※분류명은 10글자 이내로 작성 가능 합니다.</div>
-                    <div style="font-size: small">※이미 존재 하는 분류명은 추가 할 수 없습니다.</div>
+                    <div style="font-size: small" id="sortCheck">※분류명은 10글자 이내로 작성 가능 합니다.</div>
+                    <div style="font-size: small" id="sortValid">※이미 존재 하는 분류명은 추가 할 수 없습니다.</div>
                 </div>
             </div>
             <!-- 추가할 분류명이 전체 월에 사용할지 특정 월,연도를 지정할지 선택하는 부분 -->
@@ -71,13 +71,21 @@
                 </div>
             </div>
             <hr>
-            <button type="button" class="btn btn-outline-primary" style="width: 100%" id="sortComplete">완 료</button>
+            <div id="addSortSuccess"></div> <!-- 분류명 추가 성공시 성공 메세지를 보여줄 부분 -->
+            <div style="display: inline">
+                <button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortComplete">완 료</button>
+                <a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>
+            </div>
         </div>
     </div>
 
 </div>
 
 
+<script type="text/javascript" th:inline="javascript">
+    //controller에서 넘어온 현재 로그인 되어있는 아이디에 댜헌 PK값을 JS에서 사용 가능하도록 입력
+    var primaryId = [[${primaryId}]];
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- 분류명 관리에 대해 처리 하는 로직 -->
 <script type="text/javascript" src="/resources/static/js/sortAjax.js"></script>
