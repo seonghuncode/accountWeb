@@ -24,12 +24,12 @@
     <div>
         <h3 style="text-align: center; margin-bottom: 20px">분류명 관리</h3>
         <div style="text-align: center">
-            <button type="button" class="btn btn-outline-secondary" style="width: 20%; margin-right: 30px">추가</button>
-            <button type="button" class="btn btn-outline-secondary" style="width: 20%; margin-right: 30px">수정</button>
-            <button type="button" class="btn btn-outline-secondary" style="width: 20%;">삭제</button>
+            <button type="button" class="btn btn-outline-secondary" style="width: 20%; margin-right: 30px" id="sortAdd">추가</button>
+            <button type="button" class="btn btn-outline-secondary" style="width: 20%; margin-right: 30px" id="sortModify">수정</button>
+            <button type="button" class="btn btn-outline-secondary" style="width: 20%;" id="sortDelete">삭제</button>
         </div>
         <hr>
-        <h6 style="margin-bottom: 13px">기능 : 분류명 추가</h6>
+        <h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 추가</h6>
         <!-- 현재 분류명 + 추가할 분류명 이름 -->
         <div>
             <!-- 현재 분류명 -->
@@ -72,8 +72,8 @@
             </div>
             <hr>
             <div id="addSortSuccess"></div> <!-- 분류명 추가 성공시 성공 메세지를 보여줄 부분 -->
-            <div style="display: inline">
-                <button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortComplete">완 료</button>
+            <div style="display: inline" id="sortWhichSelect">
+                <button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortComplete">완 료(추가)</button>
                 <a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>
             </div>
         </div>

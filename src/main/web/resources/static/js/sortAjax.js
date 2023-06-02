@@ -50,7 +50,8 @@ $('#openPopUp').click(function () {
 
 
 //분류명 관리 에서 사용자가 분류명 추가를 진행하고 완료 버튼을 클릭했을 경우 로직
-$('#sortComplete').click(function () {
+// $('#sortComplete').click(function () { //아래 방식으로 변경한 이유 : 하단에서 제이쿼리로 id값을 변경했을 경우 해당 id값으로 이벤트 핸들러에 반영하기 위함
+$(document).on('click', '#sortComplete', function() {
 
 
     //버튼을 클릭하면 무조건 실행되는 부분------------------------------------------------------------------------------------------------------
@@ -130,6 +131,80 @@ $('#sortComplete').click(function () {
     })
 
 
+})
+
+
+
+//분류명 관리에 대한 기능--------------------------------------------------------------------------------
+
+//만약 사용자가 분류명 관리 페이지 에서 추가 버튼을 클릭할 경우 UI변경
+$('#sortAdd').click(function () {
+
+    //추가 버튼을 클릭하면 상단에 추가 페이지 라는 것을 알려준다
+    const element = document.getElementById('sortFnName');
+    element.innerHTML = '<h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 추가</h6>'
+
+    //console.log(element.textContent);
+
+    //현재 페이지가 분류명 추가라면 해당 완료 버튼에 대한 id값이 분류명 추가 하는 ajax랑 연결된 id값을 주어야 된다.
+    if(element.textContent == '기능 : 분류명 추가'){
+
+        //자바스크립트로 특정 태그를 수정 하는 방법
+        // const element2 = document.getElementById('sortWhichSelect');
+        // element2.innerHTML  =
+        //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline;" id="sortComplete">완 료(추가)</button>' +
+        //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
+
+        $('#sortWhichSelect > button').text('완 료(추가)');
+        //제이쿼리로 특정 태그의 속성을 변경하는 방법
+        $('#sortWhichSelect > button').attr('id', 'sortComplete');
+    }
+
+})
+
+
+//만약 사용자가 분류명 관리 페이지 에서 수정 버튼을 클릭할 경우 UI변경
+$('#sortModify').click(function () {
+
+    //상단 현재 페이지가 수정 페이지라는 것을 나타낸다다
+    const element = document.getElementById('sortFnName');
+    element.innerHTML = '<h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 수정</h6>'
+
+    if(element.textContent == '기능 : 분류명 수정'){
+        // const element2 = document.getElementById('sortWhichSelect');
+        // element2.innerHTML  =
+        //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteModify">완 료(수정)</button>\n' +
+        //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
+
+        $('#sortWhichSelect > button').text('완 료(수정)');
+        $('#sortWhichSelect > button').attr('id', 'sortCompleteModify');
+    }
 
 
 })
+
+//만약 사용자가 분류명 관리 페이지 에서 수정 버튼을 클릭할 경우 UI변경
+$('#sortDelete').click(function () {
+
+    //상단 현재 페이지가 수정 페이지라는 것을 나타낸다다
+    const element = document.getElementById('sortFnName');
+    element.innerHTML = '<h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 삭제</h6>'
+
+
+    if(element.textContent == '기능 : 분류명 삭제'){
+        // const element2 = document.getElementById('sortWhichSelect');
+        // element2.innerHTML  =
+        //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteDelete">완 료(삭제)</button>\n' +
+        //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
+
+
+        $('#sortWhichSelect > button').text('완 료(삭제)');
+        
+        $('#sortWhichSelect > button').attr('id', 'sortCompleteDelete');
+
+    }
+
+})
+
+
+
