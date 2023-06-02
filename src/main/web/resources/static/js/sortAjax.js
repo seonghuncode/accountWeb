@@ -135,7 +135,7 @@ $(document).on('click', '#sortComplete', function() {
 
 
 
-//분류명 관리에 대한 기능--------------------------------------------------------------------------------
+//분류명 관리에 대한 UI변경 부분------------------------------------------------------------------------------------------------------------------------
 
 //만약 사용자가 분류명 관리 페이지 에서 추가 버튼을 클릭할 경우 UI변경
 $('#sortAdd').click(function () {
@@ -155,10 +155,25 @@ $('#sortAdd').click(function () {
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline;" id="sortComplete">완 료(추가)</button>' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
-        $('#sortWhichSelect > button').text('완 료(추가)');
+        $('#writeArea').text('추가'); //입력란 죄측 설명 부분에 값
+        $('#sortWhichSelect > button').text('완 료(추가)'); //하단 완료 버튼의 value값
+        $('#changePlaceholder>input').attr('placeholder', '추가 할 분류명을 입력해 주세요.'); //입력 부분의 placeholder
         //제이쿼리로 특정 태그의 속성을 변경하는 방법
         $('#sortWhichSelect > button').attr('id', 'sortComplete');
     }
+
+
+    //유효성 검사 값 초기화
+    //다른 페이지에서 오류로 인해 특정 글자 색상이 빨간색일 수도 있기 때문에 모두 기본값으로 돌려준다
+    const sortCheck = document.getElementById('sortCheck');
+    sortCheck.style.color = "black";
+
+    var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+    $('#addSortSuccess').text('');
+    addSortSuccess.style.color = "black";
+
+    var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+    sortValid.style.color = "black";
 
 })
 
@@ -177,8 +192,24 @@ $('#sortModify').click(function () {
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
         $('#sortWhichSelect > button').text('완 료(수정)');
+        $('#writeArea').text('수정');
+        $('#changePlaceholder>input').attr('placeholder', '수정 할 분류명을 입력해 주세요.');
         $('#sortWhichSelect > button').attr('id', 'sortCompleteModify');
     }
+
+    //유효성 검사 값 초기화
+    //다른 페이지에서 오류로 인해 특정 글자 색상이 빨간색일 수도 있기 때문에 모두 기본값으로 돌려준다
+    const sortCheck = document.getElementById('sortCheck');
+    sortCheck.style.color = "black";
+
+    var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+    $('#addSortSuccess').text('');
+    addSortSuccess.style.color = "black";
+
+    var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+    sortValid.style.color = "black";
+
+
 
 
 })
@@ -204,7 +235,44 @@ $('#sortDelete').click(function () {
 
     }
 
+
+    //유효성 검사 값 초기화
+    //다른 페이지에서 오류로 인해 특정 글자 색상이 빨간색일 수도 있기 때문에 모두 기본값으로 돌려준다
+    const sortCheck = document.getElementById('sortCheck');
+    sortCheck.style.color = "black";
+
+    var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+    $('#addSortSuccess').text('');
+    addSortSuccess.style.color = "black";
+
+    var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+    sortValid.style.color = "black";
+
 })
+
+//분류명 관리 에서 수정 페이지 에서 완료 버튼을 클릭할 경우-------------------------------------------------------------------------------------
+
+//현재 존재 하는 분류명들중 사용자가 선택을 해당 선택된 값을 계속 변수에 담는다
+$("#addSortLabel1").change(function(){
+    // // Value값 가져오기
+    // var val = $("#addSortLabel1 :selected").val();
+    // console.log("값 : " + val);
+    // // Index가져오기
+    // var index = $("#addSortLabel1 :selected").index();
+    // console.log("index : "+ index);
+
+    // Text값 가져오기
+    var text = $("#addSortLabel1 :selected").text();
+    //console.log("text : " + text);
+});
+
+//완료 버튼 클릭시
+$(document).on('click', '#sortCompleteModify', function() {
+
+
+    
+})
+
 
 
 
