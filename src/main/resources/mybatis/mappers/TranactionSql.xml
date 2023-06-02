@@ -160,6 +160,7 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!--  해당 월에 해당하는 분류명 + 전체 월에서 상요하는 분류명(1111-12-12)-->
     <select id="getSortListShow" resultType="map" parameterType="hashmap">
         SELECT sort.name, sort.made_date , `user`.name
         FROM sort
@@ -168,11 +169,11 @@
         WHERE
         <choose>
             <when test='year2.equals("") and month2.equals("")'>
-                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year}
+                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year} || made_date = '1111-12-12'
             </when>
             <otherwise>
                 MONTH(sort.made_date) IN (#{month} , #{month2}) AND DATE_FORMAT(sort.made_date, '%y') IN (${year},
-                #{year2})
+                #{year2}) || made_date = '1111-12-12'
             </otherwise>
         </choose>
 
