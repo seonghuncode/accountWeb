@@ -381,6 +381,14 @@ public class TransactionController {
     @RequestMapping("/sortManage")
     public String sortMange(String loginId, String year,String month, String year2, String month2, Model model){
 
+        //분류명 관리 페이지 에서 추가를 성공 할 경우 추가 된 데이터를 반영해서 비동기로 다시 현재 분류명 리스트를 다른 함수로 요청하기 위해서는 아래의 데이터가 필수로 필요하기 때문에 넘겨준다.
+        //현재 분류명 관리 페이지 에서는 사용하지 않는다
+        model.addAttribute("loginId", loginId);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("year2", year2);
+        model.addAttribute("month2", month2);
+
         //현재 연도, 월에 존재하는 전체 분류명을 선택
         //필요한 데이터 : 현재 페이지로 넘어오면서(해당 페이지의 연,월), 로그인한 회원 아이디
         //페이지로 넘겨줄 데이터 : 현재 존재 하는 분류명
@@ -406,7 +414,7 @@ public class TransactionController {
 
         //특정 조건을 만족하는 전체 분류명을 받아오는 메서드
         List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
-//        System.out.println(sortList);
+        //System.out.println(sortList);
 
         model.addAttribute("sortList", sortList);
 
@@ -419,18 +427,61 @@ public class TransactionController {
     @ResponseBody
     public Map<String, Object> sortAddProcess(@RequestParam Map<String, Object> sortData){
 
-//        System.out.println("Controller " + sortData);
+        //System.out.println("Controller " + sortData);
 
-        //사용자가 입력한 분류명이 존재하는지 확인하는 로직
+        //사용자가 입력한 분류명이 존재하는지 확인하는 로직(존재하면 1, 존재하지 않으면 0을 반환)
         String validSortName = transactionService.getSortAddProcess(sortData);
+//        System.out.println("===validSortName===");
+//        System.out.println(validSortName);
 
         //클라이언트 에서 받아온 추가할 분류명, 적용할 일에 대해 유효성 검사와 동시에 데이터 삽입 하는 메서드
         //(분류명의 경우 특정월에만 속하거나 전체에 속할 수 있다.). 항상 사용을 선택한 경우 저장시 made_date에 1111-12-12를 넣어 준다.
         // 중요!! --> 분류명 테이블에 추가할때 분류명, 날짜 사용자 아이디, 거래내역 아이디(없을 경우 default -1) 함깨 저장해 주어야 한다
-        Map<String, Object> result = transactionService.tryAddSortName(sortData, validSortName);
+        Map<String, Object> result = transactionService.tryAddSortName(sortData, validSortName); //여기서 불류명이 중복되지 않는다면 DB에 추가하고 result를 true로 return, 중복될 경우 result를 false로 한다
+//        System.out.println("===result===");
 //        System.out.println(result);
 
         return sortData;
+
+    }
+
+
+
+
+    //분류명 관리 에서 분류명 추가 성공시 현재 분류명 관리를 다시 불러와 js에서 현재 분류명 부분만 업데이트 해주기 위한 비동기 통신 부분
+    @RequestMapping(value = "/getNowSortList" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public List<Map<String, Object>> getNowSortList(@RequestParam Map<String, Object> date2){
+
+        String loginId = (String) date2.get("loginId");
+        String year = (String) date2.get("year");
+        String month = (String) date2.get("month");
+        String year2 = (String) date2.get("year2");
+        String month2 = (String) date2.get("month2");
+
+        //현재 로그인 되어있는 아이디의 PK값을 구한다
+        int primaryId = transactionService.getPrimaryId(loginId);
+
+        Sort sort = new Sort();
+        sort.setPrimaryId(primaryId);
+        sort.setUserid(loginId);
+        sort.setYear(year);
+        sort.setMonth(month);
+        if(year2 != null && month2 != null){
+            sort.setYear2(year2);
+            sort.setMonth2(month2);
+        }
+
+//        System.out.println(year);
+//        System.out.println(month);
+//        System.out.println(year2);
+//        System.out.println(month2);
+
+        //특정 조건을 만족하는 전체 분류명을 받아오는 메서드
+        List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
+//        System.out.println(sortList);
+
+        return sortList;
 
     }
 

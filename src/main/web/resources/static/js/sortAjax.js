@@ -51,7 +51,7 @@ $('#openPopUp').click(function () {
 
 //분류명 관리 에서 사용자가 분류명 추가를 진행하고 완료 버튼을 클릭했을 경우 로직
 // $('#sortComplete').click(function () { //아래 방식으로 변경한 이유 : 하단에서 제이쿼리로 id값을 변경했을 경우 해당 id값으로 이벤트 핸들러에 반영하기 위함
-$(document).on('click', '#sortComplete', function() {
+$(document).on('click', '#sortComplete', function () {
 
 
     //버튼을 클릭하면 무조건 실행되는 부분------------------------------------------------------------------------------------------------------
@@ -78,18 +78,10 @@ $(document).on('click', '#sortComplete', function() {
 
     // console.log(sortData)
 
-    //상요자가 분류명을 입력 하지 않고 완료 버튼을 클릭한 경우 or 10글자 이상 작성한 경우
-    var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, '');
-    const sortCheck = document.getElementById('sortCheck');
-    if (sortName == "") {
-        sortCheck.style.color = "red";  //분류명이 빈값이라면 조건의 글자를 빨간색
-    } else {
-        sortCheck.style.color = "black"; //사용자가 입력을 했다면 다시 조건 글시를 검정색 으로
-    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
-    //분류명 추가 로직이 실패했을 경우 실행 되는 함수------------------------------------------------------------------------------------------
+    //통신 후 응답 받은 데이터에 따라 보여지는 화면을 다르게 보여주는 로직------------------------------------------------------------------------------------------
     function failToAdd(data) {
         // console.log("failToAdd : " + data.result);
         var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
@@ -108,31 +100,92 @@ $(document).on('click', '#sortComplete', function() {
             //만약 분류명 추가가 성공적으로 완료 됬을 경우 사용자 에게 성공 알리기
             $('#addSortSuccess').text('분류명 ' + sortName + ' 이(가) 성공적으로 추가 되었습니다.');
             addSortSuccess.style.color = "blue";
+            getNowSortList(); //성공적으로 추가 되었다면 현재 분류명 리스트를 갱신해 주기 위해 다시 불러와야 된다
         }
 
 
     }
 
-    $.ajax({
-        url: "/transaction/sortAddProcess",
-        data: sortData,  //JSON.stringify(search)
-        type: "get",
-        dataType: "json",
-        contentType: "application/json; charset=UTF-8",
-        success: function (data) {
 
-            // console.log(data);
-            failToAdd(data); //분류명 추가를 실패했을 경우 사용자 에세 색상으로 오류 알리는 함수 + 성공시 알리기
+    //사요자가 분류명을 입력 하지 않고 완료 버튼을 클릭한 경우 or 10글자 이상 작성한 경우
+    var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, '');
+    var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+    const sortCheck = document.getElementById('sortCheck');
+
+    //이 부분은 통신하기 전 클라이언트 단에서 유효성 검사이기 때문에 입력한 분류명의 글자 길이에 대해서만 검사 가능 하므로 이전에 중복 분류명에 대한 검사의 글씨는 검정색으로 바꾼다.
+    sortValid.style.color = "black";
+    if (sortName == "" || sortName.length > 10) {
+        sortCheck.style.color = "red";  //분류명이 빈값 또는 10글자 이상 이라면 조건의 글자를 빨간색
+    } else {
+        sortCheck.style.color = "black"; //사용자가 입력을 했다면 다시 조건 글시를 검정색 으로
+        doRequest();
+    }
+
+    //사용자가 값을 유효성에 맞게 입력 했을 경우에만 통신하는 함수를 실행 시킨다.-------------------------------------------
+    function doRequest() {
+        $.ajax({
+            url: "/transaction/sortAddProcess",
+            data: sortData,  //JSON.stringify(search)
+            type: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+
+                //이 경우 console.log를 사용할 경우 브라우저에 보이지 않기 때문에 controller에서 확인 해야한다()
+                //console.log("분류명 추가를 클릭했을 경우의 통신");
+                //console.log(data);
+                failToAdd(data); //분류명 추가를 실패했을 경우 사용자 에세 색상으로 오류 알리는 함수 + 성공시 알리기
+
+            }, error: function () {
+                alert("error");
+            }
+        })
+    }
+    //-------------------------------------------------------------------------------------
 
 
-        }, error: function () {
-            alert("error");
-        }
-    })
+    //사용자가 분류명 추가를 성공할 경우 현재 분류명 리스트를 DB에서 다시 받아와 현재 분류명 리스트를 갱신해 주는 부분------------------------------
+
+    //거래내역 페이지 에서 분류명 관리로 보낸 데이터
+    let date2 = { // 현재 분류명을 불러 오기 위해 필요한 데이터
+        "loginId" : loginId2,
+        "year" : year,
+       "month" : month,
+        "year2" : year2,
+        "month2" : month2
+    };
+    function getNowSortList() {
+        $.ajax({
+            url: "/transaction/getNowSortList",
+            data: date2,  //JSON.stringify(search)
+            type: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+
+                var option = '';
+                $.each(data, function (index, history) {
+                        option += '<option value="1">' + history.name + '</option>';
+                });
+
+                //받아온 현재 분류명 리스트를 반영해 주어야 된다.
+                $('#sortFrame > #addSortLabel1').remove();
+                $('#sortFrame').append(
+                    '<select class="form-select" size="3" aria-label="size 3 select example" id="addSortLabel1">' +
+                    option +
+                    '</select>'
+                );
+
+            }, error: function () {
+                alert("error");
+            }
+        })
+    }
+    //---------------------------------------------------------------------------------------------------------------
+
 
 
 })
-
 
 
 //분류명 관리에 대한 UI변경 부분------------------------------------------------------------------------------------------------------------------------
@@ -147,7 +200,7 @@ $('#sortAdd').click(function () {
     //console.log(element.textContent);
 
     //현재 페이지가 분류명 추가라면 해당 완료 버튼에 대한 id값이 분류명 추가 하는 ajax랑 연결된 id값을 주어야 된다.
-    if(element.textContent == '기능 : 분류명 추가'){
+    if (element.textContent == '기능 : 분류명 추가') {
 
         //자바스크립트로 특정 태그를 수정 하는 방법
         // const element2 = document.getElementById('sortWhichSelect');
@@ -185,7 +238,7 @@ $('#sortModify').click(function () {
     const element = document.getElementById('sortFnName');
     element.innerHTML = '<h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 수정</h6>'
 
-    if(element.textContent == '기능 : 분류명 수정'){
+    if (element.textContent == '기능 : 분류명 수정') {
         // const element2 = document.getElementById('sortWhichSelect');
         // element2.innerHTML  =
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteModify">완 료(수정)</button>\n' +
@@ -210,8 +263,6 @@ $('#sortModify').click(function () {
     sortValid.style.color = "black";
 
 
-
-
 })
 
 //만약 사용자가 분류명 관리 페이지 에서 수정 버튼을 클릭할 경우 UI변경
@@ -222,7 +273,7 @@ $('#sortDelete').click(function () {
     element.innerHTML = '<h6 style="margin-bottom: 13px" id="sortFnName">기능 : 분류명 삭제</h6>'
 
 
-    if(element.textContent == '기능 : 분류명 삭제'){
+    if (element.textContent == '기능 : 분류명 삭제') {
         // const element2 = document.getElementById('sortWhichSelect');
         // element2.innerHTML  =
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteDelete">완 료(삭제)</button>\n' +
@@ -230,7 +281,7 @@ $('#sortDelete').click(function () {
 
 
         $('#sortWhichSelect > button').text('완 료(삭제)');
-        
+
         $('#sortWhichSelect > button').attr('id', 'sortCompleteDelete');
 
     }
@@ -253,7 +304,7 @@ $('#sortDelete').click(function () {
 //분류명 관리 에서 수정 페이지 에서 완료 버튼을 클릭할 경우-------------------------------------------------------------------------------------
 
 //현재 존재 하는 분류명들중 사용자가 선택을 해당 선택된 값을 계속 변수에 담는다
-$("#addSortLabel1").change(function(){
+$("#addSortLabel1").change(function () {
     // // Value값 가져오기
     // var val = $("#addSortLabel1 :selected").val();
     // console.log("값 : " + val);
@@ -267,10 +318,9 @@ $("#addSortLabel1").change(function(){
 });
 
 //완료 버튼 클릭시
-$(document).on('click', '#sortCompleteModify', function() {
+$(document).on('click', '#sortCompleteModify', function () {
 
 
-    
 })
 
 
