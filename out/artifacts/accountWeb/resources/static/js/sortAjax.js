@@ -49,9 +49,11 @@ $('#openPopUp').click(function () {
 })
 
 
+//console.log가 엣진에서는 출력 되는데 크롬에서는 출력되지 않음????
 //분류명 관리 에서 사용자가 분류명 추가를 진행하고 완료 버튼을 클릭했을 경우 로직
 // $('#sortComplete').click(function () { //아래 방식으로 변경한 이유 : 하단에서 제이쿼리로 id값을 변경했을 경우 해당 id값으로 이벤트 핸들러에 반영하기 위함
 $(document).on('click', '#sortComplete', function () {
+
 
 
     //버튼을 클릭하면 무조건 실행되는 부분------------------------------------------------------------------------------------------------------
@@ -107,17 +109,30 @@ $(document).on('click', '#sortComplete', function () {
     }
 
 
-    //사요자가 분류명을 입력 하지 않고 완료 버튼을 클릭한 경우 or 10글자 이상 작성한 경우
+    //사요자가 분류명을 입력 하지 않고 완료 버튼을 클릭한 경우 or 10글자 이상 작성한 경우 - 추가 버튼을 클릭해서 서버로 데이터를 보내기 전 유효성 처리를 하는 부분
     var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, '');
     var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
     const sortCheck = document.getElementById('sortCheck');
+    const monthCheck = document.getElementById('monthCheck');
 
+    //완료(추가) 버튼을 클릭할 경우 아래의 경우를 모두 만족해야 서버로 데이터 통신을 시작 한다.
     //이 부분은 통신하기 전 클라이언트 단에서 유효성 검사이기 때문에 입력한 분류명의 글자 길이에 대해서만 검사 가능 하므로 이전에 중복 분류명에 대한 검사의 글씨는 검정색으로 바꾼다.
     sortValid.style.color = "black";
-    if (sortName == "" || sortName.length > 10) {
+    if(sortName == ""  && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){
+        sortCheck.style.color = "red";
+        monthCheck.style.color = "red";
+    }else if(sortName.length > 10 && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){
+        sortCheck.style.color = "red";
+        monthCheck.style.color = "red";
+    }else if(sortName == "" || sortName.length > 10) {
         sortCheck.style.color = "red";  //분류명이 빈값 또는 10글자 이상 이라면 조건의 글자를 빨간색
+        monthCheck.style.color = "black";
+    }else if(sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){ //사용자가 특정월의 input태그를 선택하고 연도, 월을 선택하지 않고 추가 버튼을 클릭한 경우의 예외처리
+        sortCheck.style.color = "black";
+        monthCheck.style.color = "red";
     } else {
         sortCheck.style.color = "black"; //사용자가 입력을 했다면 다시 조건 글시를 검정색 으로
+        monthCheck.style.color = "black";
         doRequest();
     }
 
