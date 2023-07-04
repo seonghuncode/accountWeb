@@ -169,11 +169,11 @@
         WHERE
         <choose>
             <when test='year2.equals("") and month2.equals("")'>
-                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year} || made_date = '1111-12-12'
+                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year} || made_date = '1111-12-12' AND sort.userId = #{primaryId}
             </when>
             <otherwise>
                 MONTH(sort.made_date) IN (#{month} , #{month2}) AND DATE_FORMAT(sort.made_date, '%y') IN (${year},
-                #{year2}) || made_date = '1111-12-12'
+                #{year2}) || made_date = '1111-12-12' AND sort.userId = #{primaryId}
             </otherwise>
         </choose>
 

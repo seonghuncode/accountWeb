@@ -411,10 +411,12 @@ public class TransactionController {
 //        System.out.println(month);
 //        System.out.println(year2);
 //        System.out.println(month2);
+//        System.out.println(sort.getPrimaryId());
+//        System.out.println(sort.getUserid());
 
         //특정 조건을 만족하는 전체 분류명을 받아오는 메서드
         List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
-        //System.out.println(sortList);
+//        System.out.println(sortList);
 
         model.addAttribute("sortList", sortList);
 
