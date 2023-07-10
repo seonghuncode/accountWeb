@@ -54,8 +54,6 @@ $('#openPopUp').click(function () {
 // $('#sortComplete').click(function () { //아래 방식으로 변경한 이유 : 하단에서 제이쿼리로 id값을 변경했을 경우 해당 id값으로 이벤트 핸들러에 반영하기 위함
 $(document).on('click', '#sortComplete', function () {
 
-
-
     //버튼을 클릭하면 무조건 실행되는 부분------------------------------------------------------------------------------------------------------
     //현재 로그인 되어있는 회원의 PK값
     var loginId = primaryId;
@@ -202,6 +200,55 @@ $(document).on('click', '#sortComplete', function () {
 
 })
 
+
+//사용자가 분류명 관리 에서 수정 부분에서 완료(수정) 버튼을 클릭할 경우 동작하는 로직-------------------------------------------------------------------------
+$(document).on('click', '#sortCompleteModify', function () {
+
+    var loginId = primaryId;
+
+    var sortDateWhichSelect = $('input[name=selAllOrMonth]:checked').val(); //선택된 라디오 버튼의 값
+    var sortSelectValue; //선택된 라디오 버튼에 따라 해당 값을 담을 변수
+    if (sortDateWhichSelect == "특정월") {
+        sortSelectValue = $("#monthLabel1").val();
+    } else {
+        sortSelectValue = "항상";
+    }
+
+    var selSort =  $("#sortFrame > #addSortLabel1 :selected").text(); //사용자가 선택한 현재 분류명의 값을 저장하는 변수
+    var modifySort = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''); //사용자가 입력한 수정할 분류명
+
+
+    //ajax로 통신할때 보낼 객체
+    let sortData = {
+        "addSort": $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''), //사용자가 입력한 추가할 분류명(앞뒤 공백 제거)
+        "sortDate": sortSelectValue,  //선택된 라디오 버튼에 따라 해당 값 저장
+        "loginIdByPK": loginId,
+        "result": false          //결과값으로 result는 false로 보내서 문제 없이 진행이 되었다면 true로 반환 받는다.
+    };
+
+
+    //사용자가 현재 분류명에서 선택한 select box의 option text를 의미(사용자의 선택이 변할때 마다 바로 바로 갱신 된다.)
+    $(document).ready(function () {
+        $("#sortFrame > #addSortLabel1").change(function () {
+            // Value값 가져오기
+            var val = $("#sortFrame > #addSortLabel1 :selected").val();
+            // Text값 가져오기
+            var text = $("#sortFrame > #addSortLabel1 :selected").text();
+            // Index가져오기
+            var index = $("#sortFrame > #addSortLabel1 :selected").index();
+
+            $("#value").val(val);
+            $("#text").val(text);
+            //console.log(text);
+        });
+    });
+
+    console.log("사용자가 선택한 현재 분류명 : " + selSort);
+    console.log("사용자가 수정하고 싶은 분류명 : " + modifySort);
+    console.log("사용자가 선택한 적용할 월 : " + sortSelectValue);
+
+
+})
 
 //분류명 관리에 대한 UI변경 부분------------------------------------------------------------------------------------------------------------------------
 

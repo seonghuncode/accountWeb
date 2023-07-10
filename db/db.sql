@@ -57,6 +57,7 @@ user_id = "123456",
 `password` = "123",
 view_yn = "yes",
 create_date = NOW();
+#admin 비밀번호 : 1!qqqqqq
 
 INSERT INTO `user`
 SET `name` = "test1",
@@ -358,17 +359,17 @@ SELECT id FROM `user` WHERE user_id = "1234568999";
 SELECT DATE_FORMAT(`month`,'%y') FROM budget;
 
 #분류에 대한 테이블---------------------------------------------------------------------------------------------------------------------------------------------------
-create table sort(
-                     id int unsigned not null primary key auto_increment,
-                     `name` varchar(20) not null,
-                     create_date date not null,
-                     userId int not null,
-                     transactionId int not null
+CREATE TABLE sort(
+                     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                     `name` VARCHAR(20) NOT NULL,
+                     create_date DATE NOT NULL,
+                     userId INT NOT NULL,
+                     transactionId INT NOT NULL
 )
 
-    insert into sort
-set `name` = "식비",
-create_date = now(),
+    INSERT INTO sort
+SET `name` = "식비",
+create_date = NOW(),
 userId = 1,
 transactionId =1;  #해당 id와 transaction테이블의 sort id가 같을때만 사용
 
@@ -384,9 +385,23 @@ create_date = NOW(),
 userId = 1,
 transactionId =3;
 
-select * from sort;
+SELECT * FROM sort;
+SELECT * FROM sort WHERE MONTH(`made_date`)="01" OR made_date = '1111-12-12';
+DELETE FROM sort WHERE id = 15;
 
-drop table sort;
+
+
+#사용자 테이블과 분류명 테이블의 아이디가 같은 특정 월,연에 대한 데이터를 가지고 오는 부분
+SELECT sort.name, sort.made_date , `user`.name
+FROM sort
+         LEFT JOIN `user`
+                   ON sort.userId = `user`.id
+WHERE
+    MONTH(sort.made_date)=07 AND DATE_FORMAT(sort.made_date, '%y')=23 || made_date = '1111-12-12' AND sort.userId = 98;
+
+
+
+DROP TABLE sort;
 
 
 
