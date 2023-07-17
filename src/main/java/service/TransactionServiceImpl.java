@@ -278,5 +278,47 @@ public class TransactionServiceImpl implements TransactionService {
      }
 
 
+     public Map<String, Object> tryModifytSortName(Map<String, Object> sortData, String validSortName) {
+
+         if(validSortName.equals("0")){  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
+             int doModifySortName = transactionRepository.tryModifytSortName(sortData);
+             //System.out.println("쿼리 결과 : " + doAddSortName);
+             sortData.put("result", "true");
+             if(doModifySortName != 1){
+                 System.out.println("분류명 추가 쿼리 오류 발생");
+             }
+         }else{
+             sortData.put("result", "false");
+         }
+
+
+        return sortData;
+     }
+
+    //수정할 분류명이 이미 존재하는 분류명인지 체크해주는 로직
+    public String getSortModifyProcess(Map<String, Object> sortData){
+
+        //기존 분류명 추가 에서 추가할 분류명에 대해 중복 체크를 하는 로직을 사용하기 위해 키값을 수정 해야 한다.
+        modifyKey(sortData, "modifySort", "addSort");
+
+        //수정 하려고 하는 분류명이 존재 하는지 확인하는 로직
+        String checkExistSortName = transactionRepository.getCheckExistSortName(sortData);
+//        System.out.println("result >>> " + checkExistSortName );
+
+        //사용후 키값을 원래대로 되돌린다.
+        modifyKey(sortData, "addSort", "modifySort");
+
+        return checkExistSortName;
+    }
+
+    //자바스크립트 에서 받은 키 이름을 변경해주는 로직
+    public static <K, V> void modifyKey(Map<K, V> map, K oldKey, K newKey) {
+        V value = map.remove(oldKey); // 기존 키-값 쌍 제거
+        if (value != null) {
+            map.put(newKey, value); // 새로운 키-값 쌍 추가
+        }
+    }
+
+
 
 }

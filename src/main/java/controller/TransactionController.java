@@ -482,8 +482,24 @@ public class TransactionController {
         //특정 조건을 만족하는 전체 분류명을 받아오는 메서드
         List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
 //        System.out.println(sortList);
-
         return sortList;
+    }
+
+    //클라이언트 에서 분류명 수정에 대한 데이터를 ajax통신을 통해 받는 부분------------------------------------------------------------------
+    @RequestMapping(value = "/sortModifyProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> sortModifyProcess(@RequestParam Map<String, Object> sortData){
+
+//        System.out.println("Controller " + sortData);
+
+        //수정하려고 하는 분류명이 데이터베이스에 존재하는지 확인하는 로직
+        String validSortName = transactionService.getSortModifyProcess(sortData);
+
+        Map<String, Object> result = transactionService.tryModifytSortName(sortData, validSortName);
+//        System.out.println("===result===");
+//        System.out.println(result);
+
+        return sortData;
 
     }
 

@@ -51,5 +51,9 @@ public interface TransactionService {
 
     Map<String, Object> tryAddSortName(Map<String, Object> sortData,String validSortName);
 
+    Map<String, Object> tryModifytSortName(Map<String, Object> sortData, String validSortName);
+
+    String getSortModifyProcess(Map<String, Object> sortData);
+
 
 }

@@ -49,6 +49,47 @@ $('#openPopUp').click(function () {
 })
 
 
+//사용자가 분류명 추가를 성공할 경우 현재 분류명 리스트를 DB에서 다시 받아와 현재 분류명 리스트를 갱신해 주는 부분------------------------------
+//거래내역 페이지 에서 분류명 관리로 보낸 데이터
+let date2 = { // 현재 분류명을 불러 오기 위해 필요한 데이터
+    "loginId": loginId2,
+    "year": year,
+    "month": month,
+    "year2": year2,
+    "month2": month2
+};
+
+function getNowSortList() {
+    $.ajax({
+        url: "/transaction/getNowSortList",
+        data: date2,  //JSON.stringify(search)
+        type: "get",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function (data) {
+
+            var option = '';
+            $.each(data, function (index, history) {
+                option += '<option value="1">' + history.name + '</option>';
+            });
+
+            //받아온 현재 분류명 리스트를 반영해 주어야 된다.
+            $('#sortFrame > #addSortLabel1').remove();
+            $('#sortFrame').append(
+                '<select class="form-select" size="3" aria-label="size 3 select example" id="addSortLabel1">' +
+                option +
+                '</select>'
+            );
+
+        }, error: function () {
+            alert("error");
+        }
+    })
+}
+
+//---------------------------------------------------------------------------------------------------------------
+
+
 //console.log가 엣진에서는 출력 되는데 크롬에서는 출력되지 않음????
 //분류명 관리 에서 사용자가 분류명 추가를 진행하고 완료 버튼을 클릭했을 경우 로직
 // $('#sortComplete').click(function () { //아래 방식으로 변경한 이유 : 하단에서 제이쿼리로 id값을 변경했을 경우 해당 id값으로 이벤트 핸들러에 반영하기 위함
@@ -116,16 +157,16 @@ $(document).on('click', '#sortComplete', function () {
     //완료(추가) 버튼을 클릭할 경우 아래의 경우를 모두 만족해야 서버로 데이터 통신을 시작 한다.
     //이 부분은 통신하기 전 클라이언트 단에서 유효성 검사이기 때문에 입력한 분류명의 글자 길이에 대해서만 검사 가능 하므로 이전에 중복 분류명에 대한 검사의 글씨는 검정색으로 바꾼다.
     sortValid.style.color = "black";
-    if(sortName == ""  && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){
+    if (sortName == "" && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") {
         sortCheck.style.color = "red";
         monthCheck.style.color = "red";
-    }else if(sortName.length > 10 && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){
+    } else if (sortName.length > 10 && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") {
         sortCheck.style.color = "red";
         monthCheck.style.color = "red";
-    }else if(sortName == "" || sortName.length > 10) {
+    } else if (sortName == "" || sortName.length > 10) {
         sortCheck.style.color = "red";  //분류명이 빈값 또는 10글자 이상 이라면 조건의 글자를 빨간색
         monthCheck.style.color = "black";
-    }else if(sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월"){ //사용자가 특정월의 input태그를 선택하고 연도, 월을 선택하지 않고 추가 버튼을 클릭한 경우의 예외처리
+    } else if (sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") { //사용자가 특정월의 input태그를 선택하고 연도, 월을 선택하지 않고 추가 버튼을 클릭한 경우의 예외처리
         sortCheck.style.color = "black";
         monthCheck.style.color = "red";
     } else {
@@ -154,48 +195,8 @@ $(document).on('click', '#sortComplete', function () {
             }
         })
     }
+
     //-------------------------------------------------------------------------------------
-
-
-    //사용자가 분류명 추가를 성공할 경우 현재 분류명 리스트를 DB에서 다시 받아와 현재 분류명 리스트를 갱신해 주는 부분------------------------------
-
-    //거래내역 페이지 에서 분류명 관리로 보낸 데이터
-    let date2 = { // 현재 분류명을 불러 오기 위해 필요한 데이터
-        "loginId" : loginId2,
-        "year" : year,
-       "month" : month,
-        "year2" : year2,
-        "month2" : month2
-    };
-    function getNowSortList() {
-        $.ajax({
-            url: "/transaction/getNowSortList",
-            data: date2,  //JSON.stringify(search)
-            type: "get",
-            dataType: "json",
-            contentType: "application/json; charset=UTF-8",
-            success: function (data) {
-
-                var option = '';
-                $.each(data, function (index, history) {
-                        option += '<option value="1">' + history.name + '</option>';
-                });
-
-                //받아온 현재 분류명 리스트를 반영해 주어야 된다.
-                $('#sortFrame > #addSortLabel1').remove();
-                $('#sortFrame').append(
-                    '<select class="form-select" size="3" aria-label="size 3 select example" id="addSortLabel1">' +
-                    option +
-                    '</select>'
-                );
-
-            }, error: function () {
-                alert("error");
-            }
-        })
-    }
-    //---------------------------------------------------------------------------------------------------------------
-
 
 
 })
@@ -214,41 +215,97 @@ $(document).on('click', '#sortCompleteModify', function () {
         sortSelectValue = "항상";
     }
 
-    var selSort =  $("#sortFrame > #addSortLabel1 :selected").text(); //사용자가 선택한 현재 분류명의 값을 저장하는 변수
+    var selSort = $("#sortFrame > #addSortLabel1 :selected").text(); //사용자가 선택한 현재 분류명의 값을 저장하는 변수
     var modifySort = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''); //사용자가 입력한 수정할 분류명
 
 
     //ajax로 통신할때 보낼 객체
     let sortData = {
-        "addSort": $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, ''), //사용자가 입력한 추가할 분류명(앞뒤 공백 제거)
+        "selSort": selSort, //사용자가 수정을 원하는 분류명
+        "modifySort": modifySort, //사용자가 입력한 수정할 분류명(앞뒤 공백 제거)
         "sortDate": sortSelectValue,  //선택된 라디오 버튼에 따라 해당 값 저장
         "loginIdByPK": loginId,
         "result": false          //결과값으로 result는 false로 보내서 문제 없이 진행이 되었다면 true로 반환 받는다.
     };
 
-
-    //사용자가 현재 분류명에서 선택한 select box의 option text를 의미(사용자의 선택이 변할때 마다 바로 바로 갱신 된다.)
-    $(document).ready(function () {
-        $("#sortFrame > #addSortLabel1").change(function () {
-            // Value값 가져오기
-            var val = $("#sortFrame > #addSortLabel1 :selected").val();
-            // Text값 가져오기
-            var text = $("#sortFrame > #addSortLabel1 :selected").text();
-            // Index가져오기
-            var index = $("#sortFrame > #addSortLabel1 :selected").index();
-
-            $("#value").val(val);
-            $("#text").val(text);
-            //console.log(text);
-        });
-    });
-
-    console.log("사용자가 선택한 현재 분류명 : " + selSort);
-    console.log("사용자가 수정하고 싶은 분류명 : " + modifySort);
-    console.log("사용자가 선택한 적용할 월 : " + sortSelectValue);
+    // console.log("사용자가 선택한 현재 분류명 : " + selSort);
+    // console.log("사용자가 수정하고 싶은 분류명 : " + modifySort);
+    // console.log("사용자가 선택한 적용할 월 : " + sortSelectValue);
+    // console.log("loginId : " + loginId);
 
 
-})
+    //유효성 검사 진행
+    var sortName = $(".addSortLabel2").val().replace(/^\s+|\s+$/gm, '');
+    var sortValid = document.getElementById('sortValid'); //이미 존재 하는 분류명일 경우
+    const sortCheck = document.getElementById('sortCheck');
+    const monthCheck = document.getElementById('monthCheck');
+    var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+    var modifySortSuccess = document.getElementById('noSelName'); //사용자가 수정할 분류명을 선택하지 않을 경우 알림 태그 부분
+
+    sortValid.style.color = "black";
+    if (selSort == "") {
+        $('#noSelName').text('※수정하고 싶은 분류명을 선택해 주세요.');
+        modifySortSuccess.style.color = "red";
+    } else if (sortName == "" && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") {
+        $('#noSelName').text('');
+        sortCheck.style.color = "red";
+        monthCheck.style.color = "red";
+    } else if (sortName.length > 10 && sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") {
+        $('#noSelName').text('');
+        sortCheck.style.color = "red";
+        monthCheck.style.color = "red";
+    } else if (sortName == "" || sortName.length > 10) {
+        $('#noSelName').text('');
+        sortCheck.style.color = "red";  //분류명이 빈값 또는 10글자 이상 이라면 조건의 글자를 빨간색
+        monthCheck.style.color = "black";
+    } else if (sortSelectValue.trim().length === 0 && sortDateWhichSelect == "특정월") { //사용자가 특정월의 input태그를 선택하고 연도, 월을 선택하지 않고 추가 버튼을 클릭한 경우의 예외처리
+        $('#noSelName').text('');
+        sortCheck.style.color = "black";
+        monthCheck.style.color = "red";
+    } else {
+        $('#noSelName').text('');
+        sortCheck.style.color = "black"; //사용자가 입력을 했다면 다시 조건 글시를 검정색 으로
+        monthCheck.style.color = "black";
+        doRequest();
+    }
+
+    function sucessLogic(data) {
+        if (data.result == "false") { //수정 하려고 하는 분류명이 중복 될 경우
+            sortValid.style.color = "red";
+            //실패 할 경우 성공했을때 나타난 성공 메세지 없애기
+            $('#addSortSuccess').text('');
+            addSortSuccess.style.color = "black";
+        } else if (data.result == "true") {
+            sortValid.style.color = "black";
+            //만약 분류명 추가가 성공적으로 완료 됬을 경우 사용자 에게 성공 알리기
+            $('#addSortSuccess').text('분류명 ' + sortName + ' 이(가) 성공적으로 수정 되었습니다.');
+            addSortSuccess.style.color = "blue";
+            getNowSortList(); //성공적으로 추가 되었다면 현재 분류명 리스트를 갱신해 주기 위해 다시 불러와야 된다
+        }
+    }
+
+
+        //유효성 검사 조건 만족시 요청 진행
+        function doRequest() {
+            $.ajax({
+                url: "/transaction/sortModifyProcess",
+                data: sortData,  //JSON.stringify(search)
+                type: "get",
+                dataType: "json",
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    sucessLogic(data);
+                }, error: function () {
+                    alert("error");
+                }
+            })
+        }
+
+
+    }
+
+)
+
 
 //분류명 관리에 대한 UI변경 부분------------------------------------------------------------------------------------------------------------------------
 
@@ -269,7 +326,8 @@ $('#sortAdd').click(function () {
         // element2.innerHTML  =
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline;" id="sortComplete">완 료(추가)</button>' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
-
+        
+        $('#sortValid').text('※이미 존재 하는 분류명은 추가 할 수 없습니다.');
         $('#writeArea').text('추가'); //입력란 죄측 설명 부분에 값
         $('#sortWhichSelect > button').text('완 료(추가)'); //하단 완료 버튼의 value값
         $('#changePlaceholder>input').attr('placeholder', '추가 할 분류명을 입력해 주세요.'); //입력 부분의 placeholder
@@ -293,7 +351,7 @@ $('#sortAdd').click(function () {
 })
 
 
-//만약 사용자가 분류명 관리 페이지 에서 수정 버튼을 클릭할 경우 UI변경
+//만약 사용자가 분류명 관리 페이지 에서 수정 버튼을 클릭할 경우 UI변경----------------------------------------------------------------------------
 $('#sortModify').click(function () {
 
     //상단 현재 페이지가 수정 페이지라는 것을 나타낸다다
@@ -306,6 +364,7 @@ $('#sortModify').click(function () {
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteModify">완 료(수정)</button>\n' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
+        $('#sortValid').text('※이미 존재 하는 분류명은 수정 할 수 없습니다.');
         $('#sortWhichSelect > button').text('완 료(수정)');
         $('#writeArea').text('수정');
         $('#changePlaceholder>input').attr('placeholder', '수정 할 분류명을 입력해 주세요.');

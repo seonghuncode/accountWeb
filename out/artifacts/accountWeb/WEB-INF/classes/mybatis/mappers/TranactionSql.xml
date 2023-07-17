@@ -213,5 +213,18 @@
         </choose>
     </insert>
 
+    <!-- 분류명 수정을 진행하는 쿼리 -->
+    <update id="tryModifytSortName" parameterType="hashmap">
+        UPDATE sort SET `name` = #{modifySort},
+        <choose>
+            <when test='sortDate.equals("항상")'> <!-- 조건이 항상 -->
+                made_Date =  '1111-12-12'  WHERE userID = #{loginIdByPK} AND `name` = #{selSort};
+            </when>
+            <otherwise> <!-- 만약 조건이 항상이 아니라 특정 날짜가 있다면 -->
+                made_Date = concat(#{sortDate},'-01') WHERE userID = #{loginIdByPK} AND `name` = #{selSort};
+            </otherwise>
+        </choose>
+    </update>
+
 
 </mapper>

@@ -38,4 +38,7 @@ public interface TransactionRepository {
     String getCheckExistSortName(Map<String, Object> sortData);
 
     int doAddSortName(Map<String, Object> sortData);
+
+    int tryModifytSortName(Map<String, Object> sortData);
+
 }

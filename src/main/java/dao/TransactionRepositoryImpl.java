@@ -77,4 +77,8 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.insert("dao.TransactionRepository.doAddSortName", sortData);
     }
 
+    public int tryModifytSortName(Map<String, Object> sortData){
+        return sqlSession.update("dao.TransactionRepository.doModifySortName", sortData);
+    }
+
 }
