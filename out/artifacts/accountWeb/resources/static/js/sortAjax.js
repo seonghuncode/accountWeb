@@ -326,7 +326,15 @@ $('#sortAdd').click(function () {
         // element2.innerHTML  =
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline;" id="sortComplete">완 료(추가)</button>' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
-        
+
+        //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
+        $('#sortAdd').removeClass('btn btn-outline-secondary');
+        $('#sortAdd').addClass('btn btn-secondary');
+        $('#sortModify').removeClass('btn btn-secondary');
+        $('#sortModify').addClass('btn btn-outline-secondary');
+        $('#sortDelete').removeClass('btn btn-secondary');
+        $('#sortDelete').addClass('btn btn-outline-secondary');
+
         $('#sortValid').text('※이미 존재 하는 분류명은 추가 할 수 없습니다.');
         $('#writeArea').text('추가'); //입력란 죄측 설명 부분에 값
         $('#sortWhichSelect > button').text('완 료(추가)'); //하단 완료 버튼의 value값
@@ -363,6 +371,15 @@ $('#sortModify').click(function () {
         // element2.innerHTML  =
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteModify">완 료(수정)</button>\n' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
+
+
+        //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
+        $('#sortAdd').removeClass('btn btn-secondary');
+        $('#sortAdd').addClass('btn btn-outline-secondary');
+        $('#sortModify').removeClass('btn btn-outline-secondary');
+        $('#sortModify').addClass('btn btn-secondary');
+        $('#sortDelete').removeClass('btn btn-secondary');
+        $('#sortDelete').addClass('btn btn-outline-secondary');
 
         $('#sortValid').text('※이미 존재 하는 분류명은 수정 할 수 없습니다.');
         $('#sortWhichSelect > button').text('완 료(수정)');
@@ -401,8 +418,15 @@ $('#sortDelete').click(function () {
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
 
-        $('#sortWhichSelect > button').text('완 료(삭제)');
+        //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
+        $('#sortAdd').removeClass('btn btn-secondary');
+        $('#sortAdd').addClass('btn btn-outline-secondary');
+        $('#sortModify').removeClass('btn btn-secondary');
+        $('#sortModify').addClass('btn btn-outline-secondary');
+        $('#sortDelete').removeClass('btn btn-outline-secondary');
+        $('#sortDelete').addClass('btn btn-secondary');
 
+        $('#sortWhichSelect > button').text('완 료(삭제)');
         $('#sortWhichSelect > button').attr('id', 'sortCompleteDelete');
 
     }
