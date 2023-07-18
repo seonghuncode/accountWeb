@@ -226,5 +226,10 @@
         </choose>
     </update>
 
+    <!-- 분류명을 삭제하는 로직 -->
+    <delete id="tryDeleteSortName">
+        DELETE FROM sort WHERE `name` = #{selSort} AND userId = #{loginIdByPK};
+    </delete>
+
 
 </mapper>

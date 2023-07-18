@@ -41,4 +41,6 @@ public interface TransactionRepository {
 
     int tryModifytSortName(Map<String, Object> sortData);
 
+    int tryDeleteSortName(Map<String, Object> sortData);
+
 }

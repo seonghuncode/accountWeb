@@ -269,7 +269,7 @@ $(document).on('click', '#sortCompleteModify', function () {
         doRequest();
     }
 
-    function sucessLogic(data) {
+    function successLogic(data) {
         if (data.result == "false") { //수정 하려고 하는 분류명이 중복 될 경우
             sortValid.style.color = "red";
             //실패 할 경우 성공했을때 나타난 성공 메세지 없애기
@@ -285,26 +285,86 @@ $(document).on('click', '#sortCompleteModify', function () {
     }
 
 
-        //유효성 검사 조건 만족시 요청 진행
-        function doRequest() {
-            $.ajax({
-                url: "/transaction/sortModifyProcess",
-                data: sortData,  //JSON.stringify(search)
-                type: "get",
-                dataType: "json",
-                contentType: "application/json; charset=UTF-8",
-                success: function (data) {
-                    sucessLogic(data);
-                }, error: function () {
-                    alert("error");
-                }
-            })
-        }
-
-
+    //유효성 검사 조건 만족시 요청 진행
+    function doRequest() {
+        $.ajax({
+            url: "/transaction/sortModifyProcess",
+            data: sortData,  //JSON.stringify(search)
+            type: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+                successLogic(data);
+            }, error: function () {
+                alert("error");
+            }
+        })
     }
 
-)
+})
+
+
+//사용자가 분류명 관리 에서 삭제 부분에서 완료(삭제) 버튼을 클릭할 경우 동작하는 로직-------------------------------------------------------------------------
+$(document).on('click', '#sortCompleteDelete', function () {
+
+    var loginId = primaryId;
+    var selSort = $("#sortFrame > #addSortLabel1 :selected").text(); //사용자가 선택한 현재 분류명의 값을 저장하는 변수
+    //유효성 검사 진행
+    var addSortSuccess = document.getElementById('addSortSuccess'); //사용자가 성공했을 경우 성공메세지를 보여줄 위치의 태그
+    var modifySortSuccess = document.getElementById('noSelName'); //사용자가 수정할 분류명을 선택하지 않을 경우 알림 태그 부분
+
+    //ajax로 통신할때 보낼 객체
+    let sortData = {
+        "selSort": selSort, //사용자가 수정을 원하는 분류명
+        "loginIdByPK": loginId,
+        "result": false          //결과값으로 result는 false로 보내서 문제 없이 진행이 되었다면 true로 반환 받는다.
+    };
+
+
+    if (selSort == "") {
+        $('#noSelName').text('※수정하고 싶은 분류명을 선택해 주세요.');
+        modifySortSuccess.style.color = "red";
+    } else {
+        $('#noSelName').text('');
+        //step1 : 사용자 에게 정말 삭제 할 것인지 한번더 묻기
+        var result = confirm('\"' + selSort + '\"' + ' 분류명을 정말 삭제 하시겠 습니까? ');
+        if(result) {  // result가 yes인 경우
+            // step2 : 사용자가 삭제 한다고 선택하면 삭제 로직 실행
+            doRequest();
+        }
+    }
+
+    function successLogic(data) {
+        if (data.result == "false") { //수정이 실패 했을 경우
+            $('#addSortSuccess').text('');
+            addSortSuccess.style.color = "black";
+        } else if (data.result == "true") {
+            //만약 분류명 추가가 성공적으로 완료 됬을 경우 사용자 에게 성공 알리기
+            $('#addSortSuccess').text('분류명 ' + selSort + ' 이(가) 성공적으로 삭제 되었습니다.');
+            addSortSuccess.style.color = "blue";
+            getNowSortList(); //성공적으로 추가 되었다면 현재 분류명 리스트를 갱신해 주기 위해 다시 불러와야 된다
+        }
+    }
+
+    //유효성 검사 조건 만족시 요청 진행
+    function doRequest() {
+        $.ajax({
+            url: "/transaction/sortDeleteProcess",
+            data: sortData,  //JSON.stringify(search)
+            type: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+                successLogic(data);
+            }, error: function () {
+                alert("error");
+            }
+        })
+    }
+
+
+})
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 //분류명 관리에 대한 UI변경 부분------------------------------------------------------------------------------------------------------------------------
@@ -327,6 +387,8 @@ $('#sortAdd').click(function () {
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline;" id="sortComplete">완 료(추가)</button>' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
+        $('#noSelName').text(''); //분류명 추가, 수정, 삭제 에서 다른 페이지 에서 생긴 오류 내용을 다른 페이지로 이동할 경우 없애주기 위한 코드
+
         //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
         $('#sortAdd').removeClass('btn btn-outline-secondary');
         $('#sortAdd').addClass('btn btn-secondary');
@@ -341,6 +403,11 @@ $('#sortAdd').click(function () {
         $('#changePlaceholder>input').attr('placeholder', '추가 할 분류명을 입력해 주세요.'); //입력 부분의 placeholder
         //제이쿼리로 특정 태그의 속성을 변경하는 방법
         $('#sortWhichSelect > button').attr('id', 'sortComplete');
+
+        //삭제 페이지 에서 필요없는 부분을 보이지 않게 했으므로 다시 보이게 하도록 show()를 사용해 보여주는 부분
+        $("#deleteNoNeed1").show();
+        $("#deleteNoNeed2").show();
+
     }
 
 
@@ -373,6 +440,8 @@ $('#sortModify').click(function () {
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
 
+        $('#noSelName').text(''); //분류명 추가, 수정, 삭제 에서 다른 페이지 에서 생긴 오류 내용을 다른 페이지로 이동할 경우 없애주기 위한 코드
+
         //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
         $('#sortAdd').removeClass('btn btn-secondary');
         $('#sortAdd').addClass('btn btn-outline-secondary');
@@ -386,6 +455,11 @@ $('#sortModify').click(function () {
         $('#writeArea').text('수정');
         $('#changePlaceholder>input').attr('placeholder', '수정 할 분류명을 입력해 주세요.');
         $('#sortWhichSelect > button').attr('id', 'sortCompleteModify');
+
+        //삭제 페이지 에서 필요없는 부분을 보이지 않게 했으므로 다시 보이게 하도록 show()를 사용해 보여주는 부분
+        $("#deleteNoNeed1").show();
+        $("#deleteNoNeed2").show();
+
     }
 
     //유효성 검사 값 초기화
@@ -417,6 +491,7 @@ $('#sortDelete').click(function () {
         //     '<button type="button" class="btn btn-outline-primary" style="width: 70%; display: inline" id="sortCompleteDelete">완 료(삭제)</button>\n' +
         //     '<a type="button" class="btn btn-outline-secondary" style="width: 28%; float: right; display: inline" onclick="javascript:window.close();" >닫 기</a>'
 
+        $('#noSelName').text(''); //분류명 추가, 수정, 삭제 에서 다른 페이지 에서 생긴 오류 내용을 다른 페이지로 이동할 경우 없애주기 위한 코드
 
         //사용자가 클릭한 버튼에 백그라운드 색상의 클래스를 주기 위해 기존 클래스 제거 및 새로운 클래스 추가
         $('#sortAdd').removeClass('btn btn-secondary');
@@ -425,6 +500,10 @@ $('#sortDelete').click(function () {
         $('#sortModify').addClass('btn btn-outline-secondary');
         $('#sortDelete').removeClass('btn btn-outline-secondary');
         $('#sortDelete').addClass('btn btn-secondary');
+
+        //삭제 페이지 에서는 입력 및 날짜 선택에 대한 기능은 필요가 없으므로 제이쿼리의 hide를 사용해서 숨긴다
+        $("#deleteNoNeed1").hide();
+        $("#deleteNoNeed2").hide();
 
         $('#sortWhichSelect > button').text('완 료(삭제)');
         $('#sortWhichSelect > button').attr('id', 'sortCompleteDelete');

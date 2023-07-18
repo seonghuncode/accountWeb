@@ -285,7 +285,7 @@ public class TransactionServiceImpl implements TransactionService {
              //System.out.println("쿼리 결과 : " + doAddSortName);
              sortData.put("result", "true");
              if(doModifySortName != 1){
-                 System.out.println("분류명 추가 쿼리 오류 발생");
+                 System.out.println("분류명 수정 쿼리 오류 발생");
              }
          }else{
              sortData.put("result", "false");
@@ -311,7 +311,7 @@ public class TransactionServiceImpl implements TransactionService {
         return checkExistSortName;
     }
 
-    //자바스크립트 에서 받은 키 이름을 변경해주는 로직
+    //자바스크립트 에서 받은 키 이름을 변경해주는 로직(분류명 추가 에서 만든 로직을 분류명 수정 하기 에서 사용하기 위해서 잠시 key이름을 바꾸어 사용하기 위한 함수)
     public static <K, V> void modifyKey(Map<K, V> map, K oldKey, K newKey) {
         V value = map.remove(oldKey); // 기존 키-값 쌍 제거
         if (value != null) {
@@ -319,6 +319,19 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+
+    //
+    public Map<String, Object> tryDeleteSortName(Map<String, Object> sortData) {
+
+            int doModifySortName = transactionRepository.tryDeleteSortName(sortData);
+            //System.out.println("쿼리 결과 : " + doAddSortName);
+            sortData.put("result", "true");
+            if(doModifySortName != 1){ //삭제를 진행하는 쿼리 오류 발생
+                System.out.println("분류명 삭제 쿼리 오류 발생");
+            }
+
+        return sortData;
+    }
 
 
 }

@@ -498,9 +498,21 @@ public class TransactionController {
         Map<String, Object> result = transactionService.tryModifytSortName(sortData, validSortName);
 //        System.out.println("===result===");
 //        System.out.println(result);
-
         return sortData;
+    }
 
+
+    //클라이언트 에서 분류명 삭제에 대한 데이터를 ajax통신을 통해 받는 부분------------------------------------------------------------------
+    @RequestMapping(value = "/sortDeleteProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> sortDeleteProcess(@RequestParam Map<String, Object> sortData){
+
+        System.out.println("Controller " + sortData);
+
+        Map<String, Object> result = transactionService.tryDeleteSortName(sortData);
+        System.out.println("===result===");
+        System.out.println(result);
+        return sortData;
     }
 
 

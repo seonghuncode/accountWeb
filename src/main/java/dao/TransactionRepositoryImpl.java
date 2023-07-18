@@ -77,8 +77,13 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.insert("dao.TransactionRepository.doAddSortName", sortData);
     }
 
+    //doModifySortName -> tryModifySortName으로 수정 해야 하는가??
     public int tryModifytSortName(Map<String, Object> sortData){
         return sqlSession.update("dao.TransactionRepository.doModifySortName", sortData);
+    }
+
+    public int tryDeleteSortName(Map<String, Object> sortData){
+        return sqlSession.delete("dao.TransactionRepository.tryDeleteSortName", sortData);
     }
 
 }

@@ -55,5 +55,7 @@ public interface TransactionService {
 
     String getSortModifyProcess(Map<String, Object> sortData);
 
+    Map<String, Object> tryDeleteSortName(Map<String, Object> sortData);
+
 
 }
