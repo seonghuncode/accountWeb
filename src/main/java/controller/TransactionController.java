@@ -507,12 +507,23 @@ public class TransactionController {
     @ResponseBody
     public Map<String, Object> sortDeleteProcess(@RequestParam Map<String, Object> sortData){
 
-        System.out.println("Controller " + sortData);
+       // System.out.println("Controller " + sortData);
 
         Map<String, Object> result = transactionService.tryDeleteSortName(sortData);
-        System.out.println("===result===");
-        System.out.println(result);
+//        System.out.println("===result===");
+//        System.out.println(result);
         return sortData;
+    }
+
+
+    //사용자가 자신의 거래내역 에서 예산액 수정 버튼을 클릭 하여 입력한 예산액을 데이터베이스에 반영하는 로직
+    @RequestMapping(value = "budgetAmount", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> budgetAmount(@RequestParam Map<String, Object> data1){
+        //System.out.println(data1);
+        Map<String, Object> result = transactionService.setBudgetAmount(data1);
+        //System.out.println(result);
+        return result;
     }
 
 

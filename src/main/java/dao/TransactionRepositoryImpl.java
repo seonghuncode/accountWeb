@@ -86,4 +86,18 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.delete("dao.TransactionRepository.tryDeleteSortName", sortData);
     }
 
+    //사용자가 특정 날짜에 예산액을 설정 했는지 여부를 확인한다
+    public int checkBudgetByUserId(Map<String, Object> data1) {
+        return sqlSession.selectOne("dao.TransactionRepository.checkBudgetByUserId", data1);
+    }
+
+
+    public int budgetInsert(Map<String, Object> data1){
+        return sqlSession.insert("dao.TransactionRepository.budgetInsert", data1);
+    }
+
+    public int budgetUpdate(Map<String, Object> data1){
+        return sqlSession.update("dao.TransactionRepository.budgetUpdate", data1);
+    }
+
 }

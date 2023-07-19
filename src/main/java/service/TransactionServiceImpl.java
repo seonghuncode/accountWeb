@@ -19,7 +19,7 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionRepository transactionRepository;
 
     //특정 회원 지출 내역에서 해당 회원이 실제 DB에 가지고 있는 전체 지출 일수의 갯수를 저장하고 있다.(getDateCnt2에서 사용)
-    private  int originDateCnt;
+    private int originDateCnt;
 
     public int getPrimaryId(String userId) {
         return transactionRepository.getPrimaryId(userId);
@@ -115,7 +115,7 @@ public class TransactionServiceImpl implements TransactionService {
                 }
             }
             //만약 해당 날짜에 대한 지출액 합이 없을 경우 지출액 합에 0값을 넣어 주는 코드
-            if(map1.containsKey("dayCntExpend") == false){
+            if (map1.containsKey("dayCntExpend") == false) {
                 map1.put("dayCntExpend", 0);
             }
 
@@ -135,7 +135,7 @@ public class TransactionServiceImpl implements TransactionService {
                 }
             }
             //만약 해당 날짜에 대한 수입액 합이 없을 경우 수입액 합에 0값을 넣어 주는 코드
-            if(map1.containsKey("dayCntIncome") == false){
+            if (map1.containsKey("dayCntIncome") == false) {
                 map1.put("dayCntIncome", 0);
             }
 //            for (Map.Entry<String, Object> entry : dayCntIncome.get(i).entrySet()) {
@@ -154,34 +154,34 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     //처음 특정 회원 지출 내역에서 한 페이지에 최대 일수 테이블을 3개만 보여주기 위해 존재하는 로직
-    public int getDateCnt(List<Map<String, Object>> getDailyTotalData){
+    public int getDateCnt(List<Map<String, Object>> getDailyTotalData) {
 
 
         int dateCnt = 0;
-        for(int i = 0; i < getDailyTotalData.size(); i++){
+        for (int i = 0; i < getDailyTotalData.size(); i++) {
             dateCnt++;
         }
-        
+
         originDateCnt = dateCnt; //전역변수로 getDateCnt2메소드 에서도 사용이 가능하도록 지정
-        
+
         //System.out.println(dateCnt);
-        if(dateCnt < 3){  //한페이지 에 3일치 데이터를 보여 줄 예정인데 데이터가 3개보다 작다면 전체 0,1,2의 갖고 있는 데이터를 전부 보여주기 위함
+        if (dateCnt < 3) {  //한페이지 에 3일치 데이터를 보여 줄 예정인데 데이터가 3개보다 작다면 전체 0,1,2의 갖고 있는 데이터를 전부 보여주기 위함
             return dateCnt;
-        }else{  //데이터가 3개 이상이라면 3을 return해 주어 3개의 데이터만 보이도록 한다.
+        } else {  //데이터가 3개 이상이라면 3을 return해 주어 3개의 데이터만 보이도록 한다.
             return 3;
         }
 
     }
 
     //특정 회원 지출 내역 페이지에서 추후 사용자가 7일치 내역 더보기 버튼을 클릭할 경우 한페이지에 보여줄 테이블 갯수릐 최대치를 변경해서 return해주는 로직
-    public Map<String, Object> getDateCnt2(int dateCnt){
+    public Map<String, Object> getDateCnt2(int dateCnt) {
 
-        int changeDateCnt = dateCnt+7;
+        int changeDateCnt = dateCnt + 7;
         Map<String, Object> map = new HashMap<String, Object>();
 
-        if(originDateCnt > changeDateCnt){ //기존의 보여지는 페이지 일수의 합이 실제 해당 회원이 가지고 있는 일수 데이터 보다 작을 경우 +7한 값 return
+        if (originDateCnt > changeDateCnt) { //기존의 보여지는 페이지 일수의 합이 실제 해당 회원이 가지고 있는 일수 데이터 보다 작을 경우 +7한 값 return
             map.put("changeDateCnt", changeDateCnt);
-        }else if(originDateCnt <= changeDateCnt){ //+7한 값이 실제 해당 회원이 갖고 있는 데이터를 넘어갈 경우 전체 회원의 갯수를return
+        } else if (originDateCnt <= changeDateCnt) { //+7한 값이 실제 해당 회원이 갖고 있는 데이터를 넘어갈 경우 전체 회원의 갯수를return
             map.put("changeDateCnt", originDateCnt);
             map.put("lastPage", 1); //더이상 볼 데이터가 없다는 것을 알려주기 위해
         }
@@ -190,7 +190,7 @@ public class TransactionServiceImpl implements TransactionService {
         return map;
     }
 
-    public String getThisYear(){
+    public String getThisYear() {
 
         LocalDate now = LocalDate.now();
         int year = now.getYear(); //ex. 2023
@@ -199,7 +199,7 @@ public class TransactionServiceImpl implements TransactionService {
         return changeYear;
     }
 
-    public String getThisMonth(){
+    public String getThisMonth() {
 
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();  //ex. 3
@@ -208,7 +208,7 @@ public class TransactionServiceImpl implements TransactionService {
         return changeMonth;
     }
 
-    public List<Map<String, Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction){
+    public List<Map<String, Object>> getTransactionHistoryByMonth(TransactionController.Transaction transaction) {
         return transactionRepository.getTransactionHistoryByMonth(transaction);
     }
 
@@ -222,7 +222,7 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getDayCntIncomeBySearchMonth(transaction);
     }
 
-    public  List<Map<String, Object>> getTransactionHistoryByPeriod(TransactionController.Transaction transaction){
+    public List<Map<String, Object>> getTransactionHistoryByPeriod(TransactionController.Transaction transaction) {
         return transactionRepository.getTransactionHistoryByPeriod(transaction);
     }
 
@@ -237,12 +237,12 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getDayCntIncomeByPeriod(transaction);
     }
 
-    public List<Map<String, Object>> getSortListShow(TransactionController.Sort sort){
+    public List<Map<String, Object>> getSortListShow(TransactionController.Sort sort) {
         return transactionRepository.getSortListShow(sort);
     }
 
-   //지출 내역 에서 분류명 관리에서 분류명명 추가를 완료 했을때 입력한 분류명이 DB에 존재하는지 확인하는 로직
-    public String getSortAddProcess(Map<String, Object> sortData){
+    //지출 내역 에서 분류명 관리에서 분류명명 추가를 완료 했을때 입력한 분류명이 DB에 존재하는지 확인하는 로직
+    public String getSortAddProcess(Map<String, Object> sortData) {
 
         //클라이언트로 부터 Ajax로 받은 값
 //        System.out.println(sortData.get("addSort")); // 추가할 분류명
@@ -253,50 +253,50 @@ public class TransactionServiceImpl implements TransactionService {
         String checkExistSortName = transactionRepository.getCheckExistSortName(sortData);
 //        System.out.println("result >>> " + checkExistSortName );
 
-       return checkExistSortName;
+        return checkExistSortName;
     }
 
     //사용자가 분류명 관리에서 완료버튼을 클릭했을때 입력한 분류명이 DB에 존재 하지 않을 경우 해당 분류명을 DB에 추가하는 로직
-     public Map<String, Object> tryAddSortName(Map<String, Object> sortData, String validSortName){
+    public Map<String, Object> tryAddSortName(Map<String, Object> sortData, String validSortName) {
 
 //         System.out.println("===================ServiceImpl");
 //         System.out.println(sortData);
 //         System.out.println(validSortName);
 //         System.out.println("=============================");
-        if(validSortName.equals("0")){  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
+        if (validSortName.equals("0")) {  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
             int doAddSortName = transactionRepository.doAddSortName(sortData);  //1이면 성공, 0이면 실패
             //System.out.println("쿼리 결과 : " + doAddSortName);
             sortData.put("result", "true");
-            if(doAddSortName != 1){
+            if (doAddSortName != 1) {
                 System.out.println("분류명 추가 쿼리 오류 발생");
             }
-        }else{
+        } else {
             sortData.put("result", "false");
         }
 
         return sortData;
-     }
+    }
 
 
-     public Map<String, Object> tryModifytSortName(Map<String, Object> sortData, String validSortName) {
+    public Map<String, Object> tryModifytSortName(Map<String, Object> sortData, String validSortName) {
 
-         if(validSortName.equals("0")){  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
-             int doModifySortName = transactionRepository.tryModifytSortName(sortData);
-             //System.out.println("쿼리 결과 : " + doAddSortName);
-             sortData.put("result", "true");
-             if(doModifySortName != 1){
-                 System.out.println("분류명 수정 쿼리 오류 발생");
-             }
-         }else{
-             sortData.put("result", "false");
-         }
+        if (validSortName.equals("0")) {  //사용자가 입력한 분류명이 DB에 존재X -> 추가 가능
+            int doModifySortName = transactionRepository.tryModifytSortName(sortData);
+            //System.out.println("쿼리 결과 : " + doAddSortName);
+            sortData.put("result", "true");
+            if (doModifySortName != 1) {
+                System.out.println("분류명 수정 쿼리 오류 발생");
+            }
+        } else {
+            sortData.put("result", "false");
+        }
 
 
         return sortData;
-     }
+    }
 
     //수정할 분류명이 이미 존재하는 분류명인지 체크해주는 로직
-    public String getSortModifyProcess(Map<String, Object> sortData){
+    public String getSortModifyProcess(Map<String, Object> sortData) {
 
         //기존 분류명 추가 에서 추가할 분류명에 대해 중복 체크를 하는 로직을 사용하기 위해 키값을 수정 해야 한다.
         modifyKey(sortData, "modifySort", "addSort");
@@ -323,14 +323,52 @@ public class TransactionServiceImpl implements TransactionService {
     //
     public Map<String, Object> tryDeleteSortName(Map<String, Object> sortData) {
 
-            int doModifySortName = transactionRepository.tryDeleteSortName(sortData);
-            //System.out.println("쿼리 결과 : " + doAddSortName);
-            sortData.put("result", "true");
-            if(doModifySortName != 1){ //삭제를 진행하는 쿼리 오류 발생
-                System.out.println("분류명 삭제 쿼리 오류 발생");
-            }
+        int doModifySortName = transactionRepository.tryDeleteSortName(sortData);
+        //System.out.println("쿼리 결과 : " + doAddSortName);
+        sortData.put("result", "true");
+        if (doModifySortName != 1) { //삭제를 진행하는 쿼리 오류 발생
+            System.out.println("분류명 삭제 쿼리 오류 발생");
+        }
 
         return sortData;
+    }
+
+
+    public Map<String, Object> setBudgetAmount(Map<String, Object> data1) {
+
+        String loginId = (String) data1.get("loginId");
+
+        //현재 로그인 되어있는 아이디의 PK값을 구한다
+        int primaryId = getPrimaryId(loginId);
+
+        data1.put("loginIdPK", primaryId);  //data1 json형태에 회원 아이디의 PK값을 추가 해준다.
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        //사용자가 이전에 예산액을 작성한적이 있는지 확인(없어서 null값이 return되면 0으로, 값이 있다면 1(중복이 될수 없기 때문에 1초과로 나올 수 없다.))
+        Integer existCnt = transactionRepository.checkBudgetByUserId(data1); //사용자가 해당 월에 예산액을 설정한 적이 있는지 확인
+        existCnt = existCnt != null ? existCnt : 0;
+        //System.out.println(existCnt);
+
+        data1.put("existCnt", existCnt); //0이면 insert쿼리 실행, 1이면 update 쿼리를 실행 하기 위해서 data1에 넣는다.
+        //System.out.println(data1);
+
+        if (existCnt == 0) {
+            int budgetInsert = transactionRepository.budgetInsert(data1);
+            if (budgetInsert == 1) { //쿼리가 성공하면
+                result.put("result", "success");
+            } else {
+                result.put("result", "fail");
+            }
+        } else if (existCnt == 1) {
+            int budgetUpdate = transactionRepository.budgetUpdate(data1);
+            if (budgetUpdate == 1) { //쿼리가 성공하면
+                result.put("result", "success");
+            } else {
+                result.put("result", "fail");
+            }
+        }
+        return result;
     }
 
 

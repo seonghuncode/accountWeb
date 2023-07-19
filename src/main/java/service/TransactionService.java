@@ -57,5 +57,7 @@ public interface TransactionService {
 
     Map<String, Object> tryDeleteSortName(Map<String, Object> sortData);
 
+    Map<String, Object> setBudgetAmount(Map<String, Object> data1);
+
 
 }

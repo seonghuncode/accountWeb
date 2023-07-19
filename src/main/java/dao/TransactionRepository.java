@@ -43,4 +43,10 @@ public interface TransactionRepository {
 
     int tryDeleteSortName(Map<String, Object> sortData);
 
+    int checkBudgetByUserId(Map<String, Object> data1);
+
+    int budgetInsert(Map<String, Object> data1);
+
+    int budgetUpdate(Map<String, Object> data1);
+
 }

@@ -92,7 +92,7 @@
 
         <div th:if="${#strings.equals(nowLoginUserId, userId)}">
             <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="openPopUp">분류명 관리</button>
-            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;">예산액 수정</button>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="budgetAmount">예산액 수정</button>
             <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; margin-right: 5px;">거래 내역 추가</button>
         </div>
 
@@ -220,6 +220,7 @@
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
 <script type="text/javascript" src="/resources/static/js/sortAjax.js"></script> <!-- 분류명에 관련된 Js -->
+<script type="text/javascript" src="/resources/static/js/budgetAmount.js"></script>
 
 
 </body>

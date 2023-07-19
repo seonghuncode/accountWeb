@@ -232,4 +232,28 @@
     </delete>
 
 
+    <!-- where조건에 부합하는 컬럼의 id값을 반환한다. -->
+    <select id="checkBudgetByUserId" resultType="int" parameterType="hashmap">
+        SELECT count(userId) FROM budget WHERE userId = #{loginIdPK} and `month` like concat('20', #{year}, '-',  #{month}, '%');
+    </select>
+
+    <!-- 사용자가 특정 날짜에 목표 예산을 설정한 적이 없을 경우 값을 넣어주는 쿼리 -->
+    <insert id="budgetInsert"  parameterType="hashmap">
+        INSERT INTO budget
+        SET `price` = #{budgetValue},
+            `month` = concat('20', #{year}, '-',  #{month}, '-01'),
+            userId = #{loginIdPK};
+    </insert>
+
+    <!-- 사용자가 특정 날짜에 목표예산을 설정한 적이 있다면 해당 데이터를 업데이트 해준다. -->
+    <update id="budgetUpdate" parameterType="hashmap">
+        UPDATE budget SET `price` = #{budgetValue}, `month` = concat('20', #{year}, '-',  #{month}, '-01') WHERE userId = #{loginIdPK};
+    </update>
+
+
+
+
+
+
+
 </mapper>
