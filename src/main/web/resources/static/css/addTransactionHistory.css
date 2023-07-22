@@ -1,0 +1,13 @@
+/* 현재 로그인 되어있는 회원의 거랜애역 페이지 에서 거래내역을 추가 하는 페이지 CSS */
+
+.frameFromAddTransactionHistory { /* body태그 부분 내비게이션바와 위치 맞추는 CSS */
+    display: flex;
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 40px;
+    flex-direction: column; /* 해당 스타일이 지정된 태그 안에 태그들이 세로로 나오도록 한다. */
+}
+
+.essentialCheck{
+    color: red;
+}

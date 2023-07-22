@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('거래내역추가')"></th:block>
+</head>
+<body>
+
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment('거래내역 추가 페이지')"></header>
+<!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
+
+
+<div class="frameFromAddTransactionHistory">
+    <!-- 거래내역 추가 페이지 최상단 태그 ----------------------------------------------------------------------->
+
+
+    <!-- 거래내역 추가 페이지 에서 부가 기능 버튼들 -------------------------->
+    <div style="margin-top: 50px;">
+        <button type="button" class="btn btn-light">선택 항목 삭제</button>
+
+        <span style="float: right">
+        <button type="button" class="btn btn-light">분류명 관리</button>
+        <button type="button" class="btn btn-light">내역 필드 추가</button>
+        <button type="button" class="btn btn-secondary">거래내역 추가</button>
+        </span>
+    </div>
+
+    <hr width="100%" color="blue" size="3">
+
+    <!-- 거래내역 추가 테이블 ------------------------------------------------>
+    <div style="margin-top: 50px;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col"><input class="form-check-input" type="checkbox" value="" id="checkBoxAll"></th>
+                <th scope="col">번호</th>
+                <th scope="col">날짜 <span class="essentialCheck">*</span></th>
+                <th scope="col">분류 <span class="essentialCheck">*</span></th>
+                <th scope="col">메모</th>
+                <th scope="col">금액 <span class="essentialCheck">*</span></th>
+                <th scope="col">수입/지출 <span class="essentialCheck">*</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><input class="form-check-input" type="checkbox" value="" id="checkBox1"></th>
+                <td>1</td>
+                <td><input type="date"></td>
+                <td>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)"
+                           aria-label=".form-control-sm example">
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" type="text" placeholder="최대 10억 까지 입력 가능(숫자만 입력 가능)"
+                           aria-label=".form-control-sm example">
+                </td>
+                <td>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>수입</option>
+                        <option value="1">지출</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+<!-- 7일치 내역 더 보기 버튼을 클릭할 경우, 자바스크립트로 타임리프 객체 넘기는 방법 -->
+<script type="text/javascript" th:inline="javascript">
+    // // 지출 내역 테이블에 대해 7일치 내역 더보기 버튼을 클릭했을 경우 함수 에서 사용
+    // var dateCnt = [[${dateCnt}]];
+    // var transactionHistory = [[${transactionHistory}]];
+    // var getDailyTotalData = [[${getDailyTotalData}]];
+    // //console.log(username);
+    //
+    // //검색 조건에 대한 radio button에 따라 화면을 보여줄때 사용하는 data
+    // var year = [[${year}]];
+    // var month = [[${month}]];
+    // var userId = [[${userId}]];
+    // var selectYear = [[${selectYear}]]; //사용자가 선택한 연도를 보내주어야 다음 페이지 에서 해당 값으로 value값을 유지 가능
+    // var selectMonth = [[${selectMonth}]]; //사용자가 선택한 월을 보내주어야 다음 페이지 에서 해당 값으로 value값을 유지 가능
+    // var sortName = [[${sortName}]];
+    // var beforeTypeRadio = [[${typeRadio}]];
+    // var startDate = [[${startDate}]];
+    // var endDate = [[${endDate}]];
+</script>
+<!--<script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>-->
+<!--<script type="text/javascript" src="/resources/static/js/sortAjax.js"></script> &lt;!&ndash; 분류명에 관련된 Js &ndash;&gt;-->
+<!--<script type="text/javascript" src="/resources/static/js/budgetAmount.js"></script>-->
+
+
+</body>
+</html>

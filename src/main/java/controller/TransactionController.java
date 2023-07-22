@@ -526,6 +526,13 @@ public class TransactionController {
         return result;
     }
 
+    //사용자가 자신의 거래내역 페이지 에서 거래내역 추가 버튼을 클릭하면 거래내역 추가 페이지로 이동하는 controller
+    @RequestMapping("addTransactionHistory")
+    public String addTransactionHistory(){
+
+        return "thymeleaf/content/addTransactionHistory";
+    }
+
 
 
 
