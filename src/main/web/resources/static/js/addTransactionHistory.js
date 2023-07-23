@@ -1,4 +1,4 @@
-//분류명을 가지고 오는 함수
+//분류명을 가지고 오는 함수---------------------------------------------------------------------------------------------
 function getSortList(data1, i) {
     $.ajax({
         url: "/transaction/getNowSortList",
@@ -27,6 +27,7 @@ function getSortList(data1, i) {
         }
     })
 }
+
 
 //분류명 관리를 진행하는 함수(추가/수정/삭제)----------------------------------------------------------------------------
 $('#manageSortName').click(function () {
@@ -76,68 +77,127 @@ $('#manageSortName').click(function () {
     }
 })
 
+//내역 필드 열을 추가 해주는 함수---------------------------------------------------------------------------------------
+$('#addTransactionField').click(function () {
+
+    var option = '';
+    let num;
+
+    for (let i = 1; i <= 10; i++) {
+        var uniqueNum = $(`#uniqueNum${i}`).text();
+        //예산액 추가 부분에 존재하는 필드를 카운트 하여 숫자를 지정해 주기 위한 반복문
+        if (uniqueNum == i) {
+            num = i;
+        }
+    }
+
+    //존재하는 필드 갯수가 10개가 되면 추가가 불가능 하도록 유효성 검사
+    if(num <= 9){
+        option += `<tr id="uniqueTr${num+1}">` +
+            `<th scope="row"><input class="form-check-input" type="checkbox" value="" id='checkBox${num+1}'></th>` +
+            `<td id="uniqueNum${num+1}">${num+1}</td>` +
+            ` <td><input type="date" id="selAddTransactionDate${num+1}"></td>` +
+            '<td>' +
+            `<select class="form-select form-select-sm" aria-label=".form-select-sm example" id="sortList${num+1}"><option selected style="text-align: center">---선택---</option></select>` +
+            `<span style="color: red; font-size: small" id="sortListValid${num+1}">※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.</span>` +
+            '</td>' +
+            '<td>' +
+            '<input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)" aria-label=".form-control-sm example">' +
+            '</td>' +
+            '<td>' +
+            '<input class="form-control form-control-sm" type="text" placeholder="최대 10억 미만 으로 입력 가능(숫자만 입력 가능)" style="width: 350px" aria-label=".form-control-sm example">' +
+            '</td>' +
+            '<td>' +
+            '<select class="form-select form-select-sm" aria-label=".form-select-sm example">' +
+            '<option selected>수입</option>' +
+            '<option value="1">지출</option>' +
+            ' </select>' +
+            ' </td>' +
+            '</tr>';
+
+
+        // //받아온 현재 분류명 리스트를 반영해 주어야 된다.
+        // $(`#sortList${i} > *`).remove();
+        $(`#uniqueTr${num}`).after(
+            option
+        );
+
+        doSortListProcess(); //필드가 추가 될때마다 해당 함수를 실행시켜야 추가된 필드도 해당 기능이 적용 된다.
+    }else if(num >= 10){
+        alert("거래 내역 추가는 한번에 최대 10개 까지의 내역만 추가 가능 합니다.");
+    }
+
+   
+
+})
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
+doSortListProcess(); //초기 하나의 필드가 동작하기 위해 함수를 실행 시킨다.
 
-//예산액 추가는 한번에 최대 10개의 예산액만 추가 가능하도록 한다.---------------------------------------------------------------------------
-for (let i = 1; i <= 10; i++) {
+//필드 에서 사용자가 날짜를 선택하면 분류명 리스트를 보여주고 경고메세지를 없애주는 로직---------------------------------------------------------------------------
+function doSortListProcess() {
 
-    var uniqueNum = $(`#uniqueNum${i}`).text();
-    //예산액 추가 부분에서 필드 번호가 존재할 경우에만 실행 되도록 조건문 추가 (존재하지 않을 경우 동작X)-------------------------------------------------------------
-    if (uniqueNum == i) {
-        //console.log(uniqueNum);
 
-        //거래 내역 추가 에서 계속 특정 필드의 날짜가 변경 되는지 감지 한다.-----------------------------------------------------------------
-        $(document).ready(function () {
-            $(`#selAddTransactionDate${i}`).change(function () {
-                var selDate1 = $(`#selAddTransactionDate${i}`).val();
-                //console.log("값 변화");
-                //console.log(selDate1);
+    for (let i = 1; i <= 10; i++) {
 
-                //만약 특정 필드의 날짜 값이 변경 되었을 경우 날짜가 선택되었다면 분류명을 보기 위해 날짜를 선택하라는 문구를 없앤다.
-                if (selDate1 != null) {
-                    $(`#sortListValid${i}`).text("");
-                } else {
-                    $(`#sortListValid${i}`).text("※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.");
-                    $(`#sortListValid${i}`).css("color", "red");
-                }
+        var uniqueNum = $(`#uniqueNum${i}`).text();
+        //예산액 추가 부분에서 필드 번호가 존재할 경우에만 실행 되도록 조건문 추가 (존재하지 않을 경우 동작X)-------------------------------------------------------------
+        if (uniqueNum == i) {
+            //console.log(uniqueNum);
+
+            //거래 내역 추가 에서 계속 특정 필드의 날짜가 변경 되는지 감지 한다.-----------------------------------------------------------------
+            $(document).ready(function () {
+                $(`#selAddTransactionDate${i}`).change(function () {
+                    var selDate1 = $(`#selAddTransactionDate${i}`).val();
+                    //console.log("값 변화");
+                    //console.log(selDate1);
+
+                    //만약 특정 필드의 날짜 값이 변경 되었을 경우 날짜가 선택되었다면 분류명을 보기 위해 날짜를 선택하라는 문구를 없앤다.
+                    if (selDate1 != null) {
+                        $(`#sortListValid${i}`).text("");
+                    } else {
+                        $(`#sortListValid${i}`).text("※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.");
+                        $(`#sortListValid${i}`).css("color", "red");
+                    }
+                });
             });
-        });
 
 
-        // 사용자가 예산액 추가 에서 날짜를 선택할 경우 분류명 리스트를 불러오는 부분 (사용자가 특정 필드의 분류명 select태그를 선택했을때 동작하는 태그)------------------
-        $(`#sortList${i}`).click(function () {
+            // 사용자가 예산액 추가 에서 날짜를 선택할 경우 분류명 리스트를 불러오는 부분 (사용자가 특정 필드의 분류명 select태그를 선택했을때 동작하는 태그)------------------
+            $(`#sortList${i}`).click(function () {
 
-            //예산액을 추가하는 분류명 필드는 추가, 삭제가 가능하기 때문에 정확히 어떤 필드의 날짜인지를 구별하는 것이 중요!!
-            var selDate = $(`#selAddTransactionDate${i}`).val();
-            var loginId = userId;
-            var year;
-            var month;
-            //year2, month2의 변수명은 거래내역 추가 기능에서 필요하지 않지만 기존에 만들었던 분류명 불러오기 함수를 사용하기 위해서는 빈값으로 변수명을 넘겨 주어야 사용이 가능 하다.
-            var year2 = '';
-            var month2 = '';
-            //console.log(selDate);
-
-            if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
-                //console.log("날짜가 선택 됨");
+                //예산액을 추가하는 분류명 필드는 추가, 삭제가 가능하기 때문에 정확히 어떤 필드의 날짜인지를 구별하는 것이 중요!!
+                var selDate = $(`#selAddTransactionDate${i}`).val();
+                var loginId = userId;
+                var year;
+                var month;
+                //year2, month2의 변수명은 거래내역 추가 기능에서 필요하지 않지만 기존에 만들었던 분류명 불러오기 함수를 사용하기 위해서는 빈값으로 변수명을 넘겨 주어야 사용이 가능 하다.
+                var year2 = '';
+                var month2 = '';
                 //console.log(selDate);
-                year = selDate.substr(2, 2);
-                month = selDate.substr(5, 2);
-                let data1 = { // 현재 분류명을 불러 오기 위해 필요한 데이터
-                    "loginId": loginId,
-                    "year": year,
-                    "month": month,
-                    "year2": year2,
-                    "month2": month2
-                };
-                //console.log(data1);
-                getSortList(data1, i);
-            }
+
+                if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
+                    //console.log("날짜가 선택 됨");
+                    //console.log(selDate);
+                    year = selDate.substr(2, 2);
+                    month = selDate.substr(5, 2);
+                    let data1 = { // 현재 분류명을 불러 오기 위해 필요한 데이터
+                        "loginId": loginId,
+                        "year": year,
+                        "month": month,
+                        "year2": year2,
+                        "month2": month2
+                    };
+                    //console.log(data1);
+                    getSortList(data1, i);
+                }
 
 
-        });
+            });
 
 
+        }
     }
 }
