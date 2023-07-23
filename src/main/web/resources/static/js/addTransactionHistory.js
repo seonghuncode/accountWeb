@@ -1,5 +1,5 @@
 //분류명을 가지고 오는 함수
-function getSortList(data1, i){
+function getSortList(data1, i) {
     $.ajax({
         url: "/transaction/getNowSortList",
         data: data1,  //JSON.stringify(search)
@@ -27,6 +27,55 @@ function getSortList(data1, i){
         }
     })
 }
+
+//분류명 관리를 진행하는 함수(추가/수정/삭제)----------------------------------------------------------------------------
+$('#manageSortName').click(function () {
+
+    // var _width = '650';
+    // var _height = '380';
+    var _width = '850';
+    var _height = '480';
+
+    // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+    var _left = Math.ceil((window.screen.width - _width) / 2);
+    var _top = Math.ceil((window.screen.height - _height) / 2);
+
+    //거래 내역 페이지 에서 받아오는 데이터
+    var loginId = userId; //현재 로그인한 사용자 아이디
+    var pageYear; //이번달에서 사용자가 검색한 연도(당연도)
+    var pageMonth; //이번달 에서 사용자가 검색한 월(당월)
+
+    //현재 필요 없지만 기존의 분류명 관리 함수를 사용하기 위해서 빈 변수라도 넘겨주어야 한다.
+    var year1;
+    var month1;
+    //만약 기간별 검색일 경우 종료 연도, 월을 담아주는 변수
+    var year2;
+    var month2;
+
+    //사용자가 원하는 분류명 관리하고 싶은 연도와 월을 선택과 동시에 유효성 검사를 하는 로직
+    var selDate = prompt("관리할 분류명의 연도와 월을 입력하세요(Ex. 2023-06)");
+    if (selDate == null) {
+    } else if (selDate.trim() == "") {
+        alert("관리하고 싶은 분류명 날짜를 입력 해주세요.")
+    } else if (!$.isNumeric(selDate.substr(0, 4)) || !$.isNumeric(selDate.substr(5, 2)) || selDate.substr(4, 1) != "-" || selDate.trim().length > 7) {
+        // console.log(selDate.substr(0, 4));
+        // console.log(selDate.substr(5, 2))
+        // console.log(selDate.substr(4, 1))
+        alert("잘못된 형식 입니다.")
+    } else {
+        pageYear = selDate.substr(2, 2);
+        pageMonth = selDate.substr(5, 2);
+        alert(pageYear + "년 " + pageMonth + "월에 대한 분류명 관리 페이지를 생성합니다.");
+
+        //사용자가 거래내역 페이지 에서 어떠한 검색 조건으로 검색을 하느냐에 따라 다른 값을 받기 때문에 선별
+        if (pageYear && pageMonth) {
+            year1 = pageYear;
+            month1 = pageMonth;
+        }
+        window.open('/transaction/sortManage?loginId=' + loginId + '&year=' + year1 + '&month=' + month1 + '&year2=' + year2 + '&month2=' + month2, 'popup-test', 'width=' + _width + ', height=' + _height + ', left=' + _left + ', top=' + _top);
+    }
+})
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,14 +128,12 @@ for (let i = 1; i <= 10; i++) {
                     "loginId": loginId,
                     "year": year,
                     "month": month,
-                    "year2" : year2,
-                    "month2" : month2
+                    "year2": year2,
+                    "month2": month2
                 };
-                console.log(data1);
-                 getSortList(data1, i);
+                //console.log(data1);
+                getSortList(data1, i);
             }
-
-
 
 
         });
