@@ -92,14 +92,14 @@ $('#addTransactionField').click(function () {
     }
 
     //존재하는 필드 갯수가 10개가 되면 추가가 불가능 하도록 유효성 검사
-    if(num <= 9){
-        option += `<tr id="uniqueTr${num+1}">` +
-            `<th scope="row"><input class="form-check-input" type="checkbox" value="" id='checkBox${num+1}'></th>` +
-            `<td id="uniqueNum${num+1}">${num+1}</td>` +
-            ` <td><input type="date" id="selAddTransactionDate${num+1}"></td>` +
+    if (num <= 9) {
+        option += `<tr id="uniqueTr${num + 1}">` +
+            `<th scope="row"><input class="form-check-input" type="checkbox" value="${num + 1}" id='checkBox${num + 1}' name="chk"></th>` +
+            `<td id="uniqueNum${num + 1}">${num + 1}</td>` +
+            ` <td><input type="date" id="selAddTransactionDate${num + 1}"></td>` +
             '<td>' +
-            `<select class="form-select form-select-sm" aria-label=".form-select-sm example" id="sortList${num+1}"><option selected style="text-align: center">---선택---</option></select>` +
-            `<span style="color: red; font-size: small" id="sortListValid${num+1}">※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.</span>` +
+            `<select class="form-select form-select-sm" aria-label=".form-select-sm example" id="sortList${num + 1}"><option selected style="text-align: center">---선택---</option></select>` +
+            `<span style="color: red; font-size: small" id="sortListValid${num + 1}">※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.</span>` +
             '</td>' +
             '<td>' +
             '<input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)" aria-label=".form-control-sm example">' +
@@ -110,7 +110,7 @@ $('#addTransactionField').click(function () {
             '<td>' +
             '<select class="form-select form-select-sm" aria-label=".form-select-sm example">' +
             '<option selected>수입</option>' +
-            '<option value="1">지출</option>' +
+            `<option value="${num + 1}">지출</option>` +
             ' </select>' +
             ' </td>' +
             '</tr>';
@@ -123,11 +123,96 @@ $('#addTransactionField').click(function () {
         );
 
         doSortListProcess(); //필드가 추가 될때마다 해당 함수를 실행시켜야 추가된 필드도 해당 기능이 적용 된다.
-    }else if(num >= 10){
+    } else if (num >= 10) {
         alert("거래 내역 추가는 한번에 최대 10개 까지의 내역만 추가 가능 합니다.");
     }
+})
 
-   
+
+// //거래내역 추가 페이지 에서 특절 필드들을 삭제 할 경우 삭제한 만큼 숫자를 감소해주는 로직--------------------------
+// //EX. 기존의 필드 숫자가 1,2,3 에서 2를 삭제 -> 1,2로 모든 id, value값이 변경 되도록
+// function doSortAgain() {
+//
+//     var existValue = []; // key 값을 담을 배열(현재 체크 되어 있는 체크 박스의 value값들이 들어가 있다.)
+//
+//     for (let i = 1; i <= 10; i++) {
+//         $(`#uniqueTr${i}`).each(function () {
+//             existValue.push(i);
+//         });
+//     }
+//     // console.log(existValue)
+//
+//     //존재하는 필드 갯수만큼 반복문을 돌면서 수정
+//     for(let j = 0; j < existValue.length; j++){
+//         let num = existValue[j];
+//         console.log("길이 : " + existValue.length)
+//         console.log("변경할 기존 id : " + num);
+//         console.log("변경할 새 id : " + `${j+1}`);
+//         $(`#uniqueTr${num}`).attr('id', `uniqueTr${j+1}`);
+//         $(`#checkBox${num}`).attr('id', `checkBox${j+1}`);
+//         $(`#checkBox${j+1}`).attr('value', `${j+1}`);
+//         $(`#uniqueNum${num}`).attr('id', `uniqueNum${j+1}`);
+//         $(`#uniqueNum${j+1}`).text(`${j+1}`);
+//         $(`#selAddTransactionDate${num}`).attr('id', `selAddTransactionDate${j+1}`);
+//         $(`#sortList${num}`).attr('id', `sortList${j+1}`);
+//         $(`#sortListValid${num}`).attr('id', `sortListValid${j+1}`);
+//
+//
+//     }
+//
+//     doSortListProcess();//수정된 것이 반영되기 위해 사용
+//
+//
+//
+// }
+
+
+//거래내역 추가 에서 전체 선택 / 전체 선택 해제를 동작하는 부분-----------------------------------------------------
+$(document).ready(function () {
+    //최상단 체크박스가 선택 되면 테이블에 존재하는 모든 테이블의 체크박스가 선택되고 반대로 해제되면 전체 해제됨
+    $("#checkBoxAll").click(function () {
+        if ($("#checkBoxAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+        else $("input[name=chk]").prop("checked", false);
+    });
+
+    $("input[name=chk]").click(function () {
+        var total = $("input[name=chk]").length;
+        var checked = $("input[name=chk]:checked").length;
+
+        if (total != checked) $("#checkBoxAll").prop("checked", false);
+        else $("#checkBoxAll").prop("checked", true);
+    });
+});
+
+
+//내역 필드 역을 삭제 해주는 기능------------------------------------------------------------------------------------
+$('#deleteTransactionField').click(function () {
+
+    var delchk = []; // key 값을 담을 배열(현재 체크 되어 있는 체크 박스의 value값들이 들어가 있다.)
+
+    for (let i = 1; i <= 10; i++) {
+        //삭제 key value
+        // chk라는 클래스를 가진 체크박스 중에 체크가 된
+        // object들을 찾아서 delchk라는 배열에 담는다.
+        $(`#checkBox${i}:checked`).each(function () {
+            delchk.push($(this).val());
+        });
+        // console.log(delchk)
+    }
+
+
+    //채크 되어 있는 값들을 통해 해당 필드들을 삭제 하는 로직
+    for (var i = 0; i < delchk.length; i++) {
+
+        var currentValue = delchk[i];
+
+        $('tr').remove(`#uniqueTr${currentValue}`);
+
+    }
+
+    // doSortAgain(); //삭제 되고 남아있는 내역 숫자 재정렬
+    // console.log(delchk)
+
 
 })
 

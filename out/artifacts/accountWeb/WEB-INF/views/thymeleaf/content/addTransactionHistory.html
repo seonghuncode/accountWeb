@@ -20,7 +20,7 @@
 
     <!-- 거래내역 추가 페이지 에서 부가 기능 버튼들 -------------------------->
     <div style="margin-top: 50px;">
-        <button type="button" class="btn btn-light">선택 항목 삭제</button>
+        <button type="button" class="btn btn-light" id="deleteTransactionField">선택 항목 삭제</button>
 
         <span style="float: right">
         <button type="button" class="btn btn-light" id="manageSortName">분류명 관리</button>
@@ -48,7 +48,7 @@
             <tbody style="text-align: center">
             <tr id="uniqueTr1"> <!-- 필드가 추가 되면 uniqueTr 뒤에 uniqueNum에 해당 하는 숫자가 붙는다. -->
                 <th scope="row">
-                    <input class="form-check-input" type="checkbox" value="" id="checkBox1">
+                    <input class="form-check-input" type="checkbox" value="1" id="checkBox1" name="chk">
                 </th>
                 <td id="uniqueNum1">1</td>
                 <td>
