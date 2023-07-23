@@ -528,7 +528,13 @@ public class TransactionController {
 
     //사용자가 자신의 거래내역 페이지 에서 거래내역 추가 버튼을 클릭하면 거래내역 추가 페이지로 이동하는 controller
     @RequestMapping("addTransactionHistory")
-    public String addTransactionHistory(){
+    public String addTransactionHistory(String userId, Model model){
+
+        model.addAttribute("userId", userId);
+
+        //DB에 저장 되어있는 분류명 중 특정 조건을 만족하는 리스트 전체를 받아오는 부분
+        //List<Map<String, Object>> sortList = transactionService.getSortListShow(sort);
+
 
         return "thymeleaf/content/addTransactionHistory";
     }

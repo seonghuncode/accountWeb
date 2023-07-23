@@ -94,7 +94,7 @@
             <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="openPopUp">분류명 관리</button>
             <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="budgetAmount">예산액 수정</button>
 <!--            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; margin-right: 5px;" id="addTransactionHistory">거래 내역 추가</button>-->
-            <a class="btn btn-outline-secondary" type="button" style="font-size: x-small; margin-right: 5px;" href="/transaction/addTransactionHistory" >거래 내역 추가</a>
+            <a class="btn btn-outline-secondary" type="button" style="font-size: x-small; margin-right: 5px;"  th:href="@{/transaction/addTransactionHistory(userId = ${userId})}">거래 내역 추가</a>
         </div>
 
         <div>
