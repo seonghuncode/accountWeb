@@ -192,6 +192,7 @@ $(document).ready(function () {
 //내역 필드 역을 삭제 해주는 기능------------------------------------------------------------------------------------
 $('#deleteTransactionField').click(function () {
 
+    var allFieldCnt = []; //전체 필드 갯수를 세어 전체 삭제를 진행 못 하도록 하기 위한 배열
     var delchk = []; // key 값을 담을 배열(현재 체크 되어 있는 체크 박스의 value값들이 들어가 있다.)
 
     for (let i = 1; i <= 10; i++) {
@@ -200,22 +201,36 @@ $('#deleteTransactionField').click(function () {
         // object들을 찾아서 delchk라는 배열에 담는다.
         $(`#checkBox${i}:checked`).each(function () {
             delchk.push($(this).val());
+            allFieldCnt.push($(this).val());
+        });
+        $(`#checkBox${i}`).each(function () {
+            if (!this.checked) {
+                // 현재 요소가 체크되지 않은 경우에만 값을 배열에 추가합니다.
+                allFieldCnt.push($(this).val());
+            }
         });
         // console.log(delchk)
     }
 
-
-    //채크 되어 있는 값들을 통해 해당 필드들을 삭제 하는 로직
-    for (var i = 0; i < delchk.length; i++) {
-
-        var currentValue = delchk[i];
-
-        $('tr').remove(`#uniqueTr${currentValue}`);
-
+    // console.log(allFieldCnt);
+    let cnt; //현재 존재하는 저체 필드 갯수
+    for(var k = 1; k <= allFieldCnt.length; k++){
+        cnt = k;
+    }
+    // console.log(cnt);
+    if(cnt == delchk.length){ // 사용자가 전체 필드를 선택 하고 삭제를 진행할 경우 막기
+        // console.log("삭제 불가");
+        alert("거래내역 추가를 위해서는 하나 이상의 필드가 필요 합니다! \n(※전체 필드 삭제 불가능)");
+    }else{
+        //채크 되어 있는 값들을 통해 해당 필드들을 삭제 하는 로직
+        for (var i = 0; i < delchk.length; i++) {
+            var currentValue = delchk[i];
+            $('tr').remove(`#uniqueTr${currentValue}`);
+        }
+        doSortAgain(); //삭제 되고 남아있는 내역 숫자 재정렬
+        // console.log(delchk)
     }
 
-    doSortAgain(); //삭제 되고 남아있는 내역 숫자 재정렬
-    // console.log(delchk)
 
 
 })
@@ -242,11 +257,12 @@ function doSortListProcess() {
                     var selDate1 = $(`#selAddTransactionDate${i}`).val();
                     console.log("값 변화");
                     console.log(selDate1);
+                    console.log(i + " : " + `${i}`)
 
                     //만약 특정 필드의 날짜 값이 변경 되었을 경우 날짜가 선택되었다면 분류명을 보기 위해 날짜를 선택하라는 문구를 없앤다.
                     if (selDate1 != "") {
-                        console.log("날짜 입력 경고 메세지 없애기 " + selDate1);
-                        console.log(`sortListValid${i}`)
+                        // console.log("날짜 입력 경고 메세지 없애기 " + selDate1);
+                        // console.log(`sortListValid${i}`)
                         $(`#sortListValid${i}`).text("");
                     } else if(selDate1 == ""){
                         $(`#sortListValid${i}`).text("※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.");
@@ -267,7 +283,9 @@ function doSortListProcess() {
                 //year2, month2의 변수명은 거래내역 추가 기능에서 필요하지 않지만 기존에 만들었던 분류명 불러오기 함수를 사용하기 위해서는 빈값으로 변수명을 넘겨 주어야 사용이 가능 하다.
                 var year2 = '';
                 var month2 = '';
-                //console.log(selDate);
+                console.log(`sortList${i}`)
+                console.log("선택한 날짜 : " + selDate);
+                
 
                 if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
                     // console.log("날짜가 선택 됨");
