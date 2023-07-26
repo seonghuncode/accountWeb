@@ -285,9 +285,11 @@ function doSortListProcess() {
                 var month2 = '';
                 console.log(`sortList${i}`)
                 console.log("선택한 날짜 : " + selDate);
-                
 
-                if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
+                if(selDate == null){
+                    // console.log("undefined입니다!!");
+                }
+                else if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
                     // console.log("날짜가 선택 됨");
                     // console.log(selDate);
                     year = selDate.substr(2, 2);
