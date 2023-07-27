@@ -13,7 +13,7 @@ function getSortList(data1, i) {
 
             var option = '';
             $.each(data, function (index, history) {
-                option += '<option value="1">' + history.name + '</option>';
+                option += `<option value="${index}">` + history.name + '</option>';
             });
 
             //받아온 현재 분류명 리스트를 반영해 주어야 된다.
@@ -26,6 +26,7 @@ function getSortList(data1, i) {
             alert("error");
         }
     })
+
 }
 
 
@@ -96,19 +97,24 @@ $('#addTransactionField').click(function () {
         option += `<tr id="uniqueTr${num + 1}">` +
             `<th scope="row"><input class="form-check-input" type="checkbox" value="${num + 1}" id='checkBox${num + 1}' name="chk"></th>` +
             `<td id="uniqueNum${num + 1}">${num + 1}</td>` +
-            ` <td><input type="date" id="selAddTransactionDate${num + 1}"></td>` +
+            `<td>` +
+            `<input type="date" id="selAddTransactionDate${num + 1}">` +
+            `<div id="selAddTransactionValid${num + 1}"></div>` +
+            `</td>` +
             '<td>' +
             `<select class="form-select form-select-sm" aria-label=".form-select-sm example" id="sortList${num + 1}"><option selected style="text-align: center">---선택---</option></select>` +
             `<span style="color: red; font-size: small" id="sortListValid${num + 1}">※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.</span>` +
             '</td>' +
             '<td>' +
-            '<input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)" aria-label=".form-control-sm example">' +
+            `<input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)" aria-label=".form-control-sm example" id="memo${num + 1}">` +
+            ` <div id="memoValid${num + 1}"></div>` +
             '</td>' +
             '<td>' +
-            '<input class="form-control form-control-sm" type="text" placeholder="최대 10억 미만 으로 입력 가능(숫자만 입력 가능)" style="width: 350px" aria-label=".form-control-sm example">' +
+            `<input class="form-control form-control-sm" type="text" placeholder="최대 10억 미만 으로 입력 가능(숫자만 입력 가능)" style="width: 350px" aria-label=".form-control-sm example" id="price${num + 1}">` +
+            `  <div id="priceValid${num + 1}"></div>` +
             '</td>' +
             '<td>' +
-            '<select class="form-select form-select-sm" aria-label=".form-select-sm example">' +
+            `<select class="form-select form-select-sm" aria-label=".form-select-sm example" id="type${num + 1}">` +
             '<option selected>수입</option>' +
             `<option value="${num + 1}">지출</option>` +
             ' </select>' +
@@ -145,19 +151,26 @@ function doSortAgain() {
     // console.log(existValue)
 
     //존재하는 필드 갯수만큼 반복문을 돌면서 수정
-    for(let j = 0; j < existValue.length; j++){
+    for (let j = 0; j < existValue.length; j++) {
         let num = existValue[j];
         // console.log("길이 : " + existValue.length)
         // console.log("변경할 기존 id : " + num);
         // console.log("변경할 새 id : " + `${j+1}`);
-        $(`#uniqueTr${num}`).attr('id', `uniqueTr${j+1}`);
-        $(`#checkBox${num}`).attr('id', `checkBox${j+1}`);
-        $(`#checkBox${j+1}`).attr('value', `${j+1}`);
-        $(`#uniqueNum${num}`).attr('id', `uniqueNum${j+1}`);
-        $(`#uniqueNum${j+1}`).text(`${j+1}`);
-        $(`#selAddTransactionDate${num}`).attr('id', `selAddTransactionDate${j+1}`);
-        $(`#sortList${num}`).attr('id', `sortList${j+1}`);
-        $(`#sortListValid${num}`).attr('id', `sortListValid${j+1}`);
+        $(`#uniqueTr${num}`).attr('id', `uniqueTr${j + 1}`);
+        $(`#checkBox${num}`).attr('id', `checkBox${j + 1}`);
+        $(`#checkBox${j + 1}`).attr('value', `${j + 1}`);
+        $(`#uniqueNum${num}`).attr('id', `uniqueNum${j + 1}`);
+        $(`#uniqueNum${j + 1}`).text(`${j + 1}`);
+        $(`#selAddTransactionDate${num}`).attr('id', `selAddTransactionDate${j + 1}`);
+        $(`#sortList${num}`).attr('id', `sortList${j + 1}`);
+        $(`#sortListValid${num}`).attr('id', `sortListValid${j + 1}`);
+        $(`#memo${num}`).attr('id', `memo${j + 1}`);
+        $(`#price${num}`).attr('id', `price${j + 1}`);
+        $(`#type${num}`).attr('id', `type${j + 1}`);
+
+        $(`#selAddTransactionValid${num}`).attr('id', `selAddTransactionValid${j + 1}`);
+        $(`#memoValid${num}`).attr('id', `memoValid${j + 1}`);
+        $(`#priceValid${num}`).attr('id', `priceValid${j + 1}`);
 
 
     }
@@ -166,9 +179,7 @@ function doSortAgain() {
     doSortListProcess();//수정된 것이 반영되기 위해 사용
 
 
-
 }
-
 
 
 //거래내역 추가 에서 전체 선택 / 전체 선택 해제를 동작하는 부분-----------------------------------------------------
@@ -214,14 +225,14 @@ $('#deleteTransactionField').click(function () {
 
     // console.log(allFieldCnt);
     let cnt; //현재 존재하는 저체 필드 갯수
-    for(var k = 1; k <= allFieldCnt.length; k++){
+    for (var k = 1; k <= allFieldCnt.length; k++) {
         cnt = k;
     }
     // console.log(cnt);
-    if(cnt == delchk.length){ // 사용자가 전체 필드를 선택 하고 삭제를 진행할 경우 막기
+    if (cnt == delchk.length) { // 사용자가 전체 필드를 선택 하고 삭제를 진행할 경우 막기
         // console.log("삭제 불가");
         alert("거래내역 추가를 위해서는 하나 이상의 필드가 필요 합니다! \n(※전체 필드 삭제 불가능)");
-    }else{
+    } else {
         //채크 되어 있는 값들을 통해 해당 필드들을 삭제 하는 로직
         for (var i = 0; i < delchk.length; i++) {
             var currentValue = delchk[i];
@@ -230,7 +241,6 @@ $('#deleteTransactionField').click(function () {
         doSortAgain(); //삭제 되고 남아있는 내역 숫자 재정렬
         // console.log(delchk)
     }
-
 
 
 })
@@ -255,16 +265,17 @@ function doSortListProcess() {
             $(document).ready(function () {
                 $(`#selAddTransactionDate${i}`).change(function () {
                     var selDate1 = $(`#selAddTransactionDate${i}`).val();
-                    console.log("값 변화");
-                    console.log(selDate1);
-                    console.log(i + " : " + `${i}`)
+                    // console.log("값 변화");
+                    // console.log(selDate1);
+                    // console.log(i + " : " + `${i}`)
+
 
                     //만약 특정 필드의 날짜 값이 변경 되었을 경우 날짜가 선택되었다면 분류명을 보기 위해 날짜를 선택하라는 문구를 없앤다.
                     if (selDate1 != "") {
                         // console.log("날짜 입력 경고 메세지 없애기 " + selDate1);
                         // console.log(`sortListValid${i}`)
                         $(`#sortListValid${i}`).text("");
-                    } else if(selDate1 == ""){
+                    } else if (selDate1 == "") {
                         $(`#sortListValid${i}`).text("※분류명을 선택하기 위해서는 날짜를 먼저 선택해 주세요.");
                         $(`#sortListValid${i}`).css("color", "red");
                     }
@@ -273,7 +284,10 @@ function doSortListProcess() {
 
 
             // 사용자가 예산액 추가 에서 날짜를 선택할 경우 분류명 리스트를 불러오는 부분 (사용자가 특정 필드의 분류명 select태그를 선택했을때 동작하는 태그)------------------
+            // $(`#sortList${i}`).click(function () {
+            var preSelDate = "1"; //이전에 선택한 날짜를 저장할 변수
             $(`#sortList${i}`).click(function () {
+
 
                 //예산액을 추가하는 분류명 필드는 추가, 삭제가 가능하기 때문에 정확히 어떤 필드의 날짜인지를 구별하는 것이 중요!!
                 var selDate = $(`#selAddTransactionDate${i}`).val();
@@ -283,13 +297,14 @@ function doSortListProcess() {
                 //year2, month2의 변수명은 거래내역 추가 기능에서 필요하지 않지만 기존에 만들었던 분류명 불러오기 함수를 사용하기 위해서는 빈값으로 변수명을 넘겨 주어야 사용이 가능 하다.
                 var year2 = '';
                 var month2 = '';
-                console.log(`sortList${i}`)
-                console.log("선택한 날짜 : " + selDate);
+                // console.log(`sortList${i}`)
+                // console.log("선택한 날짜 : " + selDate);
 
-                if(selDate == null){
+
+                if (selDate == null) {
                     // console.log("undefined입니다!!");
-                }
-                else if (selDate != '') {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
+                } else if (selDate != '' && selDate != preSelDate) {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
+                    //selDate != preSelDate를 비교하지 않을 경우 특정 필드 에서 분류명 리스트를 분러오지만 선택할 수 없는 이슈 발생
                     // console.log("날짜가 선택 됨");
                     // console.log(selDate);
                     year = selDate.substr(2, 2);
@@ -303,12 +318,158 @@ function doSortListProcess() {
                     };
                     //console.log(data1);
                     getSortList(data1, i);
+                    preSelDate = selDate;
                 }
 
-
             });
-
 
         }
     }
 }
+
+
+//거래내역 추가 버튼을 클릭했을 경우 실행되는 로직----------------------------------------------------------------------
+$('#addTransactionHistory').click(function () {
+
+    var addTransactionHistoryData = [];
+
+    //백엔드 Controller로 보내야 하는 데이터
+    var loginId = userId; //addTransactionHistory.html에서 받은 사용자 아이디
+    var num; //번호
+    var transactionDate; //날짜
+    var sortName; //분류
+    var memo; //메모
+    var price; //금액
+    var type; //수입 or 지출
+
+
+    //거래내역에 추가 페이지 에서 존재하는 각 필드에 대한 데이터를 배열에 넣는 작업
+    for (var i = 1; i <= 10; i++) {
+        num = i;
+        transactionDate = $(`#selAddTransactionDate${i}`).val();
+        sortName = $(`#sortList${i}`).find(":selected").text();
+        memo = $(`#memo${i}`).val();
+        price = $(`#price${i}`).val();
+        type = $(`#type${i}`).val();
+
+
+        //console.log(num, transactionDate, sortName, memo, price, type);
+
+
+        if (num == $(`#uniqueNum${i}`).text()) { //존재하는 필드 갯수에 대해서만 객체를 만들어 배열에 넣어야 된다.
+            var dataObj = {
+                userId : loginId,
+                num: num.toString(),
+                transactionDate: `${transactionDate}`,
+                sortName: `${sortName}`,
+                memo: `${memo}`,
+                price: `${price}`,
+                type: `${type}`
+            };
+
+            // JSON 배열에 객체를 추가합니다.
+            addTransactionHistoryData.push(dataObj);
+        }
+
+
+    }
+
+    var jsonString = addTransactionHistoryData;
+    //console.log("controller로 보낼 배열 : " + jsonString);
+
+    var result = addTransactionValid(jsonString); //사용자가 입력한 데이터가 조건에 맞게 입력이 데었는지 확인 문제가 없으면 1을 반환 하여 1일 경우 controller로 데이터 보내기
+    //console.log("결과 : " +  result);
+
+    //다음 작업!
+    //유효성 검사를 완료 하면 result값을 성공시 1로 반환하여 1일 경우 controller랑 통신하는 ajax부분 작성 하기
+    if(result == 1){ //유효성 검사를 모두 만족하여 사용자가 데이터를 모두 옳바르게 입력한 경우
+        $.ajax({
+            url: "/transaction/addTransactionHistoryProcess",
+            data: jsonString,  //JSON.stringify(search)
+            type: "get",
+            dataType: "json",
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+                console.log(data);
+            }, error: function () {
+                alert("error");
+            }
+        })
+    }
+
+})
+
+
+//거래애역 추가 페이지 에서 사용자가 거래내역 추가 버튼을 클릭할 경우 데이터가 제대로 입력 되었는지 유효성 검사를 담당하는 로직-----
+function addTransactionValid(jsonString) {
+    // console.log("=== addTransactionValid ===");
+    // console.log(jsonString);
+
+    var result = 0; //반환할 값을 담는 변수
+
+    //현재 거래내역 페이지 에서 존재하는 전체의 필드들에 대해 유효성 검사 진행
+    var cnt = 0; //오류 발생 횟수를 담는 변수
+    for(var i = 0; i < jsonString.length; i++){
+        var obj = jsonString[i];
+
+        // console.log(obj.transactionDate);
+        // console.log(`selAddTransactionValid${i+1}`);
+
+        //날짜가 선택되지 않는 필드가 있을 경우
+        if(obj.transactionDate == ""){
+            $(`#selAddTransactionValid${i+1}`).text("※거래 내역 추가를 위해서 존재하는 필드의 날짜는 필수로 선택 해야 합니다.");
+            $(`#selAddTransactionValid${i+1}`).css("color", "red");
+            $(`#selAddTransactionValid${i+1}`).css("font-size", "small");
+            cnt++;
+        }else if(!obj.transactionDate == ""){
+            $(`#selAddTransactionValid${i+1}`).text("");
+        }
+
+        //사용자가 분류명 관리를 선택하지 않고 거래내역 추가를 클릭했을 경우
+        if(obj.sortName == "---선택---"){
+            $(`#sortListValid${i+1}`).text("※거래 내역 추가를 위해서 분류명을 선택해 주세요.");
+            $(`#sortListValid${i+1}`).css("color", "red");
+            $(`#sortListValid${i+1}`).css("font-size", "small");
+            cnt++;
+        }else if(obj.sortName != "---선택---"){
+            $(`#sortListValid${i+1}`).text("");
+        }
+
+        //메모를 10글자 이상으로 입력한 경우
+        if(obj.memo.trim().length >= 10){
+            $(`#memoValid${i+1}`).text("※메모는 10글자 이내로만 작성 가능 합니다.");
+            $(`#memoValid${i+1}`).css("color", "red");
+            $(`#memoValid${i+1}`).css("font-size", "small");
+            cnt++;
+        }else if(obj.memo.trim().length < 10){
+            $(`#memoValid${i+1}`).text("");
+        }
+
+        //1. 금액을 입력하지 않은 경우 2. 숫자를 이외의 것을 입력한 경우 3.금액을 999,999,999 초과로 작성한 경우
+        if(obj.price.trim() == ""){
+            $(`#priceValid${i+1}`).text("※거내내역 추가를 위해 금액은 필수 입력 사항 입니다.");
+            $(`#priceValid${i+1}`).css("color", "red");
+            $(`#priceValid${i+1}`).css("font-size", "small");
+            cnt++;
+        }else if(!$.isNumeric(obj.price.trim())) {
+            $(`#priceValid${i + 1}`).text("※금액은 숫자만 입력 가능 합니다.");
+            $(`#priceValid${i + 1}`).css("color", "red");
+            $(`#priceValid${i + 1}`).css("font-size", "small");
+            cnt++;
+        }else if(obj.price.trim() > 999999999){
+            $(`#priceValid${i + 1}`).text("※금액은 최대 999,999,999 까지 입력 가능합니다.");
+            $(`#priceValid${i + 1}`).css("color", "red");
+            $(`#priceValid${i + 1}`).css("font-size", "small");
+        }else if(!(obj.price.trim() == "") && $.isNumeric(obj.price.trim()) && obj.price.trim() <= 999999999){
+            $(`#priceValid${i + 1}`).text("");
+        }
+    }
+
+    if(cnt == 0){
+        result = 1;
+    }
+    return result;
+}
+
+
+

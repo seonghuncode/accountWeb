@@ -540,6 +540,16 @@ public class TransactionController {
     }
 
 
+    //사용자가 거래내역 페이지 에서 존재하는 모든 필드의 값을 조건에 맞게 입력한 후 거래내역 추가 버튼을 클릭했을 경우 ajax를 통한 비동기 통신이 전잘되는 로직
+    @RequestMapping(value = "addTransactionHistoryProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> addTransactionHistoryProcess(@RequestParam Map<String, Object> data){
+        System.out.println(data);
+
+        return data;
+    }
+
+
 
 
 }
