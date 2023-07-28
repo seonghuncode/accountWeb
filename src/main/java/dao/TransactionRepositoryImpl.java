@@ -100,4 +100,14 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.update("dao.TransactionRepository.budgetUpdate", data1);
     }
 
+    //거래내역 추가 요청 로직
+    public int doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory){
+        return sqlSession.insert("dao.TransactionRepository.doAddTransactionHistory", addTransactionHistory);
+    }
+
+    //분류명을 통해 해당 분류명의 PK값을 요청하는 로직
+    public int getSortNamePrimaryId(String sortName){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.getSortNamePrimaryId", sortName);
+    }
+
 }

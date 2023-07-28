@@ -59,5 +59,9 @@ public interface TransactionService {
 
     Map<String, Object> setBudgetAmount(Map<String, Object> data1);
 
+    Map<String, Object> doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory);
+
+    int getSortNamePrimaryId(String sortName);
+
 
 }

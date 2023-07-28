@@ -372,4 +372,28 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+
+    //거래내역을 추가하는 쿼리를 데이터베이스에 요청하고 결과로 성공시 1 실패시 0 을 반환받은 값을 통해 result에 성공여부를 담아 return하는 로직
+    public Map<String, Object> doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory) {
+
+        int process = transactionRepository.doAddTransactionHistory(addTransactionHistory);
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        //System.out.println("쿼리 성공 여부 : " + process);
+        if (process == 1) { //삭제를 진행하는 쿼리 오류 발생
+            result.put("result", "success");
+        }else{
+            result.put("result", "fail");
+        }
+
+        return result;
+    }
+
+
+    //파라미터로 받은 분류명의 PK를 구하는 로직
+    public int getSortNamePrimaryId(String sortName) {
+        return transactionRepository.getSortNamePrimaryId(sortName);
+    }
+
+
 }

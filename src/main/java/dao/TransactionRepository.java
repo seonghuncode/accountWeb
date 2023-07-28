@@ -49,4 +49,8 @@ public interface TransactionRepository {
 
     int budgetUpdate(Map<String, Object> data1);
 
+    int doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory);
+
+    int getSortNamePrimaryId(String sortName);
+
 }

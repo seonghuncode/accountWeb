@@ -1,5 +1,7 @@
 package controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import service.TransactionService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class TransactionController {
     @Getter
     @Setter
     //분류명 관리에서 현재 분류명을 불러오기 위해 필요한 데이터를 담는 클래스
-    public class Sort{
+    public class Sort {
         int primaryId; //특정 회원의 PK
         String userid; //현재 로그인 되어있는 아이디
         String year; //연도
@@ -51,6 +54,21 @@ public class TransactionController {
     }
 
 
+    @Getter
+    @Setter
+    //거래내역 추가 페이지 에서 데이터 배열을 ajax를 통해 받기 위한 class
+    public class AddTransactionHistory {
+        private int  primaryId;
+        private int num;
+        private String transactionDate;
+        private String sortName;
+        private int sortNamePkId;
+        private String memo;
+        private int price;
+        private String typeName;
+    }
+
+
     @Autowired
     private TransactionService transactionService;
 
@@ -58,11 +76,11 @@ public class TransactionController {
     //{/usr/showTransaction(userId=${user.userId})}"
     //메인 화면에서 특정 회원을 클릭할 경우 해당 회원의 아이디를 매개변수로 받아와 해당 회원의 지출 내역을 보여주는 controller
     @RequestMapping("/showTransaction") //sortName의 경우 값이 없을 경우 오류가 나기 때문에 defaultValue로 값을 안받을 경우도 처리해주어야 된다
-    public String showTransaction(Model model, String userId, @RequestParam(value = "sortName", required = false, defaultValue = "nothing")String sortName, HttpSession httpSession) {
+    public String showTransaction(Model model, String userId, @RequestParam(value = "sortName", required = false, defaultValue = "nothing") String sortName, HttpSession httpSession) {
 
 
         //현재 로그인 되어 있는 회원의 ID를 세션에서 가지고 와서 담는 변수
-        String nowLoginUserId = (String)httpSession.getAttribute("loginedUserId");
+        String nowLoginUserId = (String) httpSession.getAttribute("loginedUserId");
         //System.out.println(nowLoginUserId);
         model.addAttribute("nowLoginUserId", nowLoginUserId);
 
@@ -90,12 +108,12 @@ public class TransactionController {
 
 
         //만약 사용자가 이번달에 해당 하는 지출 내역을 보고 싶은데 검색어를 입력 했다면
-        if(!(sortName.equals("nothing"))){
+        if (!(sortName.equals("nothing"))) {
 //            System.out.println(sortName);
             transaction.setSortName(sortName);
             model.addAttribute("sortName", sortName);
 //            System.out.println(transaction.getSortName());
-        }else{ //메인 페이지에서 요청이 올경우 sortName에 null값이 들어가 mybatis에서 오류가 나기 때문에 특정 값을 넣어 준다.
+        } else { //메인 페이지에서 요청이 올경우 sortName에 null값이 들어가 mybatis에서 오류가 나기 때문에 특정 값을 넣어 준다.
             transaction.setSortName("-1");
         }
 
@@ -158,7 +176,7 @@ public class TransactionController {
         //기존 특정 메인 페이지 에서 테이블을 일별로 보여주기 위한 데이터가 날짜, 일별 지출 총 합, 일별 수입 총 합으로 나누어져  따로 불러와서 사용하는데 어려움이 있어
         //==>3개의 데이터를 하나의 map List로 합치는 작업을 해주었다.
         //==>특정 회원의 지출 내역을 볼때 테이블을 입렬로 나타낼 경우 일별 날짜, 총 지출 합계, 총 수입 합계를 하나의 객체에 담아 클라이언트로 보내야 한다
-        List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+        List<Map<String, Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
 //        model.addAttribute("combinedList",getDailyTotalData);
 //        System.out.println("============");
 //        System.out.println(getDailyTotalData);
@@ -214,19 +232,18 @@ public class TransactionController {
 
         return map;
     }
-    
+
 
     //특정 회원 지출 내역 에서 사용자가 월별검색, 기간별 검색, 이번달 중 선택한 radio button에 따라 해당 data만 DB에서 모아 return해주는 작업을 해준다.
     @RequestMapping(value = "/showTransaction/whichSelect")
 //    public String whichSelect(@RequestParam Map<String, Object> param, Model model){
-    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName, String startDate, String endDate, HttpSession httpSession){
+    public String whichSelect(Model model, String userId, String selectYear, String selectMonth, String typeRadio, String sortName, String startDate, String endDate, HttpSession httpSession) {
 
 
         //현재 로그인 되어 있는 회원의 ID를 세션에서 가지고 와서 담는 변수
-        String nowLoginUserId = (String)httpSession.getAttribute("loginedUserId");
+        String nowLoginUserId = (String) httpSession.getAttribute("loginedUserId");
         //System.out.println(nowLoginUserId);
         model.addAttribute("nowLoginUserId", nowLoginUserId);
-
 
 
 //        //사용자가 radio button중 월별 검색을 클릭하고 요청하는 경우 받는 데이터
@@ -254,10 +271,10 @@ public class TransactionController {
         transaction.setYear(selectYear);
         transaction.setMonth(selectMonth);
         transaction.setUserId(userId);
-        if(sortName.trim().length() > 0){  //사용자가 입력한 분류명이 길이가 공백을 제외하고 0보다 클경우에만 넣어준다.
+        if (sortName.trim().length() > 0) {  //사용자가 입력한 분류명이 길이가 공백을 제외하고 0보다 클경우에만 넣어준다.
             transaction.setSortName(sortName); //사용자가 검색하고 싶은 분류명을 담는다.
 //        System.out.println(transaction.getSortName());
-        }else {
+        } else {
             transaction.setSortName("");
         }
 
@@ -286,10 +303,10 @@ public class TransactionController {
             leftMoney = targetBudget - expendSum; //월 목표 예산에서 - 월 총 소비
         }
         model.addAttribute("leftMoney", leftMoney);
-        
+
 
         //여기서 부터 JS에서 typeRadio변수에 담긴 값이 특정 월, 기간별, 당월에 따라 클라이언트로 보내지는 데이터가 다르게 분류하는 로직
-        if(typeRadio.equals("searchMonth")){
+        if (typeRadio.equals("searchMonth")) {
 
             //transactionHistory -> 실질적으로 원한는 전체 데이터를 DB에서 가지고 와서 담는 객체?
             // -> [{transaction_date=2021-05-31, price=8000, name=기타, memo=이자, type=수입}, {transaction_date=2021-05-31, price=8000, .......
@@ -299,8 +316,8 @@ public class TransactionController {
 //        System.out.println(transaction.getUserId());
 //        System.out.println(transaction.getSelectYear());
 //        System.out.println(transaction.getMonth());
-            
-            
+
+
             //1. 사용자가 radio button을 월별 검색으로 했을 경우 해당 year, month에 해당하는 데이터만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByMonth(transaction);
 //            System.out.println(sortName);
@@ -315,7 +332,7 @@ public class TransactionController {
             //특정월에 대한 총 지출, 총 수입에 대한 데이터만 가지고 와야 한다
             List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpendBySearchMonth(transaction); //일별 총 지출 내역 합계
             List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncomeBySearchMonth(transaction); //일별 총 수입 내역 합계
-            List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+            List<Map<String, Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
             model.addAttribute("getDailyTotalData", getDailyTotalData);
 
 
@@ -330,15 +347,14 @@ public class TransactionController {
             model.addAttribute("selectMonth", selectMonth);
             model.addAttribute("sortName", sortName);
             model.addAttribute("typeRadio", typeRadio); //해당 데이터를 타임리프에서 js넘겨 페이지가 재로딩 되더라도 이전 페이지가 어떠한 radio button이었는지 알 수 있기 위해서 보내준다.
-        }
-        else if(typeRadio.equals("searchPeriod")){
+        } else if (typeRadio.equals("searchPeriod")) {
 //            System.out.println(startDate);
 //            System.out.println(endDate);
             transaction.setStartDate(startDate);
             transaction.setEndDate(endDate);
 
             //사용자가 기간별 검색을 수행했기 때문에 해당 기간에 대한 모든 데이터들만 불러온다.
-            List<Map<String,Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
+            List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
             model.addAttribute("transactionHistory", transactionHistory);
             System.out.println(transactionHistory);
 
@@ -349,7 +365,7 @@ public class TransactionController {
             //특정 기간의 일별 총 수입, 총 지출에 대한 데이터만 가지고 와야 한다.
             List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpendByPeriod(transaction); //일별 총 지출 내역 합계
             List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncomeByPeriod(transaction); //일별 총 수입 내역 합계
-            List<Map<String,Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
+            List<Map<String, Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
             model.addAttribute("getDailyTotalData", getDailyTotalData);
 
 //            System.out.println(transactionHistory);
@@ -371,15 +387,13 @@ public class TransactionController {
         }
 
 
-
         return "thymeleaf/content/otherTransaction";
     }
 
 
-
     //지출 내역 페이지 에서 해당 페이지 작성자 == 현재 로그인 한 회원일 경우 분류명 관리 버튼 클릭시 보여줄 화면
     @RequestMapping("/sortManage")
-    public String sortMange(String loginId, String year,String month, String year2, String month2, Model model){
+    public String sortMange(String loginId, String year, String month, String year2, String month2, Model model) {
 
         //분류명 관리 페이지 에서 추가를 성공 할 경우 추가 된 데이터를 반영해서 비동기로 다시 현재 분류명 리스트를 다른 함수로 요청하기 위해서는 아래의 데이터가 필수로 필요하기 때문에 넘겨준다.
         //현재 분류명 관리 페이지 에서는 사용하지 않는다
@@ -402,7 +416,7 @@ public class TransactionController {
         sort.setUserid(loginId);
         sort.setYear(year);
         sort.setMonth(month);
-        if(year2 != null && month2 != null){
+        if (year2 != null && month2 != null) {
             sort.setYear2(year2);
             sort.setMonth2(month2);
         }
@@ -420,14 +434,14 @@ public class TransactionController {
 
         model.addAttribute("sortList", sortList);
 
-       return "thymeleaf/content/sortManage";
+        return "thymeleaf/content/sortManage";
     }
 
 
     //분류명 관리 에서 분류명 추가에 대한 기능을 수행하는 로직(Ajax로 비동기 통신)
-    @RequestMapping(value = "/sortAddProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @RequestMapping(value = "/sortAddProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> sortAddProcess(@RequestParam Map<String, Object> sortData){
+    public Map<String, Object> sortAddProcess(@RequestParam Map<String, Object> sortData) {
 
         //System.out.println("Controller " + sortData);
 
@@ -448,12 +462,10 @@ public class TransactionController {
     }
 
 
-
-
     //분류명 관리 에서 분류명 추가 성공시 현재 분류명 관리를 다시 불러와 js에서 현재 분류명 부분만 업데이트 해주기 위한 비동기 통신 부분
-    @RequestMapping(value = "/getNowSortList" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getNowSortList", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public List<Map<String, Object>> getNowSortList(@RequestParam Map<String, Object> date2){
+    public List<Map<String, Object>> getNowSortList(@RequestParam Map<String, Object> date2) {
 
         String loginId = (String) date2.get("loginId");
         String year = (String) date2.get("year");
@@ -469,7 +481,7 @@ public class TransactionController {
         sort.setUserid(loginId);
         sort.setYear(year);
         sort.setMonth(month);
-        if(year2 != null && month2 != null){
+        if (year2 != null && month2 != null) {
             sort.setYear2(year2);
             sort.setMonth2(month2);
         }
@@ -486,9 +498,9 @@ public class TransactionController {
     }
 
     //클라이언트 에서 분류명 수정에 대한 데이터를 ajax통신을 통해 받는 부분------------------------------------------------------------------
-    @RequestMapping(value = "/sortModifyProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @RequestMapping(value = "/sortModifyProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> sortModifyProcess(@RequestParam Map<String, Object> sortData){
+    public Map<String, Object> sortModifyProcess(@RequestParam Map<String, Object> sortData) {
 
 //        System.out.println("Controller " + sortData);
 
@@ -503,11 +515,11 @@ public class TransactionController {
 
 
     //클라이언트 에서 분류명 삭제에 대한 데이터를 ajax통신을 통해 받는 부분------------------------------------------------------------------
-    @RequestMapping(value = "/sortDeleteProcess" , produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    @RequestMapping(value = "/sortDeleteProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> sortDeleteProcess(@RequestParam Map<String, Object> sortData){
+    public Map<String, Object> sortDeleteProcess(@RequestParam Map<String, Object> sortData) {
 
-       // System.out.println("Controller " + sortData);
+        // System.out.println("Controller " + sortData);
 
         Map<String, Object> result = transactionService.tryDeleteSortName(sortData);
 //        System.out.println("===result===");
@@ -519,7 +531,7 @@ public class TransactionController {
     //사용자가 자신의 거래내역 에서 예산액 수정 버튼을 클릭 하여 입력한 예산액을 데이터베이스에 반영하는 로직
     @RequestMapping(value = "budgetAmount", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
-    public Map<String, Object> budgetAmount(@RequestParam Map<String, Object> data1){
+    public Map<String, Object> budgetAmount(@RequestParam Map<String, Object> data1) {
         //System.out.println(data1);
         Map<String, Object> result = transactionService.setBudgetAmount(data1);
         //System.out.println(result);
@@ -528,7 +540,7 @@ public class TransactionController {
 
     //사용자가 자신의 거래내역 페이지 에서 거래내역 추가 버튼을 클릭하면 거래내역 추가 페이지로 이동하는 controller
     @RequestMapping("addTransactionHistory")
-    public String addTransactionHistory(String userId, Model model){
+    public String addTransactionHistory(String userId, Model model) {
 
         model.addAttribute("userId", userId);
 
@@ -540,16 +552,64 @@ public class TransactionController {
     }
 
 
-    //사용자가 거래내역 페이지 에서 존재하는 모든 필드의 값을 조건에 맞게 입력한 후 거래내역 추가 버튼을 클릭했을 경우 ajax를 통한 비동기 통신이 전잘되는 로직
-    @RequestMapping(value = "addTransactionHistoryProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
-    @ResponseBody
-    public Map<String, Object> addTransactionHistoryProcess(@RequestParam Map<String, Object> data){
-        System.out.println(data);
 
-        return data;
+    //사용자가 거래내역 페이지 에서 존재하는 모든 필드의 값을 조건에 맞게 입력한 후 거래내역 추가 버튼을 클릭했을 경우 ajax를 통한 비동기 통신이 전잘되는 로직
+    @RequestMapping(value = "addTransactionHistoryProcess", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> addTransactionHistoryProcess(@RequestParam String jsonString) {
+        //System.out.println(jsonString);
+
+        //결과 성공 여부를 저장할 Map
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        //ajax로 받은 거래내역 데이터가 String형태로된 [{},{},{}...]이기 때문에 List<Map<String, Object>>형태로 다시 바꾸어 준다
+        try {
+            // Jackson ObjectMapper 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // JSON 형식의 문자열을 자바 객체 리스트로 변환
+            List<Map<String, Object>> dataList = objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
+
+            // Map으로 조건 처리하기
+            for (Map<String, Object> data : dataList) {
+
+                //System.out.println("data : "  + data);
+
+                AddTransactionHistory addTransactionHistory = new AddTransactionHistory(); //하나의 필드를 저장 하여 필드 별로 디비에 요청을 보낼 객체
+
+                //거래내역을 추가 하기 위해서는 해당 분류명의 primary key를 알아야 거래내역 테이블에 sortId를 저장해 나중에 참조할 수 있다.
+                int sortNameId = transactionService.getSortNamePrimaryId((String) data.get("sortName")); //분류명에 대한 컬럼의 PK를 요청
+                //System.out.println("분류명의 PK : " + sortNameId);
+
+                int primaryId = transactionService.getPrimaryId((String) data.get("userId"));
+                addTransactionHistory.setPrimaryId(primaryId);
+                addTransactionHistory.setNum(Integer.parseInt((String) data.get("num")));
+                addTransactionHistory.setTransactionDate((String) data.get("transactionDate"));
+                addTransactionHistory.setSortName((String) data.get("sortName"));
+                addTransactionHistory.setSortNamePkId(sortNameId);
+                addTransactionHistory.setMemo((String) data.get("memo"));
+                addTransactionHistory.setPrice(Integer.parseInt((String) data.get("price")));
+                addTransactionHistory.setTypeName((String) data.get("type"));
+
+//                System.out.println("===addTransactionHistory 객체===");
+//                System.out.println(addTransactionHistory.getMemo());
+
+                //거래내역을 디비에 요청해서 저장하는 로직 (반복문이 돌면서 필드 겟수 만큼 요청 한다.)
+                result = transactionService.doAddTransactionHistory(addTransactionHistory); //성공 여부를 반환해 준다
+                //System.out.println("(controller)최종 성공 여부 : " + result);
+            }
+            //System.out.println(dataList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 
 
 
+
+
 }
+

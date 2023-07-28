@@ -342,7 +342,7 @@ $('#addTransactionHistory').click(function () {
     var price; //금액
     var type; //수입 or 지출
 
-
+    var cnt = 0;
     //거래내역에 추가 페이지 에서 존재하는 각 필드에 대한 데이터를 배열에 넣는 작업
     for (var i = 1; i <= 10; i++) {
         num = i;
@@ -350,13 +350,15 @@ $('#addTransactionHistory').click(function () {
         sortName = $(`#sortList${i}`).find(":selected").text();
         memo = $(`#memo${i}`).val();
         price = $(`#price${i}`).val();
-        type = $(`#type${i}`).val();
+        // type = $(`#type${i}`).val();
+        type = $(`#type${i}`).find(":selected").text();
 
 
         //console.log(num, transactionDate, sortName, memo, price, type);
 
 
         if (num == $(`#uniqueNum${i}`).text()) { //존재하는 필드 갯수에 대해서만 객체를 만들어 배열에 넣어야 된다.
+
             var dataObj = {
                 userId : loginId,
                 num: num.toString(),
@@ -369,28 +371,34 @@ $('#addTransactionHistory').click(function () {
 
             // JSON 배열에 객체를 추가합니다.
             addTransactionHistoryData.push(dataObj);
+            cnt = i; //추가되는 필드의 갯수를 의미
         }
 
 
     }
 
     var jsonString = addTransactionHistoryData;
-    //console.log("controller로 보낼 배열 : " + jsonString);
+    //console.log(jsonString);
 
     var result = addTransactionValid(jsonString); //사용자가 입력한 데이터가 조건에 맞게 입력이 데었는지 확인 문제가 없으면 1을 반환 하여 1일 경우 controller로 데이터 보내기
     //console.log("결과 : " +  result);
 
-    //다음 작업!
+    //다음 작업!-----------------------------------------------------------------------------------------------------------------------------------------
     //유효성 검사를 완료 하면 result값을 성공시 1로 반환하여 1일 경우 controller랑 통신하는 ajax부분 작성 하기
     if(result == 1){ //유효성 검사를 모두 만족하여 사용자가 데이터를 모두 옳바르게 입력한 경우
         $.ajax({
             url: "/transaction/addTransactionHistoryProcess",
-            data: jsonString,  //JSON.stringify(search)
-            type: "get",
+            data: {jsonString: JSON.stringify(jsonString)},  //JSON.stringify(search) JSON.stringify(jsonString),     jsonString
+            type : 'get',
             dataType: "json",
             contentType: "application/json; charset=UTF-8",
             success: function (data) {
-                console.log(data);
+                //console.log(data.result);
+                if(data.result == "success"){
+                    alert( cnt + "개의 내역이 성공적으로 추가 되었습니다.");
+                }else{
+                    alert("거래내역을 추가 하는 요청 에서 문제가 발생했습니다. 관리자 에게 문의 하세요!");
+                }
             }, error: function () {
                 alert("error");
             }
@@ -398,6 +406,7 @@ $('#addTransactionHistory').click(function () {
     }
 
 })
+//다음 작업!-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 //거래애역 추가 페이지 에서 사용자가 거래내역 추가 버튼을 클릭할 경우 데이터가 제대로 입력 되었는지 유효성 검사를 담당하는 로직-----

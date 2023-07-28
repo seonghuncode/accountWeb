@@ -33,11 +33,11 @@
     </select>
 
     <!-- 메인페이지 에서 특정 회원 거래내역을 클릭할 경우 특정회원에 대한 거래 내역 정보를 가지고 오는 부분 -->
-    <!-- 거래 내역을 내림차순으로 가지고 온다 >> 최근 거래내역 부터 보여주기 위함 -->
+    <!-- 거래 내역을 내림차순으로 가지고 온다 >> 최근 거래내역 부터 보여주기 위함 (sort.transactionId ->sort.id)-->
     <select id="getTransactionHistory" resultType="map" parameterType="hashmap">
         SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
         FROM `transaction`
-        LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+        LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
         ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{month} AND `user`.id = #{primaryId} AND
@@ -48,10 +48,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getDayCntExpend" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{month}
@@ -61,10 +62,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!--수정 :  (sort.transactionId ->sort.id) -->
     <select id="getDayCntIncome" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{month}
@@ -74,10 +76,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id)-->
     <select id="getTransactionHistoryByMonth" resultType="map" parameterType="hashmap">
         SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
         FROM `transaction`
-        LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+        LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
         ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{selectMonth} AND `user`.id = #{primaryId} AND
@@ -88,10 +91,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getDayCntExpendBySearchMonth" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{selectMonth}
@@ -103,10 +107,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getDayCntIncomeBySearchMonth" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE MONTH (`transaction_date`)=#{selectMonth}
@@ -118,10 +123,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getTransactionHistoryByPeriod" resultType="map" parameterType="hashmap">
         SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
         FROM `transaction`
-        LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+        LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
         ON `transaction`.userId = `user`.id
         WHERE (`transaction_date`) BETWEEN DATE(#{startDate}) AND DATE(#{endDate}) AND `user`.id = #{primaryId}
@@ -132,10 +138,11 @@
     </select>
 
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getDayCntExpendByPeriod" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE (`transaction_date`) BETWEEN DATE (#{startDate})
@@ -146,10 +153,11 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getDayCntIncomeByPeriod" resultType="map" parameterType="hashmap">
         SELECT `transaction`.type, `transaction`.transaction_date, SUM(`transaction`.price) as `total`
         FROM `transaction`
-                 LEFT JOIN sort ON `transaction`.sortId = sort.transactionId
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
                  LEFT JOIN `user`
                            ON `transaction`.userId = `user`.id
         WHERE (`transaction_date`) BETWEEN DATE (#{startDate})
@@ -249,6 +257,19 @@
     <update id="budgetUpdate" parameterType="hashmap">
         UPDATE budget SET `price` = #{budgetValue}, `month` = concat('20', #{year}, '-',  #{month}, '-01') WHERE userId = #{loginIdPK};
     </update>
+
+    <!-- 특정 분류명에 대한 PK값을 찾는 역할 -->
+    <select id="getSortNamePrimaryId" resultType="int" parameterType="String">
+        SELECT id
+        FROM `sort`
+        WHERE `name` = #{sortName};
+    </select>
+
+    <!-- 거래내역 추가 기능을 수행하는 역학 -->
+    <insert id="doAddTransactionHistory" parameterType="hashmap">
+        INSERT INTO `transaction`(price, `type`, transaction_date, memo, userId, sortId)
+        values(#{price}, #{typeName}, #{transactionDate}, #{memo}, #{primaryId}, #{sortNamePkId});
+    </insert>
 
 
 
