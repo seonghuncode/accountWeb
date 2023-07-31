@@ -193,12 +193,12 @@
         SELECT * FROM sort WHERE
         <choose>
             <when test='sortDate.equals("항상")'> <!-- 조건이 항상이라면 전체 테이블 에서 존재 하는지 찾는다 -->
-                `name` = #{addSort}
+                `name` = #{addSort} and userId = #{loginIdByPK}
             </when>
             <otherwise> <!-- 만약 조건이 항상이 아니라 특정 날짜가 있다면 특정 월에만 존재 하는지 찾으면 된다 -->
                 `name` = #{addSort} and
                 MONTH(made_date) = SUBSTRING(#{sortDate}, 6,2) AND DATE_FORMAT(made_date, '%y') = SUBSTRING(#{sortDate},
-                3,2)
+                3,2) and userId = #{loginIdByPK}
             </otherwise>
         </choose>
         ) AS check_exist_sort_name;

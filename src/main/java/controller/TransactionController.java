@@ -443,7 +443,7 @@ public class TransactionController {
     @ResponseBody
     public Map<String, Object> sortAddProcess(@RequestParam Map<String, Object> sortData) {
 
-        //System.out.println("Controller " + sortData);
+//        System.out.println("Controller(SortAdd) " + sortData);
 
         //사용자가 입력한 분류명이 존재하는지 확인하는 로직(존재하면 1, 존재하지 않으면 0을 반환)
         String validSortName = transactionService.getSortAddProcess(sortData);
@@ -502,7 +502,7 @@ public class TransactionController {
     @ResponseBody
     public Map<String, Object> sortModifyProcess(@RequestParam Map<String, Object> sortData) {
 
-//        System.out.println("Controller " + sortData);
+//        System.out.println("Controller(SortModify) " + sortData);
 
         //수정하려고 하는 분류명이 데이터베이스에 존재하는지 확인하는 로직
         String validSortName = transactionService.getSortModifyProcess(sortData);
