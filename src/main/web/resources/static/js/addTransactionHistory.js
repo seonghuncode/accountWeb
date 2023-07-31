@@ -305,6 +305,8 @@ function doSortListProcess() {
                     // console.log("undefined입니다!!");
                 } else if (selDate != '' && selDate != preSelDate) {  //사용자가 날짜를 입력 했을 경우 에만 실행되도록 하는 조건문
                     //selDate != preSelDate를 비교하지 않을 경우 특정 필드 에서 분류명 리스트를 분러오지만 선택할 수 없는 이슈 발생
+                    //(위의 조건을 추가 하지 않을 경우 분류명 리스트를 선택하면 날짜가 선택되어 있기 때문에 계속해서 리스트를 호출하기 때문에 선택한 값이 계속 초기화 되기 때문에 조건 추가)
+
                     // console.log("날짜가 선택 됨");
                     // console.log(selDate);
                     year = selDate.substr(2, 2);
@@ -319,6 +321,11 @@ function doSortListProcess() {
                     //console.log(data1);
                     getSortList(data1, i);
                     preSelDate = selDate;
+                }else if (selDate != '' && selDate == preSelDate) {
+                    //필드 추가를 2개 이상 하고 -> 같은 날짜를 연달아 선택 할경우
+                    //selDate != '' && selDate != preSelDate 위의 else if에 해당 하지 않게 되어 리스트를 분러오지 못 하는 이슈 발생
+                    //이때 이전 선택 날짜를 1로 바꾸어 위의 조건문을 만족할 수 있도록 수정해 주기 위해 임의로 1로 바꾸어 준다.
+                    preSelDate = 1;
                 }
 
             });
