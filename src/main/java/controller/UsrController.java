@@ -117,6 +117,7 @@ public class UsrController {
     }
 
 
+    //로그인 폼에서 로그인을 성공하면 해당 회원 정보를 메인화면으로 넘겨 메인화면으로 요청하는 로직
     //현재 로그인 되어있는 세션의 아이디로 회원정보를 찾을 수 있기 때문에 따로 넘겨줄 매개변수는 없다.
     @RequestMapping("/usr/main")
     public ModelAndView doMain(Model model, Criteria cri) throws Exception {

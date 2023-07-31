@@ -81,13 +81,15 @@ public class TransactionController {
 
         //현재 로그인 되어 있는 회원의 ID를 세션에서 가지고 와서 담는 변수
         String nowLoginUserId = (String) httpSession.getAttribute("loginedUserId");
-        //System.out.println(nowLoginUserId);
+//        System.out.println("nowLoginUserId" + nowLoginUserId);
         model.addAttribute("nowLoginUserId", nowLoginUserId);
 
 
         //현재 날짜 구하는 부분
         String changeYear = transactionService.getThisYear();
         String changeMonth = transactionService.getThisMonth();
+//        System.out.println("changeYear" + changeYear);
+//        System.out.println("changeMonth" + changeMonth);
 
         model.addAttribute("year", changeYear);
         model.addAttribute("month", changeMonth);
@@ -109,17 +111,18 @@ public class TransactionController {
 
         //만약 사용자가 이번달에 해당 하는 지출 내역을 보고 싶은데 검색어를 입력 했다면
         if (!(sortName.equals("nothing"))) {
-//            System.out.println(sortName);
+//            System.out.println("sortName" + sortName);
             transaction.setSortName(sortName);
             model.addAttribute("sortName", sortName);
 //            System.out.println(transaction.getSortName());
         } else { //메인 페이지에서 요청이 올경우 sortName에 null값이 들어가 mybatis에서 오류가 나기 때문에 특정 값을 넣어 준다.
             transaction.setSortName("-1");
+//            System.out.println("sortName" + sortName);
         }
 
         //Integer로 받는 이유 : int의 경우 특정 사용자가 예산액을 지정하지 않은 경우 null값을 받을 수 없기 때문
         Integer targetBuget = transactionService.getTargetBudget(transaction);
-//        System.out.println(targetBuget);
+//        System.out.println("targetBuget" + targetBuget);
         model.addAttribute("targetBudget", targetBuget);
 
         //검색월 기준 현황 에서 남은 목표예산액, 수입, 지출에 대한 데이터를 보여주기 위해서 DB의 transaction 테이블에서 데이터를 가지고 오는 부분
@@ -145,10 +148,10 @@ public class TransactionController {
         model.addAttribute("leftMoney", leftMoney);
 //        System.out.println("지출 : " + expendSum);
 //        System.out.println("소비 : " + incomeSum);
-//        System.out.println(transactionValue);
+//        System.out.println("transactionValue" + transactionValue);
 
 
-        //지출 내역에 대한 전체 데이터를 불러오는 부분(transaction table 이랑 sort테이블 조인 + user테이블과 조인)
+//        //지출 내역에 대한 전체 데이터를 불러오는 부분(transaction table 이랑 sort테이블 조인 + user테이블과 조인)
 //        System.out.println("====================");
 //        System.out.println(transaction.getMonth());
 //        System.out.println(transaction.getYear());
@@ -157,21 +160,22 @@ public class TransactionController {
 //        System.out.println("====================");
         List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistory(transaction);
         model.addAttribute("transactionHistory", transactionHistory);
-//        System.out.println(transactionHistory);
+//        System.out.println("transactionHistory : " + transactionHistory);
         //DB에서 날짜 별로 테이블을 생성하기 위해서는 반복문을 돌릴때 기존에 특정 날짜가 생성이 되었다면 해당 날짜의 테이블은 또 만들면 안된다
         //기존 jsp를 사용할 경우 최 상단에 set으로 변수를 선언 해서 하단 에서 한번 사용되면 해당 날짜를 set으로 해당 날짜를 저당해해주 었는데 thymeleaf의 경우 최상단에서 변수를 선언하면 하단에서 수정이 불가능 하고 사용만 가능하다
         //==> 중복된 날짜를 제거한 데이터 / 구현하는 로직의 경우 serviceImpl class에 구현을 하고 controller에서는 불러오기만 하기 위해 코드 분리
         List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
         distinctTransactionHistory = transactionService.getDistinctTransactionHistory(transactionHistory);
         model.addAttribute("distinctTransactionHistory", distinctTransactionHistory);
+//        System.out.println("distinctTransactionHistory" + distinctTransactionHistory);
 
         //일별 총 합계 수입, 총 하계 지출 내역에 대한 정보를 받아오는 로직
         List<Map<String, Object>> dayCntExpend = transactionService.getDayCntExpend(transaction); //일별 총 지출 내역 합계
-//        System.out.println(dayCntExpend);
+//        System.out.println("dayCntExpend" + dayCntExpend);
 //        model.addAttribute("dayCntExpend",dayCntExpend);
         List<Map<String, Object>> dayCntIncome = transactionService.getDayCntIncome(transaction); //일별 총 수입 내역 합계
 //        model.addAttribute("dayCntIncome", dayCntIncome);
-//        System.out.println(dayCntIncome);
+//        System.out.println("dayCntIncome" + dayCntIncome);
 
         //기존 특정 메인 페이지 에서 테이블을 일별로 보여주기 위한 데이터가 날짜, 일별 지출 총 합, 일별 수입 총 합으로 나누어져  따로 불러와서 사용하는데 어려움이 있어
         //==>3개의 데이터를 하나의 map List로 합치는 작업을 해주었다.
@@ -179,7 +183,7 @@ public class TransactionController {
         List<Map<String, Object>> getDailyTotalData = transactionService.getDailyTotalData(distinctTransactionHistory, dayCntExpend, dayCntIncome);
 //        model.addAttribute("combinedList",getDailyTotalData);
 //        System.out.println("============");
-//        System.out.println(getDailyTotalData);
+//        System.out.println("getDailyTotalData" + getDailyTotalData);
 //        System.out.println("============");
         //들어있는 데이터 예시 : [{transaction_date=2023-04-22, dayCntExpend=13500, dayCntIncome=8000}, {transaction_date=2023-04-21, dayCntExpend=13500, dayCntIncome=8000}, {transaction_date=2021-04-29, dayCntExpend=40000, dayCntIncome=40000}, {transaction_date=2021-04-22, dayCntExpend=0, dayCntIncome=16000}, {transaction_date=2021-04-16, dayCntExpend=40000, dayCntIncome=40000}]
         model.addAttribute("getDailyTotalData", getDailyTotalData);
@@ -608,6 +612,18 @@ public class TransactionController {
 
 
 
+//    //네비게이션 바에서 사용자가 거래내역 버튼을 클릭할 경우 현재 로그인 되어있는 세션에 저장된 값을 구해 리턴해주는 로직
+//    //거래내역 페이지로 이동시 현재 로그인 회원의 아이디 값이 필요하기 때문
+//    @RequestMapping(value = "getNowSessionValue", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
+//    @ResponseBody
+//    public Map<String, Object> getNowSessionValue(HttpSession httpSession) {
+//
+//        String username = (String) httpSession.getAttribute("loginedUserId");
+//        Map<String, Object> result = new HashMap<String, Object>();
+//        result.put("sessionValue", username);
+//
+//        return result;
+//    }
 
 
 
