@@ -121,7 +121,12 @@ public class TransactionController {
 
         //Integer로 받는 이유 : int의 경우 특정 사용자가 예산액을 지정하지 않은 경우 null값을 받을 수 없기 때문
         Integer targetBuget = transactionService.getTargetBudget(transaction);
-//        System.out.println("targetBuget" + targetBuget);
+//        System.out.println("=========당월에 대한 데이터=========");
+//        System.out.println("transaction : " + transaction.getYear());
+//        System.out.println("transaction : " + transaction.getMonth());
+//        System.out.println("transaction : " + transaction.getUserId());
+//        System.out.println("targetBuget : " + targetBuget);
+
         model.addAttribute("targetBudget", targetBuget);
 
         //검색월 기준 현황 에서 남은 목표예산액, 수입, 지출에 대한 데이터를 보여주기 위해서 DB의 transaction 테이블에서 데이터를 가지고 오는 부분
@@ -271,7 +276,7 @@ public class TransactionController {
         model.addAttribute("month", selectMonth);
 
         //transaction객체에 DB에 접근해서 조건을 줄때 필요한 해당 userId, Year, Month값을 넣어 두어야 한다.
-        transaction.setYear(selectYear);
+        transaction.setYear(String.valueOf(selectYear).substring(2));
         transaction.setMonth(selectMonth);
         transaction.setUserId(userId);
         if (sortName.trim().length() > 0) {  //사용자가 입력한 분류명이 길이가 공백을 제외하고 0보다 클경우에만 넣어준다.
@@ -284,6 +289,11 @@ public class TransactionController {
         //targetBudget -> null or 예산액
         Integer targetBudget = transactionService.getTargetBudget(transaction);
         model.addAttribute("targetBudget", targetBudget);
+//        System.out.println("======특정 조건을 선택하는 경우======");
+//        System.out.println("transaction : " + transaction.getYear());
+//        System.out.println("transaction : " + transaction.getMonth());
+//        System.out.println("transaction : " + transaction.getUserId());
+//        System.out.println("targetBudget : " + targetBudget);
 
         //transactionValue -> [{price=8000, type=수입}, {price=8000, type=지출}, {price=8000, type=수입}, {price=8000, type=지출},......
         //incomeSum -> 총 수입액, expendSum -> 총 지출액
@@ -359,7 +369,7 @@ public class TransactionController {
             //사용자가 기간별 검색을 수행했기 때문에 해당 기간에 대한 모든 데이터들만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
             model.addAttribute("transactionHistory", transactionHistory);
-            System.out.println(transactionHistory);
+//            System.out.println(transactionHistory);
 
             //transactionHistory에서 필요한 데이터만 가공해서 담는다.
             List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
