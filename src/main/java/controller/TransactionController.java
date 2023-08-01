@@ -108,7 +108,6 @@ public class TransactionController {
         transaction.setMonth(changeMonth);
         transaction.setUserId(userId);
 
-
         //만약 사용자가 이번달에 해당 하는 지출 내역을 보고 싶은데 검색어를 입력 했다면
         if (!(sortName.equals("nothing"))) {
 //            System.out.println("sortName" + sortName);
