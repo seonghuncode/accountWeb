@@ -58,7 +58,7 @@ public class TransactionController {
     @Setter
     //거래내역 추가 페이지 에서 데이터 배열을 ajax를 통해 받기 위한 class
     public class AddTransactionHistory {
-        private int  primaryId;
+        private int primaryId;
         private int num;
         private String transactionDate;
         private String sortName;
@@ -532,12 +532,10 @@ public class TransactionController {
     @ResponseBody
     public Map<String, Object> sortDeleteProcess(@RequestParam Map<String, Object> sortData) {
 
-        // System.out.println("Controller " + sortData);
-
-        Map<String, Object> result = transactionService.tryDeleteSortName(sortData);
-//        System.out.println("===result===");
-//        System.out.println(result);
-        return sortData;
+        //분류명 삭제시 해당 분류명을 참조하는 거래내역이 있는지 확인하고 데이터베이스 무결성 제약조건에 문제가 생기지 않도록 분류명을 삭제하는 로직
+        Map<String, Object> result = transactionService.sortNameDeleteProcess(sortData);
+        
+        return result;
     }
 
 
@@ -565,9 +563,8 @@ public class TransactionController {
     }
 
 
-
     //사용자가 거래내역 페이지 에서 존재하는 모든 필드의 값을 조건에 맞게 입력한 후 거래내역 추가 버튼을 클릭했을 경우 ajax를 통한 비동기 통신이 전잘되는 로직
-    @RequestMapping(value = "addTransactionHistoryProcess", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
+    @RequestMapping(value = "addTransactionHistoryProcess", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
     public Map<String, Object> addTransactionHistoryProcess(@RequestParam String jsonString) {
         //System.out.println(jsonString);
@@ -581,7 +578,8 @@ public class TransactionController {
             ObjectMapper objectMapper = new ObjectMapper();
 
             // JSON 형식의 문자열을 자바 객체 리스트로 변환
-            List<Map<String, Object>> dataList = objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> dataList = objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {
+            });
 
             // Map으로 조건 처리하기
             for (Map<String, Object> data : dataList) {
@@ -620,10 +618,9 @@ public class TransactionController {
     }
 
 
-
     //네비게이션 바에서 사용자가 거래내역 버튼을 클릭할 경우 현재 로그인 되어있는 세션에 저장된 값을 구해 리턴해주는 로직
     //거래내역 페이지로 이동시 현재 로그인 회원의 아이디 값이 필요하기 때문
-    @RequestMapping(value = "getNowSessionValue", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
+    @RequestMapping(value = "getNowSessionValue", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
     @ResponseBody
     public Map<String, Object> getNowSessionValue(HttpSession httpSession) {
 
@@ -633,7 +630,6 @@ public class TransactionController {
 
         return result;
     }
-
 
 
 }

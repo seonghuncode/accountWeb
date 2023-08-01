@@ -271,10 +271,56 @@
         values(#{price}, #{typeName}, #{transactionDate}, #{memo}, #{primaryId}, #{sortNamePkId});
     </insert>
 
+    <!-- 분류명 삭제시 해당 분류명을 참조하고 있는 거래내역 데이터가 있는지 확인하는 쿼리 -->
+    <select id="checkBeforeDeleteSortName" resultType="Integer" parameterType="hashmap">
+        SELECT DISTINCT `transaction`.sortId
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id
+        WHERE `user`.id = #{loginIdByPK} AND sort.name = #{selSort}
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
 
 
+    <!-- 분류명 삭제시 미분류 라는 이름의 분류명이 존재하는지 확인하는 쿼리 -->
+    <select id="existNoSortName" resultType="Integer" parameterType="hashmap">
+        SELECT *
+        FROM sort
+        WHERE userId = #{loginIdByPK} AND `name` = "미분류";
+    </select>
+
+    <!-- 미분류 라는 분류명을 추가하는 쿼리 -->
+    <insert id="insertNoSortName" parameterType="hashmap">
+        INSERT INTO `sort`(`name`, made_date, userId, transactionId)
+        values("미분류", "1111-12-12", #{loginIdByPK}, -1);
+    </insert>
+
+    <!-- 특정 분류명을 삭제시 해당 분류명을 참조하는 거래내역이 있을 경우 해당 거래내역이 미분류라는 분류명을 참조하도록 수정 하는 쿼리 -->
+    <update id="updateSortNameForNoSortName" parameterType="hashmap">
+        UPDATE `transaction` SET sortId = #{selSort} WHERE userId = #{loginIdByPK} and sortId = #{result};
+    </update>
 
 
+    <!-- 삭제시 해당 회원이 가지고 있는 미분류 라는 분류명의 날짜를 반환 받는 쿼리 -->
+    <select id="getNoSortNameDate" resultType="String" parameterType="hashmap">
+        SELECT made_date
+        FROM sort
+        WHERE userId = #{loginIdByPK} AND `name` = "미분류";
+    </select>
+
+    <!-- 삭제시 존재하는 미분류 분류명의 날짜가 전체가 아닌 경우 전체로 변경하는 쿼리 -->
+    <update id="changeNoSortNameForAllDate" parameterType="hashmap">
+        UPDATE sort SET made_date = "1111-12-12" WHERE userId = #{loginIdByPK};
+    </update>
+
+
+    <!-- 미분류 이름을 가진 분류명의 PK값을 구하는 쿼리 -->
+    <select id="noSortNameId" resultType="Integer" parameterType="hashmap">
+        SELECT id
+        FROM sort
+        WHERE userId = #{loginIdByPK} AND `name` = "미분류";
+    </select>
 
 
 </mapper>

@@ -327,10 +327,11 @@ $(document).on('click', '#sortCompleteDelete', function () {
     } else {
         $('#noSelName').text('');
         //step1 : 사용자 에게 정말 삭제 할 것인지 한번더 묻기
-        var result = confirm('\"' + selSort + '\"' + ' 분류명을 정말 삭제 하시겠 습니까? ');
+        var result = confirm('만약 해당 분류명을 참조 하는 거래내역이 있을 경우 모두 미분류를 참조 하게 됩니다. \n그래도 '  + '\"' + selSort + '\"' + ' 분류명을 정말 삭제 하시겠 습니까?');
         if(result) {  // result가 yes인 경우
             // step2 : 사용자가 삭제 한다고 선택하면 삭제 로직 실행
             doRequest();
+            getNowSortList(); //성공적으로 추가 되었다면 현재 분류명 리스트를 갱신해 주기 위해 다시 불러와야 된다
         }
     }
 
@@ -548,5 +549,11 @@ $(document).on('click', '#sortCompleteModify', function () {
 })
 
 
-
+//분류명 관리 페이지 에서 사용자가 작업을 하든 안하든 취소 버튼을 크릭하면 부모 페이지가 리로드 되어 변경된 값이 반영되도록 변경되고 분류명 관리 페이지는 닫힌다.
+$('#sortMangeClose').click(function () {
+    opener.parent.location.reload();
+    self.close();
+    // var loginId = loginId2
+    // console.log(loginId)
+})
 

@@ -53,4 +53,20 @@ public interface TransactionRepository {
 
     int getSortNamePrimaryId(String sortName);
 
+    Integer checkBeforeDeleteSortName(Map<String, Object> sortData);
+
+    Integer existNoSortName(Map<String, Object> sortData);
+
+    Integer insertNoSortName(Map<String, Object> sortData);
+
+    Integer updateSortNameForNoSortName(Map<String, Object> sortData);
+
+    String getNoSortNameDate(Map<String, Object> sortData);
+
+    Integer changeNoSortNameForAllDate(Map<String, Object> sortData);
+
+    Integer noSortNameId(Map<String, Object> sortData);
+
+
+
 }

@@ -110,4 +110,39 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectOne("dao.TransactionRepositoryImpl.getSortNamePrimaryId", sortName);
     }
 
+    //분류명 삭제시 해당 분류명을 참조하고 있는 거래내역 데이터가 있는지 확인하는 쿼리
+    public Integer checkBeforeDeleteSortName(Map<String, Object> sortData){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.checkBeforeDeleteSortName", sortData);
+    }
+
+    //분류명 삭제시 미분류라는 이름의 분류명이 있는지 존재 여부를 확인하는 쿼리
+    public Integer existNoSortName(Map<String, Object> sortData){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.existNoSortName", sortData);
+    }
+
+    //해당 회원이 미분류라는 분류명을 갖고 있지 않을 경우 미분류라는 분류명을 생성하는 쿼리
+    public Integer insertNoSortName(Map<String, Object> sortData){
+        return sqlSession.insert("dao.TransactionRepository.insertNoSortName", sortData);
+    }
+
+    //삭제시 해당 분류명을 참조하는 거래내역의 분류명을 미분류라는 분류명을 참조하도록 하는 쿼리
+    public Integer updateSortNameForNoSortName(Map<String, Object> sortData){
+        return sqlSession.update("dao.TransactionRepository.updateSortNameForNoSortName", sortData);
+    }
+
+    //삭제시 해당 회원이 가지고 있는 미분류 라는 분류명의 날짜를 반환 받는 쿼리
+    public String getNoSortNameDate(Map<String, Object> sortData){
+        return sqlSession.selectOne("dao.TransactionRepository.getNoSortNameDate", sortData);
+    }
+
+    //삭제시 존재하는 미분류 분류명의 날짜가 전체가 아닌 경우 전체로 변경하는 쿼리
+    public Integer changeNoSortNameForAllDate(Map<String, Object> sortData){
+        return sqlSession.update("dao.TransactionRepository.changeNoSortNameForAllDate", sortData);
+    }
+
+    //미분류 이름의 분류명 PK값을 구하는 쿼리
+    public Integer noSortNameId(Map<String, Object> sortData){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.noSortNameId", sortData);
+    }
+
 }

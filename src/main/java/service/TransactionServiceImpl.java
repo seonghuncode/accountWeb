@@ -395,5 +395,111 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.getSortNamePrimaryId(sortName);
     }
 
+    //분류명 삭제에 사용되는 필요 로직--------------------------------------------------
+    public Integer checkBeforeDeleteSortName(Map<String, Object> sortData) {
+        return transactionRepository.checkBeforeDeleteSortName(sortData);
+    }
+
+    public Integer existNoSortName(Map<String, Object> sortData) {
+        return transactionRepository.existNoSortName(sortData);
+    }
+
+    public Integer insertNoSortName(Map<String, Object> sortData) {
+        return transactionRepository.insertNoSortName(sortData);
+    }
+
+    public Integer updateSortNameForNoSortName(Map<String, Object> sortData) {
+        return transactionRepository.updateSortNameForNoSortName(sortData);
+    }
+
+    public String getNoSortNameDate(Map<String, Object> sortData) {
+        return transactionRepository.getNoSortNameDate(sortData);
+    }
+
+    public Integer changeNoSortNameForAllDate(Map<String, Object> sortData) {
+        return transactionRepository.changeNoSortNameForAllDate(sortData);
+    }
+
+    public Integer noSortNameId(Map<String, Object> sortData) {
+        return transactionRepository.noSortNameId(sortData);
+    }
+
+    //분류명 삭제에 사용되는 필요 로직--------------------------------------------------
+
+    //분류명 삭제시 해당 분류명을 참조하는 거래내역이 있는지 확인하고 문제없이 해당 분류명을 삭제 하는 로직
+    public Map<String, Object> sortNameDeleteProcess(Map<String, Object> sortData) {
+
+//        System.out.println("Controller " + sortData);
+        String selSortValue = (String)sortData.get("selSort");
+        String resultValue = (String)sortData.get("result");
+
+        //step1. 삭제할 분류명을 참조하고 있는 거래내역 테이블이 있는지 확인(있다면 참조하는 분류명의 PK값을 반환 받는다 == 해당 값은 삭제할 PK값이다.)
+        Integer check1 = checkBeforeDeleteSortName(sortData);
+//        System.out.println("분류명 참조 여부 : " + check1);
+        //step2. 참조하는 거래내역이 없다면 정상적으로 삭제 진행
+        if (check1 == null) {
+            Map<String, Object> result = tryDeleteSortName(sortData); //기존 분류명 삭제
+//            System.out.println("===result===");
+//            System.out.println(result);
+            return sortData;
+        }
+        //step3. 참조하는 거래내역이 있다면 거래내역의 분류명을 미분류로 지정
+        if(check1 != null){
+            // 1. 미분류라는 분류명이 없다면 만들고(미분류 라는 분류명 존재 여부 체크) 및 참조하는 거래내역의 분류명을 미분류로 수정
+            Integer check2 = existNoSortName(sortData);
+//            System.out.println("미분류 분류명 존재 여부(check2) : " + check2);
+
+            sortData.put("result", check1);
+//            System.out.println("수정한 sortData : " + sortData);
+
+            if(check2 == null){
+                Integer InsertResult = insertNoSortName(sortData); //미분류 라는 이름의 분류명 생성
+//                System.out.println("미분류 분류명 추가(InsertResult) : " + InsertResult);
+                Integer noSortNameId =  noSortNameId(sortData);//미분류라는 분류명의 id값을 가지고온다.
+                sortData.put("selSort", noSortNameId);
+                //기존에 거래내역에서 참조하는 분류명을 미분류로 수정 하는 작업
+                Integer UpdateSortName = updateSortNameForNoSortName(sortData);
+//                System.out.println("참조하던 분류명을 미분류를 참조하도록 수정 쿼리(UpdateSortName) : " + UpdateSortName);
+
+                sortData.put("selSort", selSortValue); //삭제전 selSort를 다시 원래 선택 값으로 변경
+                Map<String, Object> result = tryDeleteSortName(sortData); //기존 분류명 삭제
+
+                sortData.put("result", "success");
+            }else if(check2 != null){ //미분류 분류명이 이미 존재할 경우
+                // 2. 만약 존재하는 미분류라는 분류명이 특정월에서 사용중 이라면 기간을 전체로 수정
+                String noSortNameDate = getNoSortNameDate(sortData);//존재하는 미분류라는 분류명에 대해 날짜를 확인
+                if(!noSortNameDate.equals("1111-12-12")){ //미분류라는 분류명이 전체가 아니라면 전체 사용으로 변경하는 쿼리
+                    Integer changeResult = changeNoSortNameForAllDate(sortData);//기존에 존재하는 미분류 분류명을 사용 범위를 전체로 수정하는 쿼리
+                    System.out.println("changeResult" + changeResult);
+                }
+                Integer noSortNameId =  noSortNameId(sortData);//미분류라는 분류명의 id값을 가지고온다.
+                sortData.put("selSort", noSortNameId);
+                // 3. 미분류라는 분류명이 있다면 해당 분류명을 사용해 적용)
+                Integer UpdateSortName = updateSortNameForNoSortName(sortData);
+//                System.out.println("참조하던 분류명을 미분류를 참조하도록 수정 쿼리(UpdateSortName) : " + UpdateSortName);
+
+
+                sortData.put("selSort", selSortValue); //삭제전 selSort를 다시 원래 선택 값으로 변경
+                Map<String, Object> result = tryDeleteSortName(sortData); //기존 분류명 삭제
+
+                sortData.put("result", "success");
+                sortData.put("selSort", selSortValue);
+            }
+        }
+
+//        Map<String, Object> result = transactionService.tryDeleteSortName(sortData);
+////        System.out.println("===result===");
+////        System.out.println(result);
+
+        return sortData;
+    }
+
+
+
+
+
+
+
+
 
 }
