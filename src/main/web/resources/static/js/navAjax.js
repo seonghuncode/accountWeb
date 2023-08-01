@@ -33,22 +33,22 @@ $("#try_logout").click(function () {
 
 
 //네비게이션바 에서 사용자가 거래내역을 클릭할 경우 현재 로그인 되어있는 세션 아이디를 구해서 거래내역 페이지로 넘기기
-// $("#moveShowTransaction").click(function () {
-//
-//     $.ajax({
-//         url: "/transaction/getNowSessionValue", // 스프링 컨트롤러에 매핑된 경로
-//         type: "get",
-//         dataType: "json",
-//         contentType: "application/json; charset=UTF-8",
-//         success: function(data) {
-//             console.log("세션값 가지고 오기 성공");
-//             console.log(data);
-//             console.log(data['sessionValue']);
-//             location.href="/transaction/showTransaction?userId=" + data['sessionValue'];
-//         },
-//         error: function() {
-//           console.log("(ajax요청 실패)현재 로그인 되어있는 회원의 세션값을 가지고 오는 요청을 실패 했습니다.");
-//         }
-//     });
-//
-// })
+$("#moveShowTransaction").click(function () {
+
+    $.ajax({
+        url: "/transaction/getNowSessionValue", // 스프링 컨트롤러에 매핑된 경로
+        type: "get",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function(data) {
+            console.log("세션값 가지고 오기 성공");
+            console.log(data);
+            console.log(data['sessionValue']);
+            location.href="/transaction/showTransaction?userId=" + data['sessionValue'];
+        },
+        error: function() {
+          console.log("(ajax요청 실패)현재 로그인 되어있는 회원의 세션값을 가지고 오는 요청을 실패 했습니다.");
+        }
+    });
+
+})

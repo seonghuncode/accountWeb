@@ -621,18 +621,18 @@ public class TransactionController {
 
 
 
-//    //네비게이션 바에서 사용자가 거래내역 버튼을 클릭할 경우 현재 로그인 되어있는 세션에 저장된 값을 구해 리턴해주는 로직
-//    //거래내역 페이지로 이동시 현재 로그인 회원의 아이디 값이 필요하기 때문
-//    @RequestMapping(value = "getNowSessionValue", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
-//    @ResponseBody
-//    public Map<String, Object> getNowSessionValue(HttpSession httpSession) {
-//
-//        String username = (String) httpSession.getAttribute("loginedUserId");
-//        Map<String, Object> result = new HashMap<String, Object>();
-//        result.put("sessionValue", username);
-//
-//        return result;
-//    }
+    //네비게이션 바에서 사용자가 거래내역 버튼을 클릭할 경우 현재 로그인 되어있는 세션에 저장된 값을 구해 리턴해주는 로직
+    //거래내역 페이지로 이동시 현재 로그인 회원의 아이디 값이 필요하기 때문
+    @RequestMapping(value = "getNowSessionValue", produces = "application/json; charset=utf8",   method={RequestMethod.GET})
+    @ResponseBody
+    public Map<String, Object> getNowSessionValue(HttpSession httpSession) {
+
+        String username = (String) httpSession.getAttribute("loginedUserId");
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("sessionValue", username);
+
+        return result;
+    }
 
 
 
