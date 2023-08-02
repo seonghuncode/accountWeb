@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('특정 거래 내역 수정')"></th:block>
+</head>
+<body>
+
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment('특정 거래 내역 수정 페이지')"></header>
+<!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
+
+
+<div class="frameFromAddTransactionHistory">
+    <!-- 거래내역 추가 페이지 최상단 태그 ----------------------------------------------------------------------->
+
+
+    <!-- 거래내역 추가 페이지 에서 부가 기능 버튼들 -------------------------->
+    <div style="margin-top: 50px;">
+        <button type="button" class="btn btn-light" id="manageSortName">분류명 관리</button>
+
+        <span style="float: right">
+        <button type="button" class="btn btn-light" id="doModifyTransactionData">수정</button>
+        <button type="button" class="btn btn-light" id="cancelModifyTransactionData" onClick="history.back();">취소</button>
+        </span>
+    </div>
+
+    <hr width="100%" color="blue" size="3">
+
+    <!-- 거래내역 추가 테이블 ------------------------------------------------>
+    <div style="margin-top: 50px;">
+        <table class="table table-hover">
+            <thead>
+            <tr style="text-align: center">
+                <th scope="col">번호</th>
+                <th scope="col">날짜 <span class="essentialCheck">*</span></th>
+                <th scope="col">분류 <span class="essentialCheck">*</span></th>
+                <th scope="col">메모</th>
+                <th scope="col">금액 <span class="essentialCheck">*</span></th>
+                <th scope="col">수입/지출 <span class="essentialCheck">*</span></th>
+            </tr>
+            </thead>
+            <tbody style="text-align: center">
+            <tr id="uniqueTr1">
+                <td id="uniqueNum1">[[${index}]]</td>
+                <td>
+                    <input type="date" id="selAddTransactionDate1" th:value="${transactionDate}">
+                    <div id="selAddTransactionValid1"></div>
+                </td>
+                <td>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="sortList1">
+                        <option selected style="text-align: center">[[${sortName}]]</option>
+                    </select>
+                    <span style="color: red; font-size: small" id="sortListValid1"></span>
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" type="text" placeholder="메모입력(10글자 이내)"
+                           aria-label=".form-control-sm example" id="memo1" th:value="${memo}">
+                    <div id="memoValid1"></div>
+                </td>
+                <td>
+                    <input class="form-control form-control-sm" type="text" placeholder="최대 10억 미만 으로 입력 가능(숫자만 입력 가능)" style="width: 350px"
+                           aria-label=".form-control-sm example" id="price1" th:value="${price}">
+                    <div id="priceValid1"></div>
+                </td>
+                <td>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="type1">
+                        <option th:if="${type == '수입'}" selected>수입</option>
+                        <option th:if="${type == '수입'}" value="1">지출</option>
+                        <option th:if="${type == '지출'}" selected>지출</option>
+                        <option th:if="${type == '지출'}" value="1" >수입</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
+<!-- 7일치 내역 더 보기 버튼을 클릭할 경우, 자바스크립트로 타임리프 객체 넘기는 방법 -->
+<script type="text/javascript" th:inline="javascript">
+    var userId = [[${userId}]];
+    var index = [[${index}]]
+    var transactionHistoryId = [[${transactionHistoryId}]] //사용자가 클릭한 거래내역의 PK
+</script>
+<script type="text/javascript" src="/resources/static/js/ModifyTransactionHistory.js"></script>
+
+
+
+</body>
+</html>

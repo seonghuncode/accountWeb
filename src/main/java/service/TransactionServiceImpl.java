@@ -391,8 +391,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     //파라미터로 받은 분류명의 PK를 구하는 로직
-    public int getSortNamePrimaryId(String sortName) {
-        return transactionRepository.getSortNamePrimaryId(sortName);
+    public int getSortNamePrimaryId(Map<String, Object> sortInfo) {
+        return transactionRepository.getSortNamePrimaryId(sortInfo);
     }
 
     //분류명 삭제에 사용되는 필요 로직--------------------------------------------------
@@ -496,6 +496,47 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 
+    public Map<String, Object> doModifyTransactionField(Map<String, Object> data) {
+
+        //날짜를 쿼리 에서 사용하기 좋도록 연도와 일로 나눈다
+        String date = (String)data.get("selDate");
+        String year = date.substring(2, 4);
+        String month = date.substring(5, 7);
+        data.put("year", year);
+        data.put("month", month);
+//        System.out.println("date(data에서 꺼낸 날짜) : " + date);
+
+        //사용자의 아이디를 통해 해당 아이디의 PK값을 구한다 -> 해당 PK값을 data객체에 넣어준다
+        String userId = (String)data.get("userId");
+        int userIdPK = transactionRepository.getPrimaryId(userId);
+        data.put("userIdPK", userIdPK);
+
+        //분류명의 Pk값을 알기 위해서는 어떤회원의 분류명의 pk인지 구하기 때문에 특정 회원PK, 분류명 이름이 필요하다.
+        String selSortValue = (String)data.get("selSortName"); //분류명을 data에서 추출
+        Map<String, Object> sortInfo = new HashMap<String, Object>();
+        sortInfo.put("userIdPK", userIdPK);
+        sortInfo.put("sortName", selSortValue);
+
+        int sortNamePK = transactionRepository.getSortNamePrimaryId(sortInfo);//바꾸고 싶은 분류명의 PK값을 구하는 쿼리(거래내역 테이블의 sortId에 넣을 값)
+        data.put("sortNamePK", sortNamePK);
+
+//        System.out.println("======data 최종 데이터======");
+//        System.out.println(data);
+
+        int result2 = transactionRepository.doModifyTransactionField(data); //거래내역 수정 쿼리
+//        System.out.println("result2 : " + result2);
+
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+       if(result2 == 1){
+           result.put("result", "success");
+       }else{
+           result.put("result", "fail");
+       }
+
+        return result;
+    }
 
 
 

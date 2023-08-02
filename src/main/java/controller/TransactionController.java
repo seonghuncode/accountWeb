@@ -334,7 +334,7 @@ public class TransactionController {
             //1. 사용자가 radio button을 월별 검색으로 했을 경우 해당 year, month에 해당하는 데이터만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByMonth(transaction);
 //            System.out.println(sortName);
-//            System.out.println(transactionHistory);
+//            System.out.println("transactionHistory : " + transactionHistory);
             model.addAttribute("transactionHistory", transactionHistory);
 
             //getDailyTotalData -> transactionHistory에서 필요로 하는 데이터를 가공해서 클라이언트로 보내줄 데이터를 담는 List?
@@ -369,7 +369,7 @@ public class TransactionController {
             //사용자가 기간별 검색을 수행했기 때문에 해당 기간에 대한 모든 데이터들만 불러온다.
             List<Map<String, Object>> transactionHistory = transactionService.getTransactionHistoryByPeriod(transaction);
             model.addAttribute("transactionHistory", transactionHistory);
-//            System.out.println(transactionHistory);
+//            System.out.println("transactionHistory : " + transactionHistory);
 
             //transactionHistory에서 필요한 데이터만 가공해서 담는다.
             List<Map<String, Object>> distinctTransactionHistory = new ArrayList<Map<String, Object>>();
@@ -584,15 +584,23 @@ public class TransactionController {
             // Map으로 조건 처리하기
             for (Map<String, Object> data : dataList) {
 
-                //System.out.println("data : "  + data);
+//                System.out.println("data : "  + data);
+
+                int primaryId = transactionService.getPrimaryId((String) data.get("userId"));
+
+                //특정 회원의 분류명 PK값을 알기 위해서는 특정 회원의 PK값과 알고 싶은 분류명이 필요하다
+                Map<String, Object> sortInfo = new HashMap<String, Object>();
+                sortInfo.put("userIdPK", primaryId);
+                sortInfo.put("sortName", data.get("sortName"));
+//                System.out.println("sortInfo : " + sortInfo);
 
                 AddTransactionHistory addTransactionHistory = new AddTransactionHistory(); //하나의 필드를 저장 하여 필드 별로 디비에 요청을 보낼 객체
 
                 //거래내역을 추가 하기 위해서는 해당 분류명의 primary key를 알아야 거래내역 테이블에 sortId를 저장해 나중에 참조할 수 있다.
-                int sortNameId = transactionService.getSortNamePrimaryId((String) data.get("sortName")); //분류명에 대한 컬럼의 PK를 요청
-                //System.out.println("분류명의 PK : " + sortNameId);
+                int sortNameId = transactionService.getSortNamePrimaryId(sortInfo); //분류명에 대한 컬럼의 PK를 요청
+//                System.out.println("분류명의 PK : " + sortNameId);
 
-                int primaryId = transactionService.getPrimaryId((String) data.get("userId"));
+
                 addTransactionHistory.setPrimaryId(primaryId);
                 addTransactionHistory.setNum(Integer.parseInt((String) data.get("num")));
                 addTransactionHistory.setTransactionDate((String) data.get("transactionDate"));
@@ -630,6 +638,78 @@ public class TransactionController {
 
         return result;
     }
+
+
+
+
+
+    /**
+     * 사용자가 거래내역 페이지 에서 특정 필드의 수정 버튼을 클릭할 경우 파라미터를 넘겨 받아 실행되는 로직
+     * 실제로는 날짜와 순번만 가지고 데이터베이스 에서 데이터를 불러와 수정을 진행 하지만 나머지 데이터를 가지고 데이터가 일치 하는지 한번더 확인 및 페이지에 보여주기 위한 변수
+     *
+     *
+     * @param model
+     * @param transactionDate : 해당 거래내역에 대한 날짜
+     * @param index : 특정 날짜의 거래내역을 날짜로 내림차순 했을때의 순번
+     * @param sortName : 분류명
+     * @param memo : 메모
+     * @param price : 가격
+     * @return : 특정 필드 수정 페이지로 이동
+     */
+    @RequestMapping("modifyTransactionField")
+    public String modifyTransactionField(Model model, String transactionDate, int index, String sortName, String memo, int price, String userId, String type, int transactionHistoryId) {
+
+//        System.out.println("========================");
+//        System.out.println("transactionDate : " + transactionDate);
+//        System.out.println("index : " + index);
+//        System.out.println("sortName : " + sortName);
+//        System.out.println("memo : " + memo);
+//        System.out.println("price : " + price);
+//        System.out.println("userId : " + userId);
+//        System.out.println("type : " + type);
+//        System.out.println("transactionHistoryId : " + transactionHistoryId);
+//        System.out.println("========================");
+
+        String year = transactionDate.substring(2, 4);
+        String month = transactionDate.substring(5, 7);
+
+        model.addAttribute("transactionDate", transactionDate);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("index", index);
+        model.addAttribute("sortName", sortName);
+        model.addAttribute("memo", memo);
+        model.addAttribute("price", price);
+        model.addAttribute("userId", userId);
+        model.addAttribute("type", type);
+        model.addAttribute("transactionHistoryId", transactionHistoryId);
+
+        return "thymeleaf/content/modifyTransactionField";
+
+    }
+
+
+    /**
+     *거래내역 수정 페이지 에서 유효성 검사를 통과한 경우 최종 수정할 데이터를 넘겨 받아 수정을 진행하는 로직
+     *
+     * @param data
+     * 파라미터로 받는 data 에는 {selDate, selSortName, memo, price, type, userId}가 존재한다.
+     * @return
+     */
+    @RequestMapping("doModifyTransactionField")
+    @ResponseBody
+    public Map<String, Object> doModifyTransactionField(@RequestParam Map<String, Object> data) {
+
+//        System.out.println(data);
+        Map<String, Object> result = transactionService.doModifyTransactionField(data);
+//        System.out.println(result);
+
+        return result;
+
+    }
+
+
+    
 
 
 }

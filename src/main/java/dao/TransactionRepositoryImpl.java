@@ -106,8 +106,8 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
     }
 
     //분류명을 통해 해당 분류명의 PK값을 요청하는 로직
-    public int getSortNamePrimaryId(String sortName){
-        return sqlSession.selectOne("dao.TransactionRepositoryImpl.getSortNamePrimaryId", sortName);
+    public int getSortNamePrimaryId(Map<String, Object> sortInfo){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.getSortNamePrimaryId", sortInfo);
     }
 
     //분류명 삭제시 해당 분류명을 참조하고 있는 거래내역 데이터가 있는지 확인하는 쿼리
@@ -143,6 +143,11 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
     //미분류 이름의 분류명 PK값을 구하는 쿼리
     public Integer noSortNameId(Map<String, Object> sortData){
         return sqlSession.selectOne("dao.TransactionRepositoryImpl.noSortNameId", sortData);
+    }
+
+    //거래내역 페이지 에서 특정 거래내역의 데이터를 수정하는  쿼리
+    public int doModifyTransactionField(Map<String, Object> data){
+        return sqlSession.update("dao.TransactionRepository.doModifyTransactionField", data);
     }
 
 }

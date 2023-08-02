@@ -35,7 +35,7 @@
     <!-- 메인페이지 에서 특정 회원 거래내역을 클릭할 경우 특정회원에 대한 거래 내역 정보를 가지고 오는 부분 -->
     <!-- 거래 내역을 내림차순으로 가지고 온다 >> 최근 거래내역 부터 보여주기 위함 (sort.transactionId ->sort.id)-->
     <select id="getTransactionHistory" resultType="map" parameterType="hashmap">
-        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
+        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date, `transaction`.id
         FROM `transaction`
         LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
@@ -78,7 +78,7 @@
 
     <!-- 수정 : (sort.transactionId ->sort.id)-->
     <select id="getTransactionHistoryByMonth" resultType="map" parameterType="hashmap">
-        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
+        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date, `transaction`.id
         FROM `transaction`
         LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
@@ -125,7 +125,7 @@
 
     <!-- 수정 : (sort.transactionId ->sort.id) -->
     <select id="getTransactionHistoryByPeriod" resultType="map" parameterType="hashmap">
-        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date
+        SELECT sort.name, `transaction`.memo, `transaction`.type, `transaction`.price, `transaction`.transaction_date, `transaction`.id
         FROM `transaction`
         LEFT JOIN sort ON `transaction`.sortId = sort.id
         LEFT JOIN `user`
@@ -259,10 +259,10 @@
     </update>
 
     <!-- 특정 분류명에 대한 PK값을 찾는 역할 -->
-    <select id="getSortNamePrimaryId" resultType="int" parameterType="String">
+    <select id="getSortNamePrimaryId" resultType="int" parameterType="hashmap">
         SELECT id
         FROM `sort`
-        WHERE `name` = #{sortName};
+        WHERE `name` = #{sortName} and userId = #{userIdPK};
     </select>
 
     <!-- 거래내역 추가 기능을 수행하는 역학 -->
@@ -321,6 +321,12 @@
         FROM sort
         WHERE userId = #{loginIdByPK} AND `name` = "미분류";
     </select>
+
+
+    <!-- 거래내역 페이지 에서 특정 거래내역의 데이터를 수정하는  쿼리 -->
+    <update id="doModifyTransactionField" parameterType="hashmap">
+        UPDATE `transaction` SET `price` = #{price}, type = #{type}, transaction_date = #{selDate}, memo = #{memo}, sortId = #{sortNamePK} WHERE id = #{transactionHistoryId} and userId = #{userIdPK};
+    </update>
 
 
 </mapper>

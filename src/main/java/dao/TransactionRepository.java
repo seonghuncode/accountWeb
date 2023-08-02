@@ -51,7 +51,7 @@ public interface TransactionRepository {
 
     int doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory);
 
-    int getSortNamePrimaryId(String sortName);
+    int getSortNamePrimaryId(Map<String, Object> sortInfo);
 
     Integer checkBeforeDeleteSortName(Map<String, Object> sortData);
 
@@ -66,6 +66,8 @@ public interface TransactionRepository {
     Integer changeNoSortNameForAllDate(Map<String, Object> sortData);
 
     Integer noSortNameId(Map<String, Object> sortData);
+
+    int doModifyTransactionField(Map<String, Object> data);
 
 
 
