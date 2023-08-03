@@ -642,11 +642,9 @@ public class TransactionController {
 
 
 
-
     /**
      * 사용자가 거래내역 페이지 에서 특정 필드의 수정 버튼을 클릭할 경우 파라미터를 넘겨 받아 실행되는 로직
      * 실제로는 날짜와 순번만 가지고 데이터베이스 에서 데이터를 불러와 수정을 진행 하지만 나머지 데이터를 가지고 데이터가 일치 하는지 한번더 확인 및 페이지에 보여주기 위한 변수
-     *
      *
      * @param model
      * @param transactionDate : 해당 거래내역에 대한 날짜
@@ -654,7 +652,10 @@ public class TransactionController {
      * @param sortName : 분류명
      * @param memo : 메모
      * @param price : 가격
-     * @return : 특정 필드 수정 페이지로 이동
+     * @param userId : 현재 로그인 되어있는 사용자 아이디
+     * @param type : 지출 or 수입
+     * @param transactionHistoryId : 거래내역 페이지 에서 사용자가 선택한 특정 필드의 거래내역 PK값값
+    * @return : 특정 필드 수정 페이지로 이동
      */
     @RequestMapping("modifyTransactionField")
     public String modifyTransactionField(Model model, String transactionDate, int index, String sortName, String memo, int price, String userId, String type, int transactionHistoryId) {
