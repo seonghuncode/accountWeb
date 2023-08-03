@@ -69,6 +69,8 @@ public interface TransactionRepository {
 
     int doModifyTransactionField(Map<String, Object> data);
 
+    int deleteTransactionField(Map<String, Object> data);
+
 
 
 }

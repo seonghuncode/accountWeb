@@ -81,4 +81,6 @@ public interface TransactionService {
 
     Map<String, Object> doModifyTransactionField(Map<String, Object> data);
 
+    Map<String, Object> deleteTransactionField(Map<String, Object> data);
+
 }

@@ -150,4 +150,9 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.update("dao.TransactionRepository.doModifyTransactionField", data);
     }
 
+    //거래내역 페이지 에서 특정 거래내역의 데이터를 삭제하는  쿼리
+    public int deleteTransactionField(Map<String, Object> data){
+        return sqlSession.delete("dao.TransactionRepository.deleteTransactionField", data);
+    }
+
 }

@@ -1,5 +1,5 @@
 $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의 로직
-    
+
     // console.log(dateCnt);
     function showMore(changeDateCnt) {
 
@@ -169,10 +169,10 @@ $('#searchBtn').click(function () { // ==> 각 검색 조건에 있어 어떠한
         // console.log();
         let sortName = $('#sortName').val();
         // console.log(year, month);
-        if(sortName.trim().length === 0){
+        if (sortName.trim().length === 0) {
             // console.log(sortName.trim().length); //사용자가 분류명을 입력하지 않은 경우
             location.href = '/transaction/showTransaction?userId=' + userId1;
-        }else if(sortName.trim().length != 0){ //사용자가 분류명을 입력한 경우
+        } else if (sortName.trim().length != 0) { //사용자가 분류명을 입력한 경우
             // console.log(sortName.trim().length);
             location.href = '/transaction/showTransaction?userId=' + userId1 + "&sortName=" + sortName;
         }
@@ -205,14 +205,14 @@ $('#searchBtn').click(function () { // ==> 각 검색 조건에 있어 어떠한
         let endDate = $('#endDate').val();
         // console.log(startDate, endDate);
 
-        if(startDate.trim().length === 0 || endDate.trim().length === 0){
+        if (startDate.trim().length === 0 || endDate.trim().length === 0) {
             swal('알림!', "검색을 위해 시작일과 종료일을 선택해 주세요.", 'warning');
             // console.log("에러1");
-        }else if(startDate > endDate){
+        } else if (startDate > endDate) {
             swal('알림!', "종료일이 시작일 보다 빠릅니다.", 'warning');
             // console.log("에러2");
-        }else{
-            location.href = '/transaction/showTransaction/whichSelect?userId=' + userId1 +  '&typeRadio=' + typeRadio + '&sortName=' + sortName + '&startDate=' + startDate + '&endDate=' + endDate;
+        } else {
+            location.href = '/transaction/showTransaction/whichSelect?userId=' + userId1 + '&typeRadio=' + typeRadio + '&sortName=' + sortName + '&startDate=' + startDate + '&endDate=' + endDate;
         }
 
     }
@@ -361,6 +361,61 @@ if (nowPage === "/transaction/showTransaction") {
 }
 
 
+//현재 로그인 되어있는 회원의 거래내역 페이지 에서 특정 필드의 거래내역 삭제 아이콘을 클릭할 경우 해당 필드의 데이터를 함수로 보내주어 삭제를 처리하는 로직
+function deleteTransactionField(transactionId, type, nowLoginUserId, transactionDate, count, transactionName, transactionMemo, transactionPrice) {
+    // console.log(transactionId);
+    // console.log(type);
+    // console.log(nowLoginUserId);
+    // console.log(transactionDate);
+    // console.log(count);
+    // console.log(transactionName);
+    // console.log(transactionMemo);
+    // console.log(transactionPrice);
 
 
+    var data = {
+        "transactionId": transactionId, //거래내역 PK
+        "type": type, //지출 or 수입
+        "nowLoginUserId": nowLoginUserId, //현재 로그인 되어있는 회원의 아이디
+        "transactionDate": transactionDate, //거래 날짜
+        "count": count, //거래내역 페이지 에서 사용자가 선택한 필드의 index
+        "transactionName": transactionName, //거래내역 분류명
+        "sortNamePK": "null", //
+        "year": "",
+        "month": "",
+        "userIdPK": "",
+        "transactionMemo": transactionMemo, //거래내역 메모
+        "transactionPrice": transactionPrice //거래 가격
+    };
+
+
+    var result = confirm('정말 해당 필드의 거래내역을 삭제 하시겠습니까?');
+    if (result) {
+        deleteProcess();
+    }
+
+
+    function deleteProcess() {
+        $.ajax({
+            url: "/transaction/deleteTransactionField", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+            data: data,                // HTTP 요청과 함께 서버로 보낼 데이터
+            method: "GET",                           // HTTP 요청 방식(GET, POST)
+            dataType: "json"                         // 서버에서 보내줄 데이터의 타입
+        })
+            // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+            .done(function (json) {
+                // console.log("성공");
+                alert("해당 필드의 거래내역이 정상적으로 삭제 되었습니다.");
+                location.reload(); //삭제된 값이 반영되도록 페이지 리로딩
+            })
+            // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+            .fail(function (xhr, status, errorThrown) {
+            })
+            // HTTP 요청이 성공하거나 실패하는 것에 상관없이 언제나 always() 메소드가 실행됨.
+            .always(function (xhr, status) {
+            });
+    }
+
+
+}
 

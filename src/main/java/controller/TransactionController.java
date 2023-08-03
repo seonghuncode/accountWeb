@@ -644,7 +644,7 @@ public class TransactionController {
 
     /**
      * 사용자가 거래내역 페이지 에서 특정 필드의 수정 버튼을 클릭할 경우 파라미터를 넘겨 받아 실행되는 로직
-     * 실제로는 날짜와 순번만 가지고 데이터베이스 에서 데이터를 불러와 수정을 진행 하지만 나머지 데이터를 가지고 데이터가 일치 하는지 한번더 확인 및 페이지에 보여주기 위한 변수
+     * 사용자PK, 거래내역PK값을 통해 조건을 주어 해당 컬럼을 찾고 나머지 변수들의 값으로 업데이트 한다.
      *
      * @param model
      * @param transactionDate : 해당 거래내역에 대한 날짜
@@ -705,6 +705,42 @@ public class TransactionController {
         Map<String, Object> result = transactionService.doModifyTransactionField(data);
 //        System.out.println(result);
 
+        return result;
+
+    }
+
+
+
+
+    /**
+     *현재 로그인 되어 있는 회원의 거래내역 페이지 에서 사용자가 특정 필드의 거래내역의 삭제 아이콘을 클릭할 경우 해당 거래내역을 삭제하는 로직
+     *
+     *                 "transactionId": transactionId, //거래내역 PK
+     *                 "type": type, //지출 or 수입
+     *                 "nowLoginUserId": nowLoginUserId, //현재 로그인 되어있는 회원의 아이디
+     *                 "transactionDate": transactionDate, //거래 날짜
+     *                 "count": count, //거래내역 페이지 에서 사용자가 선택한 필드의 index
+     *                 "transactionName" : transactionName, //거래내역 분류명
+     *                 "sortNamePK" : "null", //
+     *                 "year" :  "",
+     *                 "month" : "",
+     *                 "userIdPK" : "",
+     *                 "transactionMemo" : transactionMemo, //거래내역 메모
+     *                 "transactionPrice" : transactionPrice //거래 가격
+     *
+     * @param model
+     * @param data
+     * @return
+     */
+    @RequestMapping("deleteTransactionField")
+    @ResponseBody
+    public Map<String, Object> deleteTransactionField(Model model, @RequestParam Map<String, Object> data) {
+
+//        System.out.println(data);
+        
+        //거래내역 페이지 에서 특정 필드를 삭제 하는 로직
+        Map<String, Object> result = transactionService.deleteTransactionField(data);
+        
         return result;
 
     }

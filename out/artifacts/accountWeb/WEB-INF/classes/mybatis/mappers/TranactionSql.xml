@@ -328,5 +328,10 @@
         UPDATE `transaction` SET `price` = #{price}, type = #{type}, transaction_date = #{selDate}, memo = #{memo}, sortId = #{sortNamePK} WHERE id = #{transactionHistoryId} and userId = #{userIdPK};
     </update>
 
+    <!-- 거래내역 페이지 에서 특정 거래내역의 데이터를 삭제하는 쿼리 -->
+    <delete id="deleteTransactionField" parameterType="hashmap">
+        DELETE FROM `transaction` WHERE `id` = #{transactionId} AND userId = #{userIdPK};
+    </delete>
+
 
 </mapper>
