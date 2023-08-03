@@ -44,5 +44,8 @@ public interface UsrService {
 
     //검색 회원에 대한 전체 수
     int countSearchUsrListTotal(String search);
+    
+    //회원정보 페이지 에서 사용자가 입력한 비밀번호가 회원의 아이디와 일치하는지 확인하는 로직
+    Map<String, Object> checkPW(Map<String, Object> data);
 
 }

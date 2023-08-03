@@ -579,6 +579,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+    public Map<String, Object> getUserInfo(int primaryId) {
+        return transactionRepository.getUserInfo(primaryId);
+    }
+
+
+
 
 
 }

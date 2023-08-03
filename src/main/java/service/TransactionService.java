@@ -83,4 +83,6 @@ public interface TransactionService {
 
     Map<String, Object> deleteTransactionField(Map<String, Object> data);
 
+    Map<String, Object> getUserInfo(int primaryId);
+
 }

@@ -155,4 +155,12 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.delete("dao.TransactionRepository.deleteTransactionField", data);
     }
 
+    //네비게이션바에서 사용자가 회원정보 버튼을 클릭했을 경우 현재 로그인한 회원의 PK를 통해 해당 회원의 데이터를 가지고 오는 쿼리
+    public Map<String, Object> getUserInfo(int primaryId){
+        return sqlSession.selectOne("dao.TransactionRepository.getUserInfo", primaryId);
+    }
+
+
+
+
 }

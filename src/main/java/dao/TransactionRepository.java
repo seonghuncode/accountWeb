@@ -71,6 +71,8 @@ public interface TransactionRepository {
 
     int deleteTransactionField(Map<String, Object> data);
 
+    Map<String, Object> getUserInfo(int primaryId);
+
 
 
 }

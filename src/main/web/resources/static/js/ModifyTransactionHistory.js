@@ -294,7 +294,9 @@ $('#doModifyTransactionData').click(function () {
 })
 
 
-
-
-
+//거래내역 페이지 에서 특정 거래내역 필드의 수정 아이콘을 클릭한 페이지 에서 취소 버튼을 클릭할 경우 뒤로가기를 실행하는 로직
+$('#cancelModifyTransactionData').click(function () {
+    // 이전 페이지로 이동
+    history.back();
+})
 

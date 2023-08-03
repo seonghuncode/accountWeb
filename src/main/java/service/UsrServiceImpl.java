@@ -283,6 +283,35 @@ public class UsrServiceImpl implements UsrService {
         return usrRepository.countSearchUsrListTotal(search);
     }
 
+    //사용자가 마이페이지 에서 정보수정 버튼을 클릭해서 나오는 모달창에 입력한 비밀번호가 현재 로그인한 회원의 아이디와 일치하는지 확인하는 로직
+    public Map<String, Object> checkPW(Map<String, Object> data){
+
+        String userId = (String)data.get("userId");
+        String password = (String)data.get("password");
+//        System.out.println("사용자가 입력한 아이디(userId) : " + userId);
+//        System.out.println("사용자가 입력한 비밀번호(password) : " + password);
+
+        String findPasswordFromDB = usrRepository.getUserPassword(userId); //아이디를 파라미터로 넘기면 해당 아이디의 비밀번호를 찾아온다.
+//        System.out.println("현재 아이디를 통해 데이터베이스 에서 매칭 되는 비빌번호를 찾아온다(findPassordFromDB) : " + findPasswordFromDB);
+        String encoderPassword = passwordEncoder.encode(password); //사용자가 입력한 비밀번호
+
+        int result2 = 1;
+        if ((passwordEncoder.matches(password, findPasswordFromDB)) == false) { //사용자가 입력한 아이디의 비밀번호 != 사용자가 입력한 비밀번호
+//            System.out.println("사용자가 입력한 비밀번호는 일치 하지 않습니다.");
+            result2 = -1;
+        }
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if(result2 == 1){
+            result.put("result", "success");
+        }else{
+            result.put("result", "fail");
+        }
+
+        return result;
+    }
+
 
 
 

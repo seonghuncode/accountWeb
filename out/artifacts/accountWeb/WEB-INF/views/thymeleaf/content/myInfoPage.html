@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('내정보')"></th:block>
+</head>
+<body>
+
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment('회원정보 페이지')"></header>
+<!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
+
+
+<div class="frameFromMyInfo"> <!-- 전체 ui의 위치 CSS가 적용된 Frame -->
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row" style="padding: 2%;">이름</th>
+            <td style="text-align: right; padding: 2%;">[[${userInfo.name}]]</td>
+        </tr>
+        <tr>
+            <th scope="row" style="padding: 2%;">이메일</th>
+            <td style="text-align: right; padding: 2%;">[[${userInfo.email}]]</td>
+        </tr>
+        <tr>
+            <th scope="row" style="padding: 2%;">아이디</th>
+            <td style="text-align: right; padding: 2%;">[[${userInfo.user_id}]]</td>
+        </tr>
+        <tr>
+            <th scope="row" style="padding: 2%;">열람여부</th>
+            <td style="text-align: right; padding: 2%;">[[${userInfo.view_yn}]]</td>
+        </tr>
+        <tr>
+            <th scope="row" style="padding: 2%;">등록날짜</th>
+            <td style="text-align: right; padding: 2%;">[[${userInfo.create_date}]]</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-outline-secondary" id="modifyMyInfo">정보수정</button>
+
+    <!-- 비밀번호 입력 모달(정보 수정 버튼을 클릭하면 생성) -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePasswordModal()" style="text-align: right">&times;</span>
+            <h2 style="text-align: center">비밀번호 입력</h2>
+            <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요." style="margin-top: 10px; margin-bottom: 10px;">
+            <div id="modifyInfoValid" style="margin-bottom: 10px;"></div>
+            <button type="button" class="btn btn-outline-secondary" onclick="submitPassword()" style="margin-bottom: 10px;">확인</button>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
+<!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->
+<script type="text/javascript" th:inline="javascript">
+    var userId = [[${userId}]];
+    var password = [[${password}]];
+    var name = [[${name}]];
+    var userIdPK = [[${id}]];
+    var createDate = [[${create_date}]];
+    var viewYN = [[${view_yn}]];
+    var email = [[${email}]];
+</script>
+<script type="text/javascript" src="/resources/static/js/myInfoPage.js"></script>
+
+
+</body>
+</html>

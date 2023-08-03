@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import service.TransactionService;
 import service.UsrService;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,9 @@ public class UsrController {
 
     @Autowired
     private UsrService usrService;
+
+    @Autowired
+    private TransactionService transactionService;
 
 
     //메인 으로 들어오면 로그인 화면으로 보내도록 지정
@@ -183,6 +187,43 @@ public class UsrController {
         return result;
     }
 
+
+
+
+
+    /**
+     * 네비게이션바 에서 회원정보 버튼을 클릭했을 경우 세션에 저장된 아이디 값을 받아 회원정보 페이지로 이동하는 controller
+     * @param model
+     * @param userId : 현재 세션에 저장된 회원의 아이디
+     * @return
+     */
+    @RequestMapping("usr/myInfo")
+    public String myInfo(Model model, String userId) {
+
+//        System.out.println("userId : " + userId);
+        model.addAttribute("userId", userId);
+        int primaryId = transactionService.getPrimaryId(userId); //파라미터로 받은 사용자 아이디를 통해 해당 회원의 PK값을 구한다.
+
+        Map<String, Object> userInfo = transactionService.getUserInfo(primaryId); //위에서 구한 회원PK값을 통해 해당 회원의 데이터를 받아온다.
+//        System.out.println("=====사용자 정보=====");
+//        System.out.println(userInfo);
+        model.addAttribute("userInfo", userInfo);
+
+        return "thymeleaf/content/myInfoPage";
+    }
+
+
+
+    //사용자가 마이페이지 에서 정보수정 버튼을 클릭해서 나오는 모달창에 입력한 비밀번호가 현재 로그인한 회원의 아이디와 일치하는지 확인하는 로직
+    @RequestMapping(value = "/usr/checkPW", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> checkPW(@RequestBody  Map<String, Object> data) {
+
+//        System.out.println("Controller에서의 data : " + data);
+        Map<String, Object> result = usrService.checkPW(data);
+
+        return result;
+    }
 
 
 
