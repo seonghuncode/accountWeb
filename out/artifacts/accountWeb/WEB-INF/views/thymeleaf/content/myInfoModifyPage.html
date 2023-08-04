@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('내정보 수정')"></th:block>
+</head>
+<body>
+
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment('회원정보 수정 페이지')"></header>
+<!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
+
+
+<div class="frameFromMyInfo"> <!-- 전체 ui의 위치 CSS가 적용된 Frame -->
+    <div class="border-solid border border-black" style="padding: 20px;">
+        <!--테두리 주는 classs(다른 페이지에서 사용하던 class기 때문에 디자인 문제 생기면 없애기) -->
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">이름 <span
+                    style="font-size: small" id="nameValid2">(※조건:10글자 이내)</span></label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" th:value="${name}">
+            <div id="nameValid"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput2" class="form-label">이메일</label>
+            <div style="display: flex">
+                <input type="email" class="form-control" id="exampleFormControlInput2" th:value="${email}">
+                <button type="submit" class="btn btn-outline-primary col-auto" id="emailIdDuplication">중복확인</button>
+            </div>
+            <div id="emailValid"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput3" class="form-label">아이디<span
+                    style="font-size: small" id="userIdValid2">(※조건:6자리~10자리)</span></label>
+            <div style="display: flex">
+                <input type="text" class="form-control" id="exampleFormControlInput3" th:value="${userId}">
+                <button type="submit" class="btn btn-outline-primary col-auto" id="userIdDuplication">중복확인</button>
+            </div>
+            <div id="userIdValid"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput4" class="form-label">비밀번호
+                <span
+                    style="font-size: small" id="passwordValid11">(※조건:숫자, 문자, 특수문자 포함 8자~15자리)
+                </span><br>
+                <span style="font-size: small; color: green">(※비밀번호의 경우 수정을 원할 경우만 입력해 주세요.)</span>
+            </label>
+            <input type="password" class="form-control" id="exampleFormControlInput4" placeholder="***********">
+            <div id="passwordValid1"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput5" class="form-label">비밀번호 확인
+                <span
+                    style="font-size: small" id="passwordValid22">(※조건:숫자, 문자, 특수문자 포함 8자~15자리)</span><br>
+                <span style="font-size: small; color: green">(※비밀번호의 경우 수정을 원할 경우만 입력해 주세요.)</span>
+            </label>
+            <input type="password" class="form-control" id="exampleFormControlInput5" placeholder="***********">
+            <div id="passwordValid2"></div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput7" class="form-label">등록날짜</label>
+            <input type="text" class="form-control" id="exampleFormControlInput7" th:value="${createDate}" disabled>
+            <div id="regDateValid"></div>
+        </div>
+        <div class="mb-3">
+            <div style="display: flex">
+                <div>거래 내역 공개 여부(기본값 : 공개)</div>
+                <div th:if="${view_YN == 'yes'}">
+                    <input type="radio" name="select" value="yes" checked>예
+                    <input type="radio" name="select" value="no">아니요
+                </div>
+                <div th:if="${view_YN == 'no'}">
+                    <input type="radio" name="select" value="yes">예
+                    <input type="radio" name="select" value="no" checked>아니요
+                </div>
+            </div>
+            <div style="font-size: 10px; font-weight: 700; color: red; margin-top: 5px;">
+                <div>
+                    &#8251;거래 내역을 공개 할 경우 다른 사용자가 자신의 거래 내역에 대해 열람이 가능 합니다.
+                </div>
+                <div>
+                    &#8251;이후 회원 정보 에서 수정 가능 합니다.
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" class="btn btn-outline-secondary" id="modifyMyInfo2" style="width: 100%;">회원정보수정</button>
+
+        <!-- 비밀번호 입력 모달(정보 수정 버튼을 클릭하면 생성) -->
+        <div id="passwordModal" class="modal">
+            <div class="modal-content" style="width: 60%">
+                <span class="close" onclick="closePasswordModal()" style="text-align: right">&times;</span>
+                <h2 style="text-align: center">비밀번호 입력</h2>
+                <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요."
+                       style="margin-top: 10px; margin-bottom: 10px;">
+                <div id="modifyInfoValid" style="margin-bottom: 10px;"></div>
+                <button type="button" class="btn btn-outline-secondary" onclick="submitPassword()"
+                        style="margin-bottom: 10px;">확인
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
+<!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->
+<script type="text/javascript" th:inline="javascript">
+    var userId = [[${userId}]];
+    // var password = [[${password}]];
+    var name = [[${name}]];
+    var userIdPK = [[${userIdPK}]];
+    var createDate = [[${create_date}]];
+    var viewYN = [[${view_YN}]];
+    var email = [[${email}]];
+</script>
+<script type="text/javascript" src="/resources/static/js/myInfoModifyPage.js"></script>
+
+
+</body>
+</html>

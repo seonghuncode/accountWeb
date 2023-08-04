@@ -48,4 +48,13 @@ public interface UsrService {
     //회원정보 페이지 에서 사용자가 입력한 비밀번호가 회원의 아이디와 일치하는지 확인하는 로직
     Map<String, Object> checkPW(Map<String, Object> data);
 
+    //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 이메일이 중복되는 이메일인지 확인하는 로직
+    Map<String, Object> checkEmailForModifyMyInfo(Map<String, Object> data);
+
+    //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 아이다가 중복되는 아이디 인지 확인하는 로직
+    Map<String, Object> checkUserIdForModifyMyInfo(Map<String, Object> data);
+
+    //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
+    Map<String, Object> doModifyUserInfo(Map<String, Object> data);
+
 }

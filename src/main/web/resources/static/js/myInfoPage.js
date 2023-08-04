@@ -21,6 +21,7 @@ function closePasswordModal() {
 
 // 비밀번호 확인 버튼 클릭 시 처리
 function submitPassword() {
+
     const password = document.getElementById('inputPassword').value;
     // console.log('입력한 비밀번호:', password);
 
@@ -36,7 +37,7 @@ function submitPassword() {
         var result = checkPWProcess(password);
         // console.log(">>>>>> : " + result);
         if(result == "success"){ //사용자가 입력한 비밀번호가 현재 로그인한 아이디와 일치하는 비밀번호일 경우
-            // location.href="/transaction/myInfo?userId=" + data['sessionValue'];
+            location.href="/usr/myInfoModify?userId=" + userId  + "&name=" + name + "&email=" + email + "&view_YN=" + viewYN + "&createDate=" + createDate + "&userIdPK=" + userIdPK;
             closePasswordModal(); // 모달 닫기
         }else if(result == "fail"){ //사용자가 입력한 비밀번호가 현재 로그인한 아이디와 일치하지 않을 경우
             $(`#modifyInfoValid`).text("※비밀번호가 현재 로그인한 회원의 아이디와 일치 하지 않습니다.");

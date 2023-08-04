@@ -93,6 +93,29 @@
         WHERE `name` LIKE CONCAT('%', #{search}, '%') AND view_yn = 'yes'
     </select>
 
+    <!-- 회원정보 수정 페이지 에서 사용자가 수정하려고 하는 이메일이 중복되는 이메일인지 확인하는 로직 -->
+    <select id="checkEmailForModifyMyInfo" resultType="Integer" parameterType="hashmap">
+        SELECT EXISTS (SELECT * FROM `user` WHERE id != #{userIdPK} AND email = #{email})
+    </select>
+
+    <!-- 회원정보 수정 페이지 에서 사용자가 수정하려고 하는 아이다가 중복되는 아이디 인지 확인하는 로직 -->
+    <select id="checkUserIdForModifyMyInfo" resultType="Integer" parameterType="hashmap">
+        SELECT EXISTS (SELECT * FROM `user` WHERE id != #{userIdPK} AND user_id = #{userId})
+    </select>
+
+    <!-- 회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직 -->
+    <update id="doModifyUserInfo" parameterType="hashmap">
+        UPDATE `user` SET
+        <choose>
+            <when test='newPassword.equals("빈값")'>
+                `name` = #{newName}, email = #{newEmail}, user_id = #{newUserId}, view_yn = #{newView_YN}  WHERE id = #{userIdPK};
+            </when>
+            <otherwise>
+                `name` = #{newName}, email = #{newEmail}, user_id = #{newUserId}, view_yn = #{newView_YN}, password = #{newPassword} WHERE id = #{userIdPK};
+            </otherwise>
+        </choose>
+    </update>
+
 
 
 </mapper>

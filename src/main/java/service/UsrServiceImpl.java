@@ -313,6 +313,75 @@ public class UsrServiceImpl implements UsrService {
     }
 
 
+    //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 이메일이 중복되는 이메일인지 확인하는 로직
+    public Map<String, Object> checkEmailForModifyMyInfo(Map<String, Object> data){
+
+        int result2 = usrRepository.checkEmailForModifyMyInfo(data);
+//        System.out.println("중복 결과 : " + result2); //0이면 중복 없음, 1이면 중복
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if(result2 == 0){
+            result.put("result", "success");
+        }else{
+            result.put("result", "fail");
+        }
+
+        return result;
+
+    }
+
+
+    //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 아이다가 중복되는 아이디 인지 확인하는 로직
+    public Map<String, Object> checkUserIdForModifyMyInfo(Map<String, Object> data){
+
+        int result2 = usrRepository.checkUserIdForModifyMyInfo(data);
+//        System.out.println("중복 결과 : " + result2); //0이면 중복 없음, 1이면 중복
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if(result2 == 0){
+            result.put("result", "success");
+        }else{
+            result.put("result", "fail");
+        }
+
+        return result;
+
+    }
+
+
+    //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
+    public Map<String, Object> doModifyUserInfo(Map<String, Object> data){
+
+        String pw = (String)data.get("newPassword"); //사용자가 입력한 비밀번호 암호화
+//        System.out.println("받은직후 비밀번호 : " + pw);
+        if(!(pw.equals(""))){
+            String encoderPassword = passwordEncoder.encode(pw); //비밀번호 암호화
+            data.put("newPassword", encoderPassword); //암호화한 데이터 data객체에 넣기
+        }else if(pw.equals("")){
+            data.put("newPassword", "빈값");
+        }
+//        System.out.println("값이 있다면 암호화한 비빌번호 : " + (String)data.get("newPassword"));
+
+        //사용자가 비밀번호를 입력했다면 해당 비밀번호로 수정하고
+        //사용자가 비밀번호를 입력하지 않았다면 비밀번호는 수정하지 않는다.
+        int result2 = usrRepository.doModifyUserInfo(data);
+//        System.out.println("중복 결과 : " + result2); //1이면 숭정 성공, 0이면 수정 실패
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if(result2 == 1){
+            result.put("result", "success");
+        }else{
+            result.put("result", "fail");
+        }
+
+        return result;
+
+    }
+
+
 
 
 }

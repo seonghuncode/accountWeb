@@ -226,5 +226,75 @@ public class UsrController {
     }
 
 
+    /**
+     *
+     * @param userId : 현재 로그인 되어 있는 사용자 아이디
+     * @param name : 사용자 닉네임
+     * @param email : 사용지
+     * @param view_YN : 거래내역 공개 여부
+     * @param createDate : 사용자 회원가입 날짜
+     * @param userIdPK : 사용자 PK
+     */
+    @RequestMapping("usr/myInfoModify")
+    public String myInfoModify(String userId, String name, String email, String view_YN, String createDate, int userIdPK, Model model){
+//        System.out.println("userId : " + userId);
+//        System.out.println("name : " + name);
+//        System.out.println("email : " + email);
+//        System.out.println("view_YN : " + view_YN);
+//        System.out.println("createDate : " + createDate);
+//        System.out.println("userIdPK : " + userIdPK);
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+        model.addAttribute("view_YN", view_YN);
+        model.addAttribute("createDate", createDate);
+        model.addAttribute("userIdPK", userIdPK);
+
+
+        return "thymeleaf/content/myInfoModifyPage";
+
+    }
+
+
+    /**회원정보 수정 페이지 에서 사용자가 입력한 이메일이 자신 이메일을 제외하고 중복되는 이메일이 있는지 확인하는 로직
+     * 
+     * @param data
+     * @return
+     */
+    @RequestMapping(value = "/usr/checkEmailForModifyMyInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> checkEmailForModifyMyInfo(@RequestBody  Map<String, Object> data) {
+
+//        System.out.println("Controller에서의 data : " + data);
+        Map<String, Object> result = usrService.checkEmailForModifyMyInfo(data);
+        
+        return result;
+    }
+
+
+
+    //회원 정보 수정 에서 사용자가 입력한 아이디가 현재 자신의 아이디 외에 중복되는 아이디가 있는지 확인하는 로직
+    @RequestMapping(value = "/usr/checkUserIdForModifyMyInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> checkUserIdForModifyMyInfo(@RequestBody  Map<String, Object> data) {
+
+//        System.out.println("Controller에서의 data : " + data);
+        Map<String, Object> result = usrService.checkUserIdForModifyMyInfo(data);
+
+        return result;
+    }
+
+
+    //회원 정보 수정 에서 사용자가 입력한 모든 데이터가 유효성 검증을 통과해서 넘어오는 데이터로 실제 데이터베이스에 회원정보를 수정하는 로직이다.
+    @RequestMapping(value = "/usr/doModifyUserInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> doModifyUserInfo(@RequestBody  Map<String, Object> data) {
+//        System.out.println("최종적으로 수정할 데이터 : " + data);
+        Map<String, Object> result = usrService.doModifyUserInfo(data);
+        return result;
+    }
+
+
 
 }

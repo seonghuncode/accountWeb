@@ -70,5 +70,16 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return sqlSession.selectOne("dao.UsrRepositoryImpl.countSearchUsrListTotal", search);
     }
 
+    public int checkEmailForModifyMyInfo(Map<String, Object> data){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.checkEmailForModifyMyInfo", data);
+    }
+
+    public int checkUserIdForModifyMyInfo(Map<String, Object> data){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.checkUserIdForModifyMyInfo", data);
+    }
+
+    public int doModifyUserInfo(Map<String, Object> data){
+        return sqlSession.update("dao.UsrRepositoryImpl.doModifyUserInfo", data);
+    }
 
 }

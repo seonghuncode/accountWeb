@@ -50,7 +50,7 @@
 
     <!-- 비밀번호 입력 모달(정보 수정 버튼을 클릭하면 생성) -->
     <div id="passwordModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 60%">
             <span class="close" onclick="closePasswordModal()" style="text-align: right">&times;</span>
             <h2 style="text-align: center">비밀번호 입력</h2>
             <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요." style="margin-top: 10px; margin-bottom: 10px;">
@@ -67,13 +67,13 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
 <!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->
 <script type="text/javascript" th:inline="javascript">
-    var userId = [[${userId}]];
-    var password = [[${password}]];
-    var name = [[${name}]];
-    var userIdPK = [[${id}]];
-    var createDate = [[${create_date}]];
-    var viewYN = [[${view_yn}]];
-    var email = [[${email}]];
+    var userId = [[${userInfo.user_id}]];
+    var password = [[${userInfo.password}]];
+    var name = [[${userInfo.name}]];
+    var userIdPK = [[${userInfo.id}]];
+    var createDate = [[${userInfo.create_date}]];
+    var viewYN = [[${userInfo.view_yn}]];
+    var email = [[${userInfo.email}]];
 </script>
 <script type="text/javascript" src="/resources/static/js/myInfoPage.js"></script>
 

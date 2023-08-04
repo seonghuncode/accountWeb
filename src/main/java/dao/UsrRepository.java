@@ -37,4 +37,10 @@ public interface UsrRepository {
     public List<Map<String, Object>> getUsersFromSearch(Criteria cri);
 
     int countSearchUsrListTotal(String search);
+
+    int checkEmailForModifyMyInfo(Map<String, Object> data);
+
+    int checkUserIdForModifyMyInfo(Map<String, Object> data);
+
+    int doModifyUserInfo(Map<String, Object> data);
 }
