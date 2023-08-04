@@ -585,6 +585,34 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 
+    public List<Map<String, Object>> getTransactionSumBySortName(String userId, String nowYear, String nowMonth, int primaryId) {
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("primaryId", primaryId);
+        data.put("userId", userId);
+        data.put("year", nowYear);
+        data.put("month", nowMonth);
+        data.put("type", "지출");
+//        System.out.println("=============");
+//        System.out.println(data.get("primaryId"));
+//        System.out.println(data.get("userId"));
+//        System.out.println(data.get("year"));
+//        System.out.println(data.get("month"));
+//        System.out.println(data.get("type"));
+//        System.out.println("=============");
+
+        //현재 로그인 되어있는 특정 날짜의 특정 type에 대해 분류명 별로 금액을 합한 데이터를 가지고 오는 쿼리
+//        System.out.println(transactionRepository.getTransactionSumBySortName(data));
+
+
+
+        return transactionRepository.getTransactionSumBySortName(data);
+    }
+
+
+
+
 
 
 

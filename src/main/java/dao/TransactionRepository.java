@@ -73,6 +73,8 @@ public interface TransactionRepository {
 
     Map<String, Object> getUserInfo(int primaryId);
 
+    List<Map<String, Object>> getTransactionSumBySortName(Map<String, Object> data);
+
 
 
 }

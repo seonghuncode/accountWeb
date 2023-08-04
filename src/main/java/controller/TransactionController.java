@@ -531,7 +531,7 @@ public class TransactionController {
 
         //분류명 삭제시 해당 분류명을 참조하는 거래내역이 있는지 확인하고 데이터베이스 무결성 제약조건에 문제가 생기지 않도록 분류명을 삭제하는 로직
         Map<String, Object> result = transactionService.sortNameDeleteProcess(sortData);
-        
+
         return result;
     }
 
@@ -637,22 +637,20 @@ public class TransactionController {
     }
 
 
-
-
     /**
      * 사용자가 거래내역 페이지 에서 특정 필드의 수정 버튼을 클릭할 경우 파라미터를 넘겨 받아 실행되는 로직
      * 사용자PK, 거래내역PK값을 통해 조건을 주어 해당 컬럼을 찾고 나머지 변수들의 값으로 업데이트 한다.
      *
      * @param model
-     * @param transactionDate : 해당 거래내역에 대한 날짜
-     * @param index : 특정 날짜의 거래내역을 날짜로 내림차순 했을때의 순번
-     * @param sortName : 분류명
-     * @param memo : 메모
-     * @param price : 가격
-     * @param userId : 현재 로그인 되어있는 사용자 아이디
-     * @param type : 지출 or 수입
+     * @param transactionDate      : 해당 거래내역에 대한 날짜
+     * @param index                : 특정 날짜의 거래내역을 날짜로 내림차순 했을때의 순번
+     * @param sortName             : 분류명
+     * @param memo                 : 메모
+     * @param price                : 가격
+     * @param userId               : 현재 로그인 되어있는 사용자 아이디
+     * @param type                 : 지출 or 수입
      * @param transactionHistoryId : 거래내역 페이지 에서 사용자가 선택한 특정 필드의 거래내역 PK값값
-    * @return : 특정 필드 수정 페이지로 이동
+     * @return : 특정 필드 수정 페이지로 이동
      */
     @RequestMapping("modifyTransactionField")
     public String modifyTransactionField(Model model, String transactionDate, int index, String sortName, String memo, int price, String userId, String type, int transactionHistoryId) {
@@ -688,10 +686,9 @@ public class TransactionController {
 
 
     /**
-     *거래내역 수정 페이지 에서 유효성 검사를 통과한 경우 최종 수정할 데이터를 넘겨 받아 수정을 진행하는 로직
+     * 거래내역 수정 페이지 에서 유효성 검사를 통과한 경우 최종 수정할 데이터를 넘겨 받아 수정을 진행하는 로직
      *
-     * @param data
-     * 파라미터로 받는 data 에는 {selDate, selSortName, memo, price, type, userId}가 존재한다.
+     * @param data 파라미터로 받는 data 에는 {selDate, selSortName, memo, price, type, userId}가 존재한다.
      * @return
      */
     @RequestMapping("doModifyTransactionField")
@@ -707,23 +704,21 @@ public class TransactionController {
     }
 
 
-
-
     /**
-     *현재 로그인 되어 있는 회원의 거래내역 페이지 에서 사용자가 특정 필드의 거래내역의 삭제 아이콘을 클릭할 경우 해당 거래내역을 삭제하는 로직
-     *
-     *                 "transactionId": transactionId, //거래내역 PK
-     *                 "type": type, //지출 or 수입
-     *                 "nowLoginUserId": nowLoginUserId, //현재 로그인 되어있는 회원의 아이디
-     *                 "transactionDate": transactionDate, //거래 날짜
-     *                 "count": count, //거래내역 페이지 에서 사용자가 선택한 필드의 index
-     *                 "transactionName" : transactionName, //거래내역 분류명
-     *                 "sortNamePK" : "null", //
-     *                 "year" :  "",
-     *                 "month" : "",
-     *                 "userIdPK" : "",
-     *                 "transactionMemo" : transactionMemo, //거래내역 메모
-     *                 "transactionPrice" : transactionPrice //거래 가격
+     * 현재 로그인 되어 있는 회원의 거래내역 페이지 에서 사용자가 특정 필드의 거래내역의 삭제 아이콘을 클릭할 경우 해당 거래내역을 삭제하는 로직
+     * <p>
+     * "transactionId": transactionId, //거래내역 PK
+     * "type": type, //지출 or 수입
+     * "nowLoginUserId": nowLoginUserId, //현재 로그인 되어있는 회원의 아이디
+     * "transactionDate": transactionDate, //거래 날짜
+     * "count": count, //거래내역 페이지 에서 사용자가 선택한 필드의 index
+     * "transactionName" : transactionName, //거래내역 분류명
+     * "sortNamePK" : "null", //
+     * "year" :  "",
+     * "month" : "",
+     * "userIdPK" : "",
+     * "transactionMemo" : transactionMemo, //거래내역 메모
+     * "transactionPrice" : transactionPrice //거래 가격
      *
      * @param model
      * @param data
@@ -734,32 +729,54 @@ public class TransactionController {
     public Map<String, Object> deleteTransactionField(Model model, @RequestParam Map<String, Object> data) {
 
 //        System.out.println(data);
-        
+
         //거래내역 페이지 에서 특정 필드를 삭제 하는 로직
         Map<String, Object> result = transactionService.deleteTransactionField(data);
-        
+
         return result;
 
     }
 
+    @RequestMapping(value = "moveChartPage", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    public String moveChartPage(Model model, String userId, String nowYear, String nowMonth) {
+//        System.out.println("userId : " + userId);
+//        System.out.println("nowYear : " + nowYear);
+//        System.out.println("nowMonth : " + nowMonth);
 
-    @RequestMapping("moveChartPage")
-    public String myInfo(Model model, String userId) {
-
-        System.out.println("userId : " + userId);
-        model.addAttribute("userId", userId);
         int primaryId = transactionService.getPrimaryId(userId); //파라미터로 받은 사용자 아이디를 통해 해당 회원의 PK값을 구한다.
 
-        Map<String, Object> userInfo = transactionService.getUserInfo(primaryId); //위에서 구한 회원PK값을 통해 해당 회원의 데이터를 받아온다.
-        System.out.println("=====사용자 정보=====");
-        System.out.println(userInfo);
+        //위에서 구한 회원PK값을 통해 해당 회원의 데이터를 받아온다.
+        Map<String, Object> userInfo = transactionService.getUserInfo(primaryId);
+//        System.out.println("=====사용자 정보=====");
+//        System.out.println(userInfo);
+
+
+        //특정 날짜에 해당하는 분류명별 총 가격 합계를 구해오는 로직
+        List<Map<String, Object>> result = transactionService.getTransactionSumBySortName(userId, nowYear, nowMonth, primaryId);
+
+        //목표 예산을 가지고 온다.
+        Transaction transaction = new Transaction();
+        transaction.setYear(nowYear);
+        transaction.setMonth(nowMonth);
+        transaction.setPrimaryId(primaryId);
+        Integer targetBudget = transactionService.getTargetBudget(transaction);
+//        System.out.println(targetBudget);
+
+
+
+
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("primaryId", primaryId);
+        model.addAttribute("nowYear", nowYear);
+        model.addAttribute("nowMonth", nowMonth);
+        model.addAttribute("result", result);
         model.addAttribute("userInfo", userInfo);
+        model.addAttribute("targetBudget", targetBudget);
+
 
         return "thymeleaf/content/chartPage";
     }
-
-
-    
 
 
 }

@@ -160,6 +160,11 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectOne("dao.TransactionRepository.getUserInfo", primaryId);
     }
 
+    //네비게이션바 에서 통계 버튼을 클릭하면 현재 로그인 되어 있는 당월의 지출 내역을 분류명 별로 합계를 내어 가지고 오는 쿼리
+    public List<Map<String, Object>> getTransactionSumBySortName(Map<String, Object> data){
+        return sqlSession.selectList("dao.TransactionRepository.getTransactionSumBySortName", data);
+    }
+
 
 
 

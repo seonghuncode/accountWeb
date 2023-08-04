@@ -16,6 +16,70 @@
 
 <div class="frameFromMyInfo"> <!-- 전체 ui의 위치 CSS가 적용된 Frame -->
 
+    <!-- 검색 조건을 선택하는 부분 ---------------------------------------------------------------------------------->
+    <div>
+        <span style="margin-right: 7px;">검색</span>
+        <input type="month" id="selectMonth" style="margin-right: 10px;">
+        <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+                지출 통계
+            </label>
+        </div>
+        <div class="form-check" style="display: inline-flex">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+            <label class="form-check-label" for="flexRadioDefault2">
+                수입 통계
+            </label>
+        </div>
+        <div style="display: inline">
+            <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>
+            <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;">검색</button>
+        </div>
+        <hr class="frame" style="margin-top: 20px; display: flex; width: 100%">
+    </div>
+
+
+
+    <!-- 통계를 보여주는 부분 ---------------------------------------------------------------------------------->
+    <div>
+
+        <!-- 통계 정보를 테이블로 보여주는 부분 -->
+        <div style="margin-top: 60px;">
+            <table class="table table-bordered table-hover" style="text-align: center; width: 40%;">
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center">[[${userInfo.name}]]회원의 [[${nowYear}]]년 [[${nowMonth}]]월 거래내역</caption>
+                <thead>
+                <tr>
+                    <th scope="col" >분류명</th>
+                    <th scope="col" >분류별 합계</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="summary : ${result}">
+                    <th scope="row">[[${summary.name}]]</th>
+                    <td th:text="${#numbers.formatInteger(summary.sum, 0, 'COMMA')}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">목표예산</th>
+                    <td th:if="${targetBudget} != null"
+                        th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}">
+                    </td>
+                    <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
+                </tr>
+                <tr>
+                    <th scope="row">예산 차이</th>
+                    <td th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">총 지출</th>
+                    <td th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 
 </div>
 
