@@ -7,10 +7,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import service.TransactionService;
 
 import javax.servlet.http.HttpSession;
@@ -746,7 +743,20 @@ public class TransactionController {
     }
 
 
+    @RequestMapping("moveChartPage")
+    public String myInfo(Model model, String userId) {
 
+        System.out.println("userId : " + userId);
+        model.addAttribute("userId", userId);
+        int primaryId = transactionService.getPrimaryId(userId); //파라미터로 받은 사용자 아이디를 통해 해당 회원의 PK값을 구한다.
+
+        Map<String, Object> userInfo = transactionService.getUserInfo(primaryId); //위에서 구한 회원PK값을 통해 해당 회원의 데이터를 받아온다.
+        System.out.println("=====사용자 정보=====");
+        System.out.println(userInfo);
+        model.addAttribute("userInfo", userInfo);
+
+        return "thymeleaf/content/chartPage";
+    }
 
 
     

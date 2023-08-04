@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- config fragment 사용, header안에 공통적으로 들어가는 것들이 모여있다. -->
+    <th:block th:replace="thymeleaf/fragment/config :: configFragment('차트(통계)')"></th:block>
+</head>
+<body>
+
+<!--Header 영역을 참조합니다.(내비게이션바를 불러온다)-->
+<header th:replace="thymeleaf/fragment/header :: headerFragment('통계 페이지')"></header>
+<!-- 특정 회원 이름을 받아 넣어주는 것으로 수정 -->
+
+
+<div class="frameFromMyInfo"> <!-- 전체 ui의 위치 CSS가 적용된 Frame -->
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
+<!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->
+<!--<script type="text/javascript" th:inline="javascript">-->
+<!--    var userId = [[${userInfo.user_id}]];-->
+<!--    var password = [[${userInfo.password}]];-->
+<!--    var name = [[${userInfo.name}]];-->
+<!--    var userIdPK = [[${userInfo.id}]];-->
+<!--    var createDate = [[${userInfo.create_date}]];-->
+<!--    var viewYN = [[${userInfo.view_yn}]];-->
+<!--    var email = [[${userInfo.email}]];-->
+<!--</script>-->
+<!--<script type="text/javascript" src="/resources/static/js/myInfoPage.js"></script>-->
+
+
+</body>
+</html>
