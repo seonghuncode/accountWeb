@@ -85,7 +85,9 @@ public interface TransactionService {
 
     Map<String, Object> getUserInfo(int primaryId);
 
-    List<Map<String, Object>> getTransactionSumBySortName(String userId, String nowYear, String nowMonth, int primaryId);
+    List<Map<String, Object>> getTransactionSumBySortName(String userId, String year, String month, int primaryId, String type);
+
+    Integer getTotalPrice(int primaryId, String year, String month, String type);
 
 
 

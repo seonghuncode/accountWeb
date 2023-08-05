@@ -75,6 +75,8 @@ public interface TransactionRepository {
 
     List<Map<String, Object>> getTransactionSumBySortName(Map<String, Object> data);
 
+    Integer getTotalPrice(Map<String, Object> data);
+
 
 
 }

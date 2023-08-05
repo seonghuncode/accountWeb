@@ -165,6 +165,10 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectList("dao.TransactionRepository.getTransactionSumBySortName", data);
     }
 
+    //현재 로그인 되어 있는 회원의 특정월에 사용한 type에 대한 총 합한 금액을 구하는 로직
+    public Integer getTotalPrice(Map<String, Object> data){
+        return sqlSession.selectOne("dao.TransactionRepository.getTotalPrice", data);
+    }
 
 
 

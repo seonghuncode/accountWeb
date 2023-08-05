@@ -351,6 +351,16 @@
         ORDER BY `transaction`.transaction_date DESC;
     </select>
 
+    <!-- 현재 로그인 되어 있는 회원의 특정월에 사용한 type에 대한 총 합한 금액을 구하는 로직 -->
+    <select id="getTotalPrice" resultType="Integer" parameterType="hashmap">
+        SELECT SUM(`transaction`.price) AS totalPrice
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
+                 LEFT JOIN `user` ON `transaction`.userId = `user`.id
+        WHERE MONTH (`transaction_date`)=#{month} AND `user`.id = #{primaryId} AND DATE_FORMAT(`transaction_date`,'%y')=#{year} AND `transaction`.type = #{type}
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
+
 
 
 

@@ -738,10 +738,11 @@ public class TransactionController {
     }
 
     @RequestMapping(value = "moveChartPage", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
-    public String moveChartPage(Model model, String userId, String nowYear, String nowMonth) {
+    public String moveChartPage(Model model, String userId, String year, String month, @RequestParam(value="type", defaultValue = "지출")String type) {
 //        System.out.println("userId : " + userId);
-//        System.out.println("nowYear : " + nowYear);
-//        System.out.println("nowMonth : " + nowMonth);
+//        System.out.println("nowYear : " + year);
+//        System.out.println("nowMonth : " + month);
+//        System.out.println("type : " + type);
 
         int primaryId = transactionService.getPrimaryId(userId); //파라미터로 받은 사용자 아이디를 통해 해당 회원의 PK값을 구한다.
 
@@ -752,27 +753,37 @@ public class TransactionController {
 
 
         //특정 날짜에 해당하는 분류명별 총 가격 합계를 구해오는 로직
-        List<Map<String, Object>> result = transactionService.getTransactionSumBySortName(userId, nowYear, nowMonth, primaryId);
+        List<Map<String, Object>> result = transactionService.getTransactionSumBySortName(userId, year, month, primaryId, type);
 
         //목표 예산을 가지고 온다.
         Transaction transaction = new Transaction();
-        transaction.setYear(nowYear);
-        transaction.setMonth(nowMonth);
+        transaction.setYear(year);
+        transaction.setMonth(month);
         transaction.setPrimaryId(primaryId);
         Integer targetBudget = transactionService.getTargetBudget(transaction);
 //        System.out.println(targetBudget);
 
+        //현재 로그인한 회원의 특정 날짜에 대해 총 사용한 지출 or 수입 합계를 구하는 로직 (없을 경우 처리도 필요)
+        Integer totalPrice = transactionService.getTotalPrice(primaryId, year, month, type);
+//        System.out.println("총 거래 가격" + totalPrice);
 
+        Integer remainPriceByTargetBudget = -1;
+        if(targetBudget != null){
+            remainPriceByTargetBudget = targetBudget - totalPrice; //예산액에서 현재 사용 금액을 빼고 남은 금액
+        }
 
 
 
         model.addAttribute("userId", userId);
         model.addAttribute("primaryId", primaryId);
-        model.addAttribute("nowYear", nowYear);
-        model.addAttribute("nowMonth", nowMonth);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
         model.addAttribute("result", result);
         model.addAttribute("userInfo", userInfo);
         model.addAttribute("targetBudget", targetBudget);
+        model.addAttribute("type", type);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("remainPriceByTargetBudget", remainPriceByTargetBudget);
 
 
         return "thymeleaf/content/chartPage";

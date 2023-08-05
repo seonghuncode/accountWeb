@@ -110,7 +110,7 @@ $("#moveChartPage").click(function () {
             // console.log(data);
             // console.log(data['sessionValue']);
             var userId = data['sessionValue'];
-            location.href="/transaction/moveChartPage?userId=" + userId + "&nowYear=" + nowYear + "&nowMonth=" + nowMonth;
+            location.href="/transaction/moveChartPage?userId=" + userId + "&year=" + nowYear + "&month=" + nowMonth;
         },
         error: function() {
             console.log("(ajax요청 실패)현재 로그인 되어있는 회원의 세션값을 가지고 오는 요청을 실패 했습니다.");

@@ -585,15 +585,15 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 
-    public List<Map<String, Object>> getTransactionSumBySortName(String userId, String nowYear, String nowMonth, int primaryId) {
+    public List<Map<String, Object>> getTransactionSumBySortName(String userId, String year, String month, int primaryId, String type) {
 
         //쿼리에 필요한 데이터들를 Map형태로 넣는다.
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("primaryId", primaryId);
         data.put("userId", userId);
-        data.put("year", nowYear);
-        data.put("month", nowMonth);
-        data.put("type", "지출");
+        data.put("year", year);
+        data.put("month", month);
+        data.put("type", type);
 //        System.out.println("=============");
 //        System.out.println(data.get("primaryId"));
 //        System.out.println(data.get("userId"));
@@ -605,14 +605,26 @@ public class TransactionServiceImpl implements TransactionService {
         //현재 로그인 되어있는 특정 날짜의 특정 type에 대해 분류명 별로 금액을 합한 데이터를 가지고 오는 쿼리
 //        System.out.println(transactionRepository.getTransactionSumBySortName(data));
 
-
-
         return transactionRepository.getTransactionSumBySortName(data);
     }
 
 
 
 
+    //현재 로그인 되어 있는 회원의 특정월에 사용한 type에 대한 총 합한 금액을 구하는 로직
+    public Integer getTotalPrice(int primaryId, String year, String month, String type) {
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("primaryId", primaryId);
+        data.put("year", year);
+        data.put("month", month);
+        data.put("type", type);
+        
+        Integer result = transactionRepository.getTotalPrice(data);
+        
+        return result;
+    }
 
 
 
