@@ -172,4 +172,21 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
 
 
 
+    //통계 페이지 에서 사용자가 기간 검색 조건에서 입력한 기간에 해당하는 지출 내역을 분류명 별로 합계를 내어 가지고 오는 쿼리
+    public List<Map<String, Object>> getTransactionSumBySortNameAndPeriod(Map<String, Object> data){
+        return sqlSession.selectList("dao.TransactionRepository.getTransactionSumBySortNameAndPeriod", data);
+    }
+
+    //현재 로그인 되어 있는 회원의 특정 기간 동안의 목표 예산의 총합을 가지고 오는 로직
+    public Integer getTargetBudgeByPeriod(Map<String, Object> data){
+        return sqlSession.selectOne("dao.TransactionRepository.getTargetBudgeByPeriod", data);
+    }
+
+    //현재 로그인한 회원의 특정 날짜 기간에 대해 총 사용한 지출 or 수입 합계를 구하는 로직
+    public Integer getTotalPriceByPeriod(Map<String, Object> data){
+        return sqlSession.selectOne("dao.TransactionRepository.getTotalPriceByPeriod", data);
+    }
+
+
+
 }

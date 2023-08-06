@@ -16,48 +16,140 @@
 
 <div class="frameFromMyInfo"> <!-- 전체 ui의 위치 CSS가 적용된 Frame -->
 
-    <!-- 검색 조건을 선택하는 부분 ---------------------------------------------------------------------------------->
+    <!-- 특정월 검색 or 기간 검색을 선택하는 부분 -->
     <div>
-        <span style="margin-right: 7px;">검색</span>
-        <input type="month" id="selectMonth" style="margin-right: 10px;" th:value="'20'+${year}+'-'+${month}">
-        <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
-        <div style="display: inline" th:if="${type} == '지출'">
-            <div class="form-check" style="display: inline-flex; margin-right: 10px;">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="지출"
-                       checked>
-                <label class="form-check-label" for="flexRadioDefault1">
-                    지출 통계
+        <!-- 사용자가 특정 기간을 검색했을 경우 기간 검색 radio태그에 select가 되도록 하기 위한 코드 -->
+        <div th:if="${searchMethod} == '기간검색'" style="display: inline">
+            <div class="form-check" style="display: inline-flex; margin-right: 10px; margin-bottom: 15px;">
+                <input class="form-check-input" type="radio" name="searchRequirement" id="searchMonth"
+                       value="특정월">
+                <label class="form-check-label" for="searchMonth">
+                    특정 월 검색
                 </label>
             </div>
             <div class="form-check" style="display: inline-flex">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="수입">
-                <label class="form-check-label" for="flexRadioDefault2">
-                    수입 통계
+                <input class="form-check-input" type="radio" name="searchRequirement" id="searchPeriod"
+                       value="기간" checked>
+                <label class="form-check-label" for="searchPeriod">
+                    기간 검색
                 </label>
             </div>
         </div>
-        <div style="display: inline" th:unless="${type} == '지출'">
-            <div class="form-check" style="display: inline-flex; margin-right: 10px;">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="지출">
-                <label class="form-check-label" for="flexRadioDefault1">
-                    지출 통계
+        <!-- 사용자가 특정월을 검색했을 경우 특정 월 검색 radio태그에 select가 되도록 하기 위한 코드 -->
+        <div th:unless="${searchMethod} == '기간검색'" style="display: inline">
+            <div class="form-check" style="display: inline-flex; margin-right: 10px; margin-bottom: 15px;">
+                <input class="form-check-input" type="radio" name="searchRequirement" id="searchMonth"
+                       value="특정월" checked>
+                <label class="form-check-label" for="searchMonth">
+                    특정 월 검색
                 </label>
             </div>
             <div class="form-check" style="display: inline-flex">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="수입"
-                       checked>
-                <label class="form-check-label" for="flexRadioDefault2">
-                    수입 통계
+                <input class="form-check-input" type="radio" name="searchRequirement" id="searchPeriod"
+                       value="기간">
+                <label class="form-check-label" for="searchPeriod">
+                    기간 검색
                 </label>
             </div>
         </div>
-        <div style="display: inline">
-            <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>
-            <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;"
-                    id="doSearchChart">검색
-            </button>
+        <span id="searchValid"></span>
+
+        <!-- 검색 조건을 선택하는 부분 ---------------------------------------------------------------------------------->
+        <div id="searchPart">
+
+            <!-- 만약 사용자가 기간 검색을 통해 검색을 했다면 검색 이후에도 특정 기간 검색 ui가 유지 되도록 조건 -->
+            <div th:if="${searchMethod} == '기간검색'" style="display: inline">
+                <span style="margin-right: 7px;">특정 기간 검색</span>
+                <input type="month" id="startDate" style="margin-right: 10px;" th:value="${startDate}">
+                <span style="margin-left: 3px; margin-right: 3px;">~</span>
+                <input type="month" id="endDate" style="margin-right: 10px;" th:value="${endDate}">
+                <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
+                <div style="display: inline" th:if="${type} == '지출'">
+                    <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                               value="지출" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">지출 통계</label>
+                    </div>
+                    <div class="form-check" style="display: inline-flex">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                               value="수입">
+                        <label class="form-check-label" for="flexRadioDefault2">수입 통계</label>
+                    </div>
+                </div>
+                <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
+                <div style="display: inline" th:unless="${type} == '지출'">
+                    <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                               value="지출">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            지출 통계
+                        </label>
+                    </div>
+                    <div class="form-check" style="display: inline-flex">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                               value="수입"
+                               checked>
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            수입 통계
+                        </label>
+                    </div>
+                </div>
+                <div style="display: inline">
+                    <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;"
+                            id="doSearchChartByPeriod">검색
+                    </button>
+                </div>
+                <hr class="frame" style="margin-top: 20px; display: flex; width: 100%">
+            </div>
+            <!-- 만약 사용자가 특정 월 검색을 통해 검색을 했다면 검색 이후에도 특정 월 검색 ui가 유지 되도록 조건 -->
+            <div th:unless="${searchMethod} == '기간검색'" style="display: inline">
+                <span style="margin-right: 7px;">검색</span>
+                <input type="month" id="selectMonth" style="margin-right: 10px;" th:value="'20'+${year}+'-'+${month}">
+                <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
+                <div style="display: inline" th:if="${type} == '지출'">
+                    <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                               value="지출"
+                               checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            지출 통계
+                        </label>
+                    </div>
+                    <div class="form-check" style="display: inline-flex">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                               value="수입">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            수입 통계
+                        </label>
+                    </div>
+                </div>
+                <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
+                <div style="display: inline" th:unless="${type} == '지출'">
+                    <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                               value="지출">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            지출 통계
+                        </label>
+                    </div>
+                    <div class="form-check" style="display: inline-flex">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                               value="수입"
+                               checked>
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            수입 통계
+                        </label>
+                    </div>
+                </div>
+                <div style="display: inline">
+<!--                    <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>-->
+                    <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;"
+                            id="doSearchChart">검색
+                    </button>
+                </div>
+                <hr class="frame" style="margin-top: 20px; display: flex; width: 100%">
+            </div>
         </div>
-        <hr class="frame" style="margin-top: 20px; display: flex; width: 100%">
     </div>
 
 
@@ -67,7 +159,10 @@
         <!-- 통계 정보를 테이블로 보여주는 부분 ---------------------------------------------------------------------------->
         <div style="width: 35%; float: left">
             <table class="table table-bordered table-hover" style="text-align: center;">
-                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center">
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center" th:if="${searchMethod} == '기간검색'">
+                    [[${userInfo.name}]]회원의 <br> [[${startDate}]] ~ [[${endDate}]] 사이의 거래내역
+                </caption>
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center" th:unless="${searchMethod} == '기간검색'">
                     [[${userInfo.name}]]회원의 [[${year}]]년 [[${month}]]월 거래내역
                 </caption>
                 <thead>
@@ -108,7 +203,7 @@
         </div>
 
         <!-- 그래프를 보여주는 부분 --------------------------------------------------------------------------->
-        <div style="width: 45%; float: right">
+        <div style="width: 35%; float: right">
             <!--차트가 그려질 부분-->
             <canvas id="myChart" style="display: inline; float: right"></canvas>
         </div>

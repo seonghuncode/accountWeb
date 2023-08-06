@@ -77,6 +77,11 @@ public interface TransactionRepository {
 
     Integer getTotalPrice(Map<String, Object> data);
 
+    List<Map<String, Object>> getTransactionSumBySortNameAndPeriod(Map<String, Object> data);
+
+    Integer getTargetBudgeByPeriod(Map<String, Object> data);
+
+    Integer getTotalPriceByPeriod(Map<String, Object> data);
 
 
 }

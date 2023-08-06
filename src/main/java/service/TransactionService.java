@@ -89,7 +89,11 @@ public interface TransactionService {
 
     Integer getTotalPrice(int primaryId, String year, String month, String type);
 
+    List<Map<String, Object>> getTransactionSumBySortNameAndPeriod(String userId, String startYear, String startMonth, String endYear, String endMonth, int primaryId, String type, String startDate, String endDate);
 
+    Integer getTargetBudgeByPeriod(int primaryId, String startDate, String endDate);
+
+    Integer getTotalPriceByPeriod(int primaryId, String startDate, String endDate, String type);
 
 
 }

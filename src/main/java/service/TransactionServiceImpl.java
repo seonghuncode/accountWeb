@@ -628,5 +628,66 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 
+    public List<Map<String, Object>> getTransactionSumBySortNameAndPeriod(String userId, String startYear, String startMonth, String endYear, String endMonth, int primaryId, String type, String startDate, String endDate) {
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("primaryId", primaryId);
+        data.put("userId", userId);
+        data.put("startYear", startYear);
+        data.put("startMonth", startMonth);
+        data.put("endYear", endYear);
+        data.put("endMonth", endMonth);
+        data.put("type", type);
+        data.put("startDate", startDate);
+        data.put("endDate", endDate);
+//        System.out.println("=============");
+//        System.out.println(data.get("primaryId"));
+//        System.out.println(data.get("userId"));
+//        System.out.println(data.get("startYear"));
+//        System.out.println(data.get("startMonth"));
+//        System.out.println(data.get("endYear"));
+//        System.out.println(data.get("endMonth"));
+//        System.out.println(data.get("type"));
+//        System.out.println("=============");
+
+        //현재 로그인 되어있는 특정 날짜의 특정 type에 대해 분류명 별로 금액을 합한 데이터를 가지고 오는 쿼리
+//        System.out.println(transactionRepository.getTransactionSumBySortName(data));
+
+        return transactionRepository.getTransactionSumBySortNameAndPeriod(data);
+    }
+
+
+    //현재 로그인 되어 있는 회원의 특정 기간 동안의 목표 예산의 총합을 가지고 오는 로직
+    public Integer getTargetBudgeByPeriod(int primaryId, String startDate, String endDate) {
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("primaryId", primaryId);
+        data.put("startDate", startDate);
+        data.put("endDate", endDate);
+
+        Integer result = transactionRepository.getTargetBudgeByPeriod(data);
+
+        return result;
+    }
+
+
+    //현재 로그인한 회원의 특정 날짜 기간에 대해 총 사용한 지출 or 수입 합계를 구하는 로직
+    public Integer getTotalPriceByPeriod(int primaryId, String startDate, String endDate, String type) {
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("primaryId", primaryId);
+        data.put("startDate", startDate);
+        data.put("endDate", endDate);
+        data.put("type", type);
+
+        Integer result = transactionRepository.getTotalPriceByPeriod(data);
+
+        return result;
+    }
+
+
 
 }

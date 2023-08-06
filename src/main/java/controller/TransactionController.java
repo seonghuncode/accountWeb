@@ -790,5 +790,67 @@ public class TransactionController {
     }
 
 
+
+
+
+    //통계 페이지 에서 사용자가 기간 검색을 클릭하고 특정 기간 검색에 대한 조건을 입력하고 검색 버튼을 클릭할 경우 넘어오는 로직
+    @RequestMapping(value = "moveChartPageByPeriod", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    public String moveChartPageByPeriod(Model model, String userId, String startYear, String startMonth, String endYear, String endMonth, String type,String searchMethod, String startDate, String endDate) {
+//        System.out.println("=========================");
+//        System.out.println("userId : " + userId);
+//        System.out.println("startYear : " + startYear);
+//        System.out.println("startMonth : " + startMonth);
+//        System.out.println("endYear : " + endYear);
+//        System.out.println("endMonth : " + endMonth);
+//        System.out.println("type : " + type);
+//        System.out.println("searchMethod : " + searchMethod);
+//        System.out.println("=========================");
+
+        int primaryId = transactionService.getPrimaryId(userId); //파라미터로 받은 사용자 아이디를 통해 해당 회원의 PK값을 구한다.
+
+        //위에서 구한 회원PK값을 통해 해당 회원의 데이터를 받아온다.
+        Map<String, Object> userInfo = transactionService.getUserInfo(primaryId);
+//        System.out.println("=====사용자 정보=====");
+//        System.out.println(userInfo);
+
+
+        //특정 기간 에 해당하는 분류명별 총 가격 합계를 구해오는 로직
+        List<Map<String, Object>> result = transactionService.getTransactionSumBySortNameAndPeriod(userId, startYear, startMonth, endYear, endMonth, primaryId, type, startDate, endDate);
+//        System.out.println(result);
+
+        //목표 예산을 가지고 온다.(기간에 대한 목표 예산의 경우 해당하는 기간의 목표예산을 모두 더한다)
+        Integer targetBudget = transactionService.getTargetBudgeByPeriod(primaryId, startDate, endDate);
+//        System.out.println(targetBudget);
+
+        //현재 로그인한 회원의 특정 날짜 기간에 대해 총 사용한 지출 or 수입 합계를 구하는 로직 (없을 경우 처리도 필요)
+        Integer totalPrice = transactionService.getTotalPriceByPeriod(primaryId, startDate, endDate, type);
+//        System.out.println("총 거래 가격" + totalPrice);
+
+        Integer remainPriceByTargetBudget = -1;
+        if(targetBudget != null){
+            remainPriceByTargetBudget = targetBudget - totalPrice; //예산액에서 현재 사용 금액을 빼고 남은 금액
+        }
+
+
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("primaryId", primaryId);
+        model.addAttribute("searchMethod", searchMethod);
+        model.addAttribute("year", startYear);
+        model.addAttribute("month", startMonth);
+        model.addAttribute("result", result);
+        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("targetBudget", targetBudget);
+        model.addAttribute("type", type);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("remainPriceByTargetBudget", remainPriceByTargetBudget);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+
+
+        return "thymeleaf/content/chartPage";
+    }
+
+
 }
 

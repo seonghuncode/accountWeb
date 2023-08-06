@@ -362,6 +362,40 @@
     </select>
 
 
+    <!-- 통계 페이지 에서 사용자가 기간 검색 조건에서 입력한 기간에 해당하는 지출 내역을 분류명 별로 합계를 내어 가지고 오는 쿼리 -->
+    <select id="getTransactionSumBySortNameAndPeriod" resultType="map" parameterType="hashmap">
+        SELECT sort.name, SUM(`transaction`.price) AS 'sum', `type`
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
+                 LEFT JOIN `user`
+                           ON `transaction`.userId = `user`.id
+        WHERE (`transaction_date`) BETWEEN DATE(CONCAT(#{startDate}, '-01')) AND DATE(LAST_DAY(CONCAT(#{endDate}, '-01')))  AND `user`.id = #{primaryId} AND `transaction`.type = #{type}
+        GROUP BY sort.name
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
+
+
+    <!-- 현재 로그인 되어 있는 회원의 특정 기간 동안의 목표 예산의 총합을 가지고 오는 로직 -->
+    <select id="getTargetBudgeByPeriod" resultType="Integer" parameterType="hashmap">
+        SELECT SUM(budget.price)
+        FROM budget
+                 LEFT JOIN `user` ON budget.userId = user.id
+        WHERE (`month`) BETWEEN DATE(CONCAT(#{startDate}, '-01')) AND DATE(LAST_DAY(CONCAT(#{endDate}, '-01')))
+          AND user.id =#{primaryId};
+    </select>
+
+
+
+    <!-- 현재 로그인한 회원의 특정 날짜 기간에 대해 총 사용한 지출 or 수입 합계를 구하는 로직 -->
+    <select id="getTotalPriceByPeriod" resultType="Integer" parameterType="hashmap">
+        SELECT SUM(`transaction`.price) AS totalPrice
+        FROM `transaction`
+                 LEFT JOIN sort ON `transaction`.sortId = sort.id
+                 LEFT JOIN `user` ON `transaction`.userId = `user`.id
+        WHERE (`transaction_date`) BETWEEN DATE(CONCAT(#{startDate}, '-01')) AND DATE(LAST_DAY(CONCAT(#{endDate}, '-01'))) AND `user`.id = #{primaryId}  AND `transaction`.type = #{type}
+        ORDER BY `transaction`.transaction_date DESC;
+    </select>
+
 
 
 </mapper>
