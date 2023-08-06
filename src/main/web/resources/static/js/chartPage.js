@@ -1,3 +1,4 @@
+//차트를 보여주는 로직------------------------------------------------------------------------------------------------
 var context = document
     .getElementById('myChart')
     .getContext('2d');
@@ -41,20 +42,64 @@ var myChart = new Chart(context, {
     //+마우스를 가져다 데면 해당 영역의 이름(label)을 같이 보여주는 옵션
     options: {
         tooltips: {
-            callbacks: {
+            titleFontSize: 30,
+            bodyFontSize: 20,
+        callbacks: {
                 title: function(tooltipItem, data) {
                     var dataset = data.datasets[0];
                     var value = dataset.data[tooltipItem[0].index];
                     var percent = ((value / totalValue) * 100).toFixed(2);
+
                     return data.labels[tooltipItem[0].index];
                 },
                 label: function(tooltipItem, data) {
                     var dataset = data.datasets[0];
                     var value = dataset.data[tooltipItem.index];
                     var percent = ((value / totalValue) * 100).toFixed(2);
-                    return `${value.toLocaleString('ko-KR')} (${percent}%)`;
+                    return `${value.toLocaleString('ko-KR') + '원'} (${percent}%)`;
                 }
             }
         }
     }
 });
+
+
+
+
+
+//검색 버튼을 클릭 했을 경우 사용자가 선택한 조건을 가지고 통계 페이지로 재요청을 하는 로직
+$('#doSearchChart').click(function () {
+    var date = $('#selectMonth').val();
+    var type = $('input[name=flexRadioDefault]:checked').val();
+    var year = date.substr(2,2);
+    var month = date.substr(5,2);
+    // console.log(userId);
+    // console.log(date);
+    // console.log(type);
+    // console.log(year);
+    // console.log(month);
+
+    //회원이 선택한 검색 조건 정보를 통계 페이지로 보내 해당 조건에 대한 통계 정보를 보여주도록 하는 통신
+    $.ajax({
+        url: "/transaction/getNowSessionValue", // 스프링 컨트롤러에 매핑된 경로
+        type: "get",
+        dataType: "json",
+        contentType: "application/json; charset=UTF-8",
+        success: function(data) {
+            // console.log("세션값 가지고 오기 성공");
+            // console.log(data);
+            // console.log(data['sessionValue']);
+            var userId = data['sessionValue'];
+            location.href="/transaction/moveChartPage?userId=" + userId + "&year=" + year + "&month=" + month + "&type=" + type;
+        },
+        error: function() {
+            console.log("(ajax요청 실패)현재 로그인 되어있는 회원의 세션값을 가지고 오는 요청을 실패 했습니다.");
+        }
+    });
+
+
+
+
+})
+
+

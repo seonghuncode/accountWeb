@@ -20,25 +20,45 @@
     <div>
         <span style="margin-right: 7px;">검색</span>
         <input type="month" id="selectMonth" style="margin-right: 10px;" th:value="'20'+${year}+'-'+${month}">
-        <div class="form-check" style="display: inline-flex; margin-right: 10px;">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-            <label class="form-check-label" for="flexRadioDefault1">
-                지출 통계
-            </label>
+        <!-- controller에서 넘어온 type에 따라 수입 or 지출에 check되도록 if, else if 사용 -->
+        <div style="display: inline" th:if="${type} == '지출'">
+            <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="지출"
+                       checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                    지출 통계
+                </label>
+            </div>
+            <div class="form-check" style="display: inline-flex">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="수입">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    수입 통계
+                </label>
+            </div>
         </div>
-        <div class="form-check" style="display: inline-flex">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-            <label class="form-check-label" for="flexRadioDefault2">
-                수입 통계
-            </label>
+        <div style="display: inline" th:unless="${type} == '지출'">
+            <div class="form-check" style="display: inline-flex; margin-right: 10px;">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="지출">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    지출 통계
+                </label>
+            </div>
+            <div class="form-check" style="display: inline-flex">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="수입"
+                       checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    수입 통계
+                </label>
+            </div>
         </div>
         <div style="display: inline">
             <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>
-            <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;">검색</button>
+            <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;"
+                    id="doSearchChart">검색
+            </button>
         </div>
         <hr class="frame" style="margin-top: 20px; display: flex; width: 100%">
     </div>
-
 
 
     <!-- 통계를 보여주는 부분 --------------------------------------------------------------------------------------------------------------------------------->
@@ -47,11 +67,13 @@
         <!-- 통계 정보를 테이블로 보여주는 부분 ---------------------------------------------------------------------------->
         <div style="width: 35%; float: left">
             <table class="table table-bordered table-hover" style="text-align: center;">
-                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center">[[${userInfo.name}]]회원의 [[${year}]]년 [[${month}]]월 거래내역</caption>
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center">
+                    [[${userInfo.name}]]회원의 [[${year}]]년 [[${month}]]월 거래내역
+                </caption>
                 <thead>
                 <tr style="background-color: #FFA07A;">
-                    <th scope="col" >분류명</th>
-                    <th scope="col" >분류별 합계</th>
+                    <th scope="col">분류명</th>
+                    <th scope="col">분류별 합계</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,23 +81,26 @@
                     <th scope="row">[[${summary.name}]]</th>
                     <td th:text="${#numbers.formatInteger(summary.sum, 0, 'COMMA')+'원'}"></td>
                 </tr>
-                <tr style="background-color: #F8F9FA;">
+                <tr style="background-color: #F8F9FA;" th:if="${type} == '지출'">
                     <th scope="row">목표예산</th>
                     <td th:if="${targetBudget} != null"
                         th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')+'원'}">
                     </td>
                     <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
                 </tr>
-                <tr style="background-color: #F8F9FA;">
-                    <th scope="row">예산 차이</th>
-                    <td th:if="${remainPriceByTargetBudget} != -1" th:text="${#numbers.formatInteger(remainPriceByTargetBudget, 0, 'COMMA')+'원'}"></td>
+                <tr style="background-color: #F8F9FA;" th:if="${type} == '지출'">
+                    <th scope="row">남은 예산</th>
+                    <td th:if="${remainPriceByTargetBudget} != -1"
+                        th:text="${#numbers.formatInteger(remainPriceByTargetBudget, 0, 'COMMA')+'원'}"></td>
                     <td th:unless="${remainPriceByTargetBudget} != -1"> -</td>
                 </tr>
                 <tr style="background-color: #F8F9FA;">
                     <th scope="row" th:if="${type} == '지출'">총 지출</th>
                     <th scope="row" th:unless="${type} == '지출'">총 수입</th>
-                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:if="${type} == '지출'" style="color: blue;"></td>
-                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:unless="${type} == '지출'" style="color: red;"></td>
+                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:if="${type} == '지출'"
+                        style="color: blue;"></td>
+                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:unless="${type} == '지출'"
+                        style="color: red;"></td>
                 </tr>
 
                 </tbody>
@@ -83,21 +108,15 @@
         </div>
 
         <!-- 그래프를 보여주는 부분 --------------------------------------------------------------------------->
-            <div style="width: 45%; float: right">
-                <!--차트가 그려질 부분-->
-                <canvas id="myChart" style="display: inline; float: right"></canvas>
-            </div>
+        <div style="width: 45%; float: right">
+            <!--차트가 그려질 부분-->
+            <canvas id="myChart" style="display: inline; float: right"></canvas>
+        </div>
 
     </div>
 
 
-
-
-
-
 </div>
-
-
 
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
