@@ -43,4 +43,6 @@ public interface UsrRepository {
     int checkUserIdForModifyMyInfo(Map<String, Object> data);
 
     int doModifyUserInfo(Map<String, Object> data);
+
+    Map<String, Object> findUserIdProcess(Map<String, Object> data);
 }

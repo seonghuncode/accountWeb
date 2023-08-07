@@ -382,6 +382,21 @@ public class UsrServiceImpl implements UsrService {
     }
 
 
+    //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
+    public Map<String, Object> findUserIdProcess(Map<String, Object> data){
+
+        Map<String, Object> userId = usrRepository.findUserIdProcess(data);
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(userId != null){
+            result.put("userId", userId.get("user_id"));
+        }else{
+            result.put("userId", "fail");
+        }
+        return result;
+    }
+
+
 
 
 }

@@ -57,4 +57,7 @@ public interface UsrService {
     //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
     Map<String, Object> doModifyUserInfo(Map<String, Object> data);
 
+    //사용자가 아이디 찾기 페이지 에서 아이디 찾기 버튼을 클릭했을 경우 실행되는 로직
+    Map<String, Object> findUserIdProcess(Map<String, Object> data);
+
 }

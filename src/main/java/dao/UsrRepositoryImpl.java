@@ -82,4 +82,10 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return sqlSession.update("dao.UsrRepositoryImpl.doModifyUserInfo", data);
     }
 
+    public Map<String, Object> findUserIdProcess(Map<String, Object> data){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.findUserIdProcess", data);
+    }
+
+
+
 }

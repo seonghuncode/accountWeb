@@ -296,5 +296,25 @@ public class UsrController {
     }
 
 
+    //로그인 페이지 에서 사용자 아이디를 찾는 페이지로 return하는 로직
+    @RequestMapping(value = "/usr/findUserId", produces = "application/json; charset=utf8", method = {RequestMethod.GET})
+    public String findUserId() {
+        return "thymeleaf/usr/findUserId";
+    }
+
+    @RequestMapping("/usr/findUserIdProcess")
+    @ResponseBody
+    public Map<String,Object> findUserIdProcess(Model model, @RequestParam Map<String, Object> data) {
+
+//        System.out.println(data);
+        //사용자가 아이디 찾기 페이지 에서 보낸 usreName, userEmail와 일치하는 회원의 아이디를 찾는 로직
+        Map<String, Object> result = usrService.findUserIdProcess(data);
+//        System.out.println(result);
+
+        return result;
+
+    }
+
+
 
 }
