@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div style="display: inline">
-<!--                    <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>-->
+                    <!--                    <button type="button" class="btn btn-outline-primary" style="float: right;">당월</button>-->
                     <button type="button" class="btn btn-outline-secondary" style="float: right; margin-right: 7px;"
                             id="doSearchChart">검색
                     </button>
@@ -159,10 +159,12 @@
         <!-- 통계 정보를 테이블로 보여주는 부분 ---------------------------------------------------------------------------->
         <div style="width: 35%; float: left">
             <table class="table table-bordered table-hover" style="text-align: center;">
-                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center" th:if="${searchMethod} == '기간검색'">
-                    [[${userInfo.name}]]회원의 <br> [[${startDate}]] ~ [[${endDate}]] 사이의 거래내역
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center"
+                         th:if="${searchMethod} == '기간검색'">
+                    [[${userInfo.name}]]회원의 <br> [[${startDate}]] ~ [[${endDate}]] 거래내역
                 </caption>
-                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center" th:unless="${searchMethod} == '기간검색'">
+                <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center"
+                         th:unless="${searchMethod} == '기간검색'">
                     [[${userInfo.name}]]회원의 [[${year}]]년 [[${month}]]월 거래내역
                 </caption>
                 <thead>
@@ -192,20 +194,41 @@
                 <tr style="background-color: #F8F9FA;">
                     <th scope="row" th:if="${type} == '지출'">총 지출</th>
                     <th scope="row" th:unless="${type} == '지출'">총 수입</th>
-                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:if="${type} == '지출'"
-                        style="color: blue;"></td>
-                    <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:unless="${type} == '지출'"
-                        style="color: red;"></td>
+                    <!-- 총 지출이 존재할 경우 -->
+                    <div th:if="${totalPrice} != null">
+                        <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:if="${type} == '지출'"
+                            style="color: blue;"></td>
+                        <td th:text="${#numbers.formatInteger(totalPrice, 0, 'COMMA')+'원'}" th:unless="${type} == '지출'"
+                            style="color: red;"></td>
+                    </div>
+                    <!-- 총 지출이 없을 경우 -->
+                    <div th:unless="${totalPrice} != null">
+                        <td th:text="'-'" th:if="${type} == '지출'"
+                            style="color: blue;"></td>
+                        <td th:text="'-'" th:unless="${type} == '지출'"
+                            style="color: red;"></td>
+                    </div>
                 </tr>
+
 
                 </tbody>
             </table>
         </div>
 
         <!-- 그래프를 보여주는 부분 --------------------------------------------------------------------------->
-        <div style="width: 35%; float: right">
+        <div style="width: 35%; float: right" th:if="${totalPrice} != null">
             <!--차트가 그려질 부분-->
             <canvas id="myChart" style="display: inline; float: right"></canvas>
+        </div>
+        <div style="width: 35%; float: right" th:unless="${totalPrice} != null">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                        <div class="card-footer text-center text-dark">
+                            <h5>거래 내역이 없습니다.</h5>
+                        </div>
+                    </div>
         </div>
 
     </div>

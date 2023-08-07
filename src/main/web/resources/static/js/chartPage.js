@@ -1,67 +1,92 @@
 //차트를 보여주는 로직------------------------------------------------------------------------------------------------
-var context = document
-    .getElementById('myChart')
-    .getContext('2d');
+if (totalPrice != null) { //값이 있을 경우 에만 실행, 값이 없을 경우 실행 되지X
 
-var data = result;
-var labels = data.map(item => item.name);
-var values = data.map(item => parseInt(item.sum)); // parseFloat를 사용하여 소수점 값 처리
+    var context = document
+        .getElementById('myChart')
+        .getContext('2d');
+
+    var data = result;
+    var labels = data.map(item => item.name);
+    var values = data.map(item => parseInt(item.sum)); // parseFloat를 사용하여 소수점 값 처리
 
 // 랜덤 RGB 값 생성 함수(각 영역별로 색상을 다르게 하기 위함)
-function getRandomRGB() {
-    var r = Math.floor(Math.random() * 256);
-    var g = Math.floor(Math.random() * 256);
-    var b = Math.floor(Math.random() * 256);
-    return `rgba(${r}, ${g}, ${b},`;
-}
+    function getRandomRGB() {
+        var r = Math.floor(Math.random() * 256);
+        var g = Math.floor(Math.random() * 256);
+        var b = Math.floor(Math.random() * 256);
+        return `rgba(${r}, ${g}, ${b},`;
+    }
 
-var backgroundColors = values.map(() => getRandomRGB() + ' 0.2)'); // 랜덤한 색상 + 투명도
+    var backgroundColors = values.map(() => getRandomRGB() + ' 0.2)'); // 랜덤한 색상 + 투명도
 // var borderColors = values.map(() => getRandomRGB() + ' 1)'); // 랜덤한 색상 + 투명도
-var borderColors = backgroundColors; // 랜덤한 색상 + 투명도
+    var borderColors = backgroundColors; // 랜덤한 색상 + 투명도
 
-var totalValue = values.reduce((acc, curr) => acc + curr, 0); // 전체 값을 계산
+    var totalValue = values.reduce((acc, curr) => acc + curr, 0); // 전체 값을 계산
 
-var myChart = new Chart(context, {
-    type: 'pie',
-    data: {
-        labels: labels,
-        datasets: [
-            {
-                label: 'test1',
-                fill: false,
-                data: values,
-                backgroundColor: backgroundColors,
-                borderColor: borderColors,
-                borderWidth: 1
-            }
-        ]
-    },
-    //원래 data에 들어가는 values가 정수가 들어가기 때문에 화면에서 마우스를 가져다 데면 숫자만 나오는데
-    //+이 부분을 100단위로 나누어 ,로 구분하도록 하는 옵션
-    //+전체를 100%로 했을 경우 각 파트별로 마우스를 가겨다데면 차지하는 비중을 퍼센트로 보여주는 옵션 추가
-    //+마우스를 가져다 데면 해당 영역의 이름(label)을 같이 보여주는 옵션
-    options: {
-        tooltips: {
-            titleFontSize: 25,
-            bodyFontSize: 15,
-            callbacks: {
-                title: function (tooltipItem, data) {
-                    var dataset = data.datasets[0];
-                    var value = dataset.data[tooltipItem[0].index];
-                    var percent = ((value / totalValue) * 100).toFixed(2);
+    var myChart = new Chart(context, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'test1',
+                    fill: false,
+                    data: values,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }
+            ]
+        },
+        //원래 data에 들어가는 values가 정수가 들어가기 때문에 화면에서 마우스를 가져다 데면 숫자만 나오는데
+        //+이 부분을 100단위로 나누어 ,로 구분하도록 하는 옵션
+        //+전체를 100%로 했을 경우 각 파트별로 마우스를 가겨다데면 차지하는 비중을 퍼센트로 보여주는 옵션 추가
+        //+마우스를 가져다 데면 해당 영역의 이름(label)을 같이 보여주는 옵션
+        options: {
+            tooltips: {
+                titleFontSize: 25,
+                bodyFontSize: 15,
+                callbacks: {
+                    title: function (tooltipItem, data) {
+                        var dataset = data.datasets[0];
+                        var value = dataset.data[tooltipItem[0].index];
+                        var percent = ((value / totalValue) * 100).toFixed(2);
 
-                    return data.labels[tooltipItem[0].index];
-                },
-                label: function (tooltipItem, data) {
-                    var dataset = data.datasets[0];
-                    var value = dataset.data[tooltipItem.index];
-                    var percent = ((value / totalValue) * 100).toFixed(2);
-                    return `${value.toLocaleString('ko-KR') + '원'} (${percent}%)`;
+                        return data.labels[tooltipItem[0].index];
+                    },
+                    label: function (tooltipItem, data) {
+                        var dataset = data.datasets[0];
+                        var value = dataset.data[tooltipItem.index];
+                        var percent = ((value / totalValue) * 100).toFixed(2);
+                        return `${value.toLocaleString('ko-KR') + '원'} (${percent}%)`;
+                    }
                 }
             }
         }
-    }
-});
+    });
+
+} else {
+
+//값이 없을때의 차트 디자인-------------------------------------------------------------------------------------------
+    data = {
+        datasets: [{
+            backgroundColor: ['#F8F9FA'],
+            data: [100]
+        }],
+        // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+        labels: ['X']
+    };
+
+    // 가운데 구멍이 없는 파이형 차트
+    var ctx1 = document.getElementById("myChart1");
+    var myPieChart = new Chart(ctx1, {
+        type: 'pie',
+        data: data,
+        options: {}
+    });
+
+
+}
 
 
 //검색 버튼을 클릭 했을 경우 사용자가 선택한 조건을 가지고 통계 페이지로 재요청을 하는 로직

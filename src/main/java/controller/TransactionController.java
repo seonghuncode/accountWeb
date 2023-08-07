@@ -768,7 +768,7 @@ public class TransactionController {
 //        System.out.println("총 거래 가격" + totalPrice);
 
         Integer remainPriceByTargetBudget = -1;
-        if(targetBudget != null){
+        if(targetBudget != null && totalPrice != null){
             remainPriceByTargetBudget = targetBudget - totalPrice; //예산액에서 현재 사용 금액을 빼고 남은 금액
         }
 
@@ -827,7 +827,7 @@ public class TransactionController {
 //        System.out.println("총 거래 가격" + totalPrice);
 
         Integer remainPriceByTargetBudget = -1;
-        if(targetBudget != null){
+        if(targetBudget != null && totalPrice != null){ //거래내역이 없어도 목표 예산이 있을 경우 오류가 발생하지 않도록 두 값 모두 null이 아닐때
             remainPriceByTargetBudget = targetBudget - totalPrice; //예산액에서 현재 사용 금액을 빼고 남은 금액
         }
 
