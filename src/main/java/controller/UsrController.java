@@ -316,5 +316,13 @@ public class UsrController {
     }
 
 
+    //사용자가 로그인/아이디 찾기 페이지 에서 비밀번호 찾기 버튼을 클릭할 경우 비밀번호 찾기 페이지로 이동하는 로직
+    @RequestMapping("usr/findUserPw")
+    public String findUserPw(){
+        return "thymeleaf/usr/findUserPw";
+
+    }
+
+
 
 }

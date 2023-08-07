@@ -1,3 +1,5 @@
+//아이디 찾기 관련-------------------------------------------------------------------------------------------------------
+
 //사용자가 아이디 찾기 페이지 에서 아이디 찾기 버튼을 클릭했을 경우 실행 되는 로직
 $(`#try-findUserId`).click(function () {
     var userName = $('#findName').val();
@@ -98,3 +100,66 @@ function findUserIdProcess(userName, userEmail){
 
 
 
+
+//비밀번호 찾기 관련-------------------------------------------------------------------------------------------------------
+
+//사용자가 비밀번호 찾기 페이지 에서 비밀번호 찾기 버튼을 클릭했을 경우 실행 되는 로직
+$(`#try-findUserPw`).click(function () {
+    var userName = $('#findName').val();
+    var userId = $('#loginId').val();
+    var userEmail = $('#findEmail').val();
+    console.log(userName);
+    console.log(userId);
+    console.log(userEmail);
+
+    var result = validFindPassword(userName, userId, userEmail);
+    console.log(result);
+    
+    if(result == "success"){  //비밀번호 찾기 에서 사용자가 입력한 데이터들이 유효성 검사를 통과한 경우 실행되는 로직
+        
+    }
+    
+})
+
+
+//사용자가 비밀번호 찾기 에서 입력한 데이터에 대해서 유효성 검사 하는 로직
+function validFindPassword(userName, userId, userEmail){
+
+    var result = "success";
+
+    if(userName == ""){
+        $(`#validNoName`).text("※이름을 입력해 주세요.");
+        $(`#validNoName`).css("color", "red");
+        $(`#validNoName`).css("font-size", "small");
+        result = "fail";
+    }else if(userName != ""){
+        $(`#validNoName`).text("");
+    }
+
+    if(userId == ""){
+        $(`#validNoId`).text("※아이디를 입력해 주세요.");
+        $(`#validNoId`).css("color", "red");
+        $(`#validNoId`).css("font-size", "small");
+        result = "fail";
+    }else if(userId != ""){
+        $(`#validNoId`).text("");
+    }
+
+    var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/; //이메일 형식을 확인하는 정규식
+    if(userEmail == ""){
+        $(`#validNoEmail`).text("※이메일을 입력해 주세요.");
+        $(`#validNoEmail`).css("color", "red");
+        $(`#validNoEmail`).css("font-size", "small");
+        result = "fail";
+    }else if(!regEmail.test(userEmail)){
+        $(`#validNoEmail`).text("※이메일 형식이 아닙니다.");
+        $(`#validNoEmail`).css("color", "red");
+        $(`#validNoEmail`).css("font-size", "small");
+        result = "fail";
+    }else if(userEmail != "" && regEmail.test(userEmail)){
+        $(`#validNoEmail`).text("");
+    }
+
+    return result;
+    
+}
