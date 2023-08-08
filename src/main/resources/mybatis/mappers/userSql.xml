@@ -126,6 +126,18 @@
         SELECT user_id FROM `user` WHERE `name` = #{userName} AND email = #{userEmail};
     </select>
 
+    <!-- 사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직 -->
+    <select id="getUserPkByFindPw" resultType="Integer" parameterType="hashmap">
+        SELECT id FROM `user` WHERE `name`=#{userName} AND email = #{userEmail} AND user_id=#{userId};
+    </select>
+
+
+
+    <!-- 비밀번호 찾기 에서 임시 비밀번호가 생성되면 기존 회원의 비밀번호를 임시 비밀번호로 변경한다. -->
+    <update id="changePwToTemporaryPw" parameterType="hashmap">
+        UPDATE `user` SET `password` = #{temporaryPassword} WHERE id = #{userPk};
+    </update>
+
 
 </mapper>
 

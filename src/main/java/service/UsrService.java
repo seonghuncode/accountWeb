@@ -60,4 +60,7 @@ public interface UsrService {
     //사용자가 아이디 찾기 페이지 에서 아이디 찾기 버튼을 클릭했을 경우 실행되는 로직
     Map<String, Object> findUserIdProcess(Map<String, Object> data);
 
+    //사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직
+    Map<String, Object> getUserPkByFindPw(Map<String, Object> data);
+
 }

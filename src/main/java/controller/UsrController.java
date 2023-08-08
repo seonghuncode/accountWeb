@@ -320,7 +320,24 @@ public class UsrController {
     @RequestMapping("usr/findUserPw")
     public String findUserPw(){
         return "thymeleaf/usr/findUserPw";
+    }
 
+
+    /**
+     * 사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직
+     * @param data
+     * @return
+     */
+    @RequestMapping(value = "/usr/findUserPWProcess", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
+    @ResponseBody
+    public Map<String, Object> findUserPWProcess(@RequestBody  Map<String, Object> data)  {
+        System.out.println(data);
+
+        //사용자가 입력한 이름, 아이디, 이메일과 일치하는 회원의 PK값을 가지고 오는 로직
+        Map<String, Object> result =  usrService.getUserPkByFindPw(data);
+//        System.out.println("회원의 PK : " + result);
+
+        return result;
     }
 
 

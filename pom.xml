@@ -192,8 +192,6 @@
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
-
-
         <!-- JSON (list를 json형태로 변환해주는 의존성)-->
         <!-- String 형태로 받은 데이터를 List<Map<String, Object>>형태로 바꾸어 주기 위한 라이브러리 -->
         <dependency>
@@ -201,6 +199,15 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+
+
+        <!-- 비밀번호 찾기 에서 비밀번호를 회원 이메일로 전송하기 위한 의존성 주입( Java Mail AP) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.5</version>
+        </dependency>
+
 
 
 

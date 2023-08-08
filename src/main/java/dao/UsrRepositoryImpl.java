@@ -1,6 +1,7 @@
 package dao;
 
 import dto.Criteria;
+import dto.UserByFindPw;
 import dto.UsrDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,13 @@ public class UsrRepositoryImpl implements  UsrRepository {
         return sqlSession.selectOne("dao.UsrRepositoryImpl.findUserIdProcess", data);
     }
 
+    public Integer getUserPkByFindPw(Map<String, Object> data){
+        return sqlSession.selectOne("dao.UsrRepositoryImpl.getUserPkByFindPw", data);
+    }
+
+    public Integer changePwToTemporaryPw(UserByFindPw info){
+        return sqlSession.update("dao.UsrRepositoryImpl.changePwToTemporaryPw", info);
+    }
 
 
 }

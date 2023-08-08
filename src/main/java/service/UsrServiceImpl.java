@@ -3,21 +3,32 @@ package service;
 
 import dao.UsrRepository;
 import dto.Criteria;
+import dto.UserByFindPw;
 import dto.UsrDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import util.MailUtil;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
 public class UsrServiceImpl implements UsrService {
+
+    //임시 비밀번호 생성시 난수로 인덱스를 걸어 가져올 배열
+    private final char[] rndCharSet = new char[]{
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '!', '@', '#', '$', '%', '^', '&', '_', '=', '+'
+            // 원하는 특수문자 추가해서 사용
+    };
 
     @Autowired
     private UsrRepository usrRepository;
@@ -170,13 +181,13 @@ public class UsrServiceImpl implements UsrService {
 //        System.out.println("찾아온 아이디 : " + existUserId);
 
         boolean isLogined = false;
-        if(httpSession.getAttribute("loginedUserId") !=  null){ //이미 세션이 존재 해서 로그인이 되어 있을 경우 isLoginedid = true로 변경
+        if (httpSession.getAttribute("loginedUserId") != null) { //이미 세션이 존재 해서 로그인이 되어 있을 경우 isLoginedid = true로 변경
             isLogined = true;
         }
-        if(isLogined){ //로그인을 진행할 경우 usrDto에 있는 변수명으로 bindingResult에 오류들을 모아 보내주는데 로그인 에서 사용하지 않는 checkPassword변수는
+        if (isLogined) { //로그인을 진행할 경우 usrDto에 있는 변수명으로 bindingResult에 오류들을 모아 보내주는데 로그인 에서 사용하지 않는 checkPassword변수는
             bindingResult.addError(new FieldError("usrDto", "checkPassword", "이미 로그인이 되어 있습니다."));
             System.out.println("<<<<<<<<<<>>>>>>>>>>");
-            System.out.println( httpSession.getAttribute("loginedUserId"));
+            System.out.println(httpSession.getAttribute("loginedUserId"));
             System.out.println("<<<<<<<<<<>>>>>>>>>>");
         }
 
@@ -210,7 +221,7 @@ public class UsrServiceImpl implements UsrService {
 //        System.out.println(errorProcess(bindingResult, usrDto, successFn));
 
         Map<String, Object> loginStatus = errorProcess(bindingResult, usrDto, successFn);  //로그인이 성공적으로 진행되면 세션 등록
-        if (loginStatus.containsKey("success") && loginStatus.containsValue(usrRepository.findUserNameByUserId(usrDto.getUserId()))){ //로그인이 성공적으로 됬을 경우 세션 등록
+        if (loginStatus.containsKey("success") && loginStatus.containsValue(usrRepository.findUserNameByUserId(usrDto.getUserId()))) { //로그인이 성공적으로 됬을 경우 세션 등록
             httpSession.setAttribute("loginedUserId", usrDto.getUserId());
         }
 
@@ -220,21 +231,21 @@ public class UsrServiceImpl implements UsrService {
     }
 
 
-    public Map<String, Object> doLogout(HttpSession httpSession){
+    public Map<String, Object> doLogout(HttpSession httpSession) {
 
         //String을 json형태로 return하기 위한 방법
         Map result = new HashMap<String, Object>();
 
         boolean isLoginedId = false;
-        if(httpSession.getAttribute("loginedUserId") == null){
+        if (httpSession.getAttribute("loginedUserId") == null) {
             isLoginedId = true;
         }
         //로그아웃이 되어 있다면 실질적으로 로그아웃 버튼을 클릭할 상황은 없지만 일단 만들어 놓음
-        if(isLoginedId){
+        if (isLoginedId) {
             System.out.println(httpSession.getAttribute("loginedUserId"));
             System.out.println("이미 로그아웃 되어 있습니다.");
             result.put("status", "이미 로그아웃 되어 있습니다.");
-        }else{
+        } else {
             System.out.println(httpSession.getAttribute("loginedUserId"));
             httpSession.removeAttribute("loginedUserId");
             System.out.println("로그아웃 되었습니다.");
@@ -245,10 +256,9 @@ public class UsrServiceImpl implements UsrService {
 
     }
 
-    public List<UsrDto> getAllUserFromDB(){
+    public List<UsrDto> getAllUserFromDB() {
         return usrRepository.getAllUserFromDB();
     }
-
 
 
     //페이징 기능을 위한 역할
@@ -260,34 +270,34 @@ public class UsrServiceImpl implements UsrService {
 
 
     @Override
-    public int countUsrListTotal(){
+    public int countUsrListTotal() {
         return usrRepository.countUsrListTotal();
     }
 
     @Override
-    public int getAllUserCnt(){
+    public int getAllUserCnt() {
         return usrRepository.getAllUserCnt();
     }
 
     @Override
-    public int getNoUserCnt(){
+    public int getNoUserCnt() {
         return usrRepository.getNoUserCnt();
     }
 
     //메인화면에서 사용자가 입력한 검색어에 대한 회원만 불러오는 역할
-    public List<Map<String, Object>> getUsersFromSearch(Criteria cri){
+    public List<Map<String, Object>> getUsersFromSearch(Criteria cri) {
         return usrRepository.getUsersFromSearch(cri);
     }
 
-    public int countSearchUsrListTotal(String search){
+    public int countSearchUsrListTotal(String search) {
         return usrRepository.countSearchUsrListTotal(search);
     }
 
     //사용자가 마이페이지 에서 정보수정 버튼을 클릭해서 나오는 모달창에 입력한 비밀번호가 현재 로그인한 회원의 아이디와 일치하는지 확인하는 로직
-    public Map<String, Object> checkPW(Map<String, Object> data){
+    public Map<String, Object> checkPW(Map<String, Object> data) {
 
-        String userId = (String)data.get("userId");
-        String password = (String)data.get("password");
+        String userId = (String) data.get("userId");
+        String password = (String) data.get("password");
 //        System.out.println("사용자가 입력한 아이디(userId) : " + userId);
 //        System.out.println("사용자가 입력한 비밀번호(password) : " + password);
 
@@ -303,9 +313,9 @@ public class UsrServiceImpl implements UsrService {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        if(result2 == 1){
+        if (result2 == 1) {
             result.put("result", "success");
-        }else{
+        } else {
             result.put("result", "fail");
         }
 
@@ -314,16 +324,16 @@ public class UsrServiceImpl implements UsrService {
 
 
     //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 이메일이 중복되는 이메일인지 확인하는 로직
-    public Map<String, Object> checkEmailForModifyMyInfo(Map<String, Object> data){
+    public Map<String, Object> checkEmailForModifyMyInfo(Map<String, Object> data) {
 
         int result2 = usrRepository.checkEmailForModifyMyInfo(data);
 //        System.out.println("중복 결과 : " + result2); //0이면 중복 없음, 1이면 중복
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        if(result2 == 0){
+        if (result2 == 0) {
             result.put("result", "success");
-        }else{
+        } else {
             result.put("result", "fail");
         }
 
@@ -333,16 +343,16 @@ public class UsrServiceImpl implements UsrService {
 
 
     //회원정보 수정 페이지 에서 사용자가 수정하려고 하는 아이다가 중복되는 아이디 인지 확인하는 로직
-    public Map<String, Object> checkUserIdForModifyMyInfo(Map<String, Object> data){
+    public Map<String, Object> checkUserIdForModifyMyInfo(Map<String, Object> data) {
 
         int result2 = usrRepository.checkUserIdForModifyMyInfo(data);
 //        System.out.println("중복 결과 : " + result2); //0이면 중복 없음, 1이면 중복
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        if(result2 == 0){
+        if (result2 == 0) {
             result.put("result", "success");
-        }else{
+        } else {
             result.put("result", "fail");
         }
 
@@ -352,14 +362,14 @@ public class UsrServiceImpl implements UsrService {
 
 
     //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
-    public Map<String, Object> doModifyUserInfo(Map<String, Object> data){
+    public Map<String, Object> doModifyUserInfo(Map<String, Object> data) {
 
-        String pw = (String)data.get("newPassword"); //사용자가 입력한 비밀번호 암호화
+        String pw = (String) data.get("newPassword"); //사용자가 입력한 비밀번호 암호화
 //        System.out.println("받은직후 비밀번호 : " + pw);
-        if(!(pw.equals(""))){
+        if (!(pw.equals(""))) {
             String encoderPassword = passwordEncoder.encode(pw); //비밀번호 암호화
             data.put("newPassword", encoderPassword); //암호화한 데이터 data객체에 넣기
-        }else if(pw.equals("")){
+        } else if (pw.equals("")) {
             data.put("newPassword", "빈값");
         }
 //        System.out.println("값이 있다면 암호화한 비빌번호 : " + (String)data.get("newPassword"));
@@ -371,9 +381,9 @@ public class UsrServiceImpl implements UsrService {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        if(result2 == 1){
+        if (result2 == 1) {
             result.put("result", "success");
-        }else{
+        } else {
             result.put("result", "fail");
         }
 
@@ -383,18 +393,94 @@ public class UsrServiceImpl implements UsrService {
 
 
     //회원정보 수정 페이지 에서 사용자가 입력한 모든 데이터가 유효성 검사를 통과한 데이터로 실제 데이터베이스에 데이터를 수정 반영하는 로직
-    public Map<String, Object> findUserIdProcess(Map<String, Object> data){
+    public Map<String, Object> findUserIdProcess(Map<String, Object> data) {
 
         Map<String, Object> userId = usrRepository.findUserIdProcess(data);
 
         Map<String, Object> result = new HashMap<String, Object>();
-        if(userId != null){
+        if (userId != null) {
             result.put("userId", userId.get("user_id"));
-        }else{
+        } else {
             result.put("userId", "fail");
         }
         return result;
     }
+
+
+    //사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직-----------------------
+    public Map<String, Object> getUserPkByFindPw(Map<String, Object> data){
+
+        Integer userPk = usrRepository.getUserPkByFindPw(data); //사용자가 비밀번호 찾기 에서 입력한 데이터와 일치하는 회원의 PK값을 가지고 온다
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        //사용자가 비밀번호 찾기 에서 입력한 데이터가 DB에 존재한다면
+        if (userPk != null) {
+            result.put("userPk", userPk);
+            //============================================================================================
+            
+            //임시 비밀번호를 생성하는 로직
+            String temporaryPassword = getRandomString(10); //10글자의 임시 비밀번호 생성
+//            System.out.println("임시 비밀번호 : " + temporaryPassword);
+            String encoderPassword = passwordEncoder.encode(temporaryPassword); //비밀번호 암호화
+//            System.out.println("암호와된 임시 비밀번호 : " + encoderPassword);
+
+
+            //임시 비밀번호를 회원 이메일로 보내주는 로직
+            UserByFindPw info = new UserByFindPw();
+            info.setName((String)data.get("userName"));
+            info.setUserId((String)data.get("userId"));
+            info.setEmail((String)data.get("userEmail"));
+            info.setUserPk(userPk);
+            info.setTemporaryPassword(temporaryPassword);
+
+            MailUtil mail = new MailUtil(); //메일 전송하기
+            try {
+                mail.sendEmail(info);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("오류발생");
+                System.out.println("이메일 전송중 문제 발생(UsrServiceImpl)");
+            }
+
+            //임시 비밀번호로 회원의 기존 비밀번호를 임시 비밀번호로 변경 하는 쿼리
+            info.setTemporaryPassword(encoderPassword); //데이터 베이스에 저장할때는 암호화된 비밀번호를 넣는다.
+            Integer changePw = usrRepository.changePwToTemporaryPw(info);
+//            System.out.println(changePw); //기존 비밀번호를 임시비밀번호로 데이터 수정 하는 쿼리
+            if(changePw != 1){
+                System.out.println("기존 비밀번호를 임시 비밀번로 변경하는 쿼리문 에서 문제 발생");
+            }
+
+            //============================================================================================
+        } else {
+            result.put("userPk", "fail");
+        }
+        return result;
+    }
+
+
+
+
+    //난수 비밀번호를 생성하는 함수--------------------------------------------------------------------------------------
+    public String getRandomString(int size) { //임시 비밀번호 길이를 받는다.
+        StringBuilder sb = new StringBuilder();
+        Random rnd = new Random(new Date().getTime());
+        int len = rndCharSet.length;
+        for (int i = 0; i < size; i++) {
+            sb.append(rndCharSet[rnd.nextInt(len)]);
+        }
+        return sb.toString();
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 

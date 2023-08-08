@@ -64,8 +64,6 @@
 
 
 
-
-
 <!-- HandlerMapping, Controller, ViewResolver, View등의 빈 설정 -->
 </beans>
 

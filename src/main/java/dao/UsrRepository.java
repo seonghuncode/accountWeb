@@ -1,6 +1,7 @@
 package dao;
 
 import dto.Criteria;
+import dto.UserByFindPw;
 import dto.UsrDto;
 import org.springframework.stereotype.Repository;
 
@@ -45,4 +46,8 @@ public interface UsrRepository {
     int doModifyUserInfo(Map<String, Object> data);
 
     Map<String, Object> findUserIdProcess(Map<String, Object> data);
+
+    Integer getUserPkByFindPw(Map<String, Object> data);
+
+    Integer changePwToTemporaryPw(UserByFindPw info);
 }

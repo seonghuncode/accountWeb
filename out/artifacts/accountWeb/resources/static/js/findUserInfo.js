@@ -108,15 +108,15 @@ $(`#try-findUserPw`).click(function () {
     var userName = $('#findName').val();
     var userId = $('#loginId').val();
     var userEmail = $('#findEmail').val();
-    console.log(userName);
-    console.log(userId);
-    console.log(userEmail);
+    // console.log(userName);
+    // console.log(userId);
+    // console.log(userEmail);
 
     var result = validFindPassword(userName, userId, userEmail);
-    console.log(result);
+    // console.log(result);
     
     if(result == "success"){  //비밀번호 찾기 에서 사용자가 입력한 데이터들이 유효성 검사를 통과한 경우 실행되는 로직
-        
+        findUserPwProcess(userName, userId, userEmail); //해당 데이터와 일치하는 회원의 PK값을 가지고 오는 함수
     }
     
 })
@@ -162,4 +162,51 @@ function validFindPassword(userName, userId, userEmail){
 
     return result;
     
+}
+
+
+//사용자가 비밀번호 찾기 페이지 에서 입력한 데이터가 유효성 검증을 통과 했다면 해당 회원의 PK를 가지고 오는 통신
+//PK를 가지고 오는 이유는 추후 임시 비밀번호를 생성할 경우 해당 PK회원의 비밀번호를 수정하기 위함
+function findUserPwProcess(userName, userId, userEmail){
+
+    var data = {
+        userName: userName,
+        userId : userId,
+        userEmail: userEmail
+    };
+
+    $.ajax({  //이메일 중복 여부를 확인하는 통신
+        url: "/usr/findUserPWProcess",
+        data: JSON.stringify(data),  //data: info, JSON.stringify(info)
+        async: false,
+        method: "post",
+        dataType: "json",   //dataType : "html",
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if(res.userPk == "fail"){
+                $(`#validNotCorrect`).text("※일치하는 회원이 없습니다.");
+                $(`#validNotCorrect`).css("color", "red");
+                $(`#validNotCorrect`).css("font-size", "small");
+                // console.log("실패 : " + res.userPk);
+            }else if(res.userPk != "fail"){
+                $(`#validNotCorrect`).text("");
+                // console.log("회원의 PK값");
+                // console.log(res);
+
+                swal({
+                    title:"비밀번호 찾기 성공",
+                    text:userName + "님의 임시 비밀번호를 '" + userEmail + "' 로 전송 했습니다.  \n\n※임시 비밀번호로 로그인 후 비밀번호를 변경해 주세요!",
+                    icon:"success",
+                    buttons: "확인"
+                }).then(()=>{
+                    location.href = '/usr/loginForm';
+                })
+
+            }
+        },
+        error: function () {
+            console.log("요청 또는 응답에 있어 문제가 발생했습니다.");
+            alert("error")
+        }
+    });
 }

@@ -131,7 +131,7 @@ $('#addTransactionField').click(function () {
         // console.log("===========필드 추가시 진행되는 분류명 리스트 프로세스");
         // console.log(`추가 id : ${num+1}`)
         doSortListProcess(); //필드가 추가 될때마다 해당 함수를 실행시켜야 추가된 필드도 해당 기능이 적용 된다.
-    } else if (num >= 10) {
+        } else if (num >= 10) {
         alert("거래 내역 추가는 한번에 최대 10개 까지의 내역만 추가 가능 합니다.");
     }
 })
