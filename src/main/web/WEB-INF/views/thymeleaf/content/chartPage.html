@@ -218,17 +218,10 @@
         <!-- 그래프를 보여주는 부분 --------------------------------------------------------------------------->
         <div style="width: 35%; float: right" th:if="${totalPrice} != null">
             <!--차트가 그려질 부분-->
-            <canvas id="myChart" style="display: inline; float: right"></canvas>
+            <div id="chart_div" style="display: inline; float: right"></div>
         </div>
         <div style="width: 35%; float: right" th:unless="${totalPrice} != null">
-                    <div class="card">
-                        <div class="card-body">
-                            <canvas id="myChart1"></canvas>
-                        </div>
-                        <div class="card-footer text-center text-dark">
-                            <h5>거래 내역이 없습니다.</h5>
-                        </div>
-                    </div>
+            <div id="chart_div2" style="display: inline; float: right"></div>
         </div>
 
     </div>
@@ -236,6 +229,10 @@
 
 </div>
 
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> <!-- 구글 차트 사용 -->
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
 <!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->

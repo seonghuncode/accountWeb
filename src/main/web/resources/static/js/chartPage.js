@@ -1,91 +1,88 @@
 //차트를 보여주는 로직------------------------------------------------------------------------------------------------
-if (totalPrice != null) { //값이 있을 경우 에만 실행, 값이 없을 경우 실행 되지X
+if (totalPrice != null) { //값이 있을 경우 에만 실행, 값이 없을 경우 실행 되지X (구글 차트 사용)
 
-    var context = document
-        .getElementById('myChart')
-        .getContext('2d');
+    
+// Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages': ['corechart']});
 
-    var data = result;
-    var labels = data.map(item => item.name);
-    var values = data.map(item => parseInt(item.sum)); // parseFloat를 사용하여 소수점 값 처리
+// Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
-// 랜덤 RGB 값 생성 함수(각 영역별로 색상을 다르게 하기 위함)
-    function getRandomRGB() {
-        var r = Math.floor(Math.random() * 256);
-        var g = Math.floor(Math.random() * 256);
-        var b = Math.floor(Math.random() * 256);
-        return `rgba(${r}, ${g}, ${b},`;
+// Callback that creates and populates a data table,
+// instantiates the pie chart, passes in the data and
+// draws it.
+    function drawChart() {
+
+        var data1 = result;
+        var labels2 = data1.map(item => item.name);
+        var values3 = data1.map(item => parseInt(item.sum)); // parseFloat를 사용하여 소수점 값 처리
+        // console.log(data1);
+        // console.log(labels2);
+        // console.log(values3);
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data1.forEach(function(item) {
+            var formattedValue = item.sum.toLocaleString('en-US'); // 3자리마다 쉼표를 추가하여 서식화
+            // data.addRows([[`${item.name} (${formattedValue})`, item.sum]]);
+            data.addRows([[item.name , item.sum]]);
+        });
+
+        // Set chart options
+        var options = {
+            'title': '',
+            'width': 400,
+            'height': 300,
+            // pieSliceText: 'value-and-percentage' // 이름과 퍼센트 모두 표시
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
     }
 
-    var backgroundColors = values.map(() => getRandomRGB() + ' 0.2)'); // 랜덤한 색상 + 투명도
-// var borderColors = values.map(() => getRandomRGB() + ' 1)'); // 랜덤한 색상 + 투명도
-    var borderColors = backgroundColors; // 랜덤한 색상 + 투명도
 
-    var totalValue = values.reduce((acc, curr) => acc + curr, 0); // 전체 값을 계산
 
-    var myChart = new Chart(context, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'test1',
-                    fill: false,
-                    data: values,
-                    backgroundColor: backgroundColors,
-                    borderColor: borderColors,
-                    borderWidth: 1
-                }
-            ]
-        },
-        //원래 data에 들어가는 values가 정수가 들어가기 때문에 화면에서 마우스를 가져다 데면 숫자만 나오는데
-        //+이 부분을 100단위로 나누어 ,로 구분하도록 하는 옵션
-        //+전체를 100%로 했을 경우 각 파트별로 마우스를 가겨다데면 차지하는 비중을 퍼센트로 보여주는 옵션 추가
-        //+마우스를 가져다 데면 해당 영역의 이름(label)을 같이 보여주는 옵션
-        options: {
-            tooltips: {
-                titleFontSize: 25,
-                bodyFontSize: 15,
-                callbacks: {
-                    title: function (tooltipItem, data) {
-                        var dataset = data.datasets[0];
-                        var value = dataset.data[tooltipItem[0].index];
-                        var percent = ((value / totalValue) * 100).toFixed(2);
-
-                        return data.labels[tooltipItem[0].index];
-                    },
-                    label: function (tooltipItem, data) {
-                        var dataset = data.datasets[0];
-                        var value = dataset.data[tooltipItem.index];
-                        var percent = ((value / totalValue) * 100).toFixed(2);
-                        return `${value.toLocaleString('ko-KR') + '원'} (${percent}%)`;
-                    }
-                }
-            }
-        }
-    });
 
 } else {
+// //값이 없을때의 차트 디자인-------------------------------------------------------------------------------------------
+    
+// Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages': ['corechart']});
 
-//값이 없을때의 차트 디자인-------------------------------------------------------------------------------------------
-    data = {
-        datasets: [{
-            backgroundColor: ['#F8F9FA'],
-            data: [100]
-        }],
-        // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
-        labels: ['X']
-    };
+// Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
-    // 가운데 구멍이 없는 파이형 차트
-    var ctx1 = document.getElementById("myChart1");
-    var myPieChart = new Chart(ctx1, {
-        type: 'pie',
-        data: data,
-        options: {}
-    });
+// Callback that creates and populates a data table,
+// instantiates the pie chart, passes in the data and
+// draws it.
+    function drawChart() {
 
 
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+            [`X`, 0.0]
+        ])
+
+
+        // Set chart options
+        var options = {
+            'title': '거래 내역이 없어 차트를 그릴 수 없습니다.',
+            'width': 400,
+            'height': 300
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+    }
+
+    
 }
 
 
@@ -259,6 +256,7 @@ $('#searchMonth').click(function () {
 
 
 })
+
 
 
 
