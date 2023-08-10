@@ -14,6 +14,7 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
         var theadHtml = '';
         var week = new Array('일', '월', '화', '수', '목', '금', '토');
 
+
         //table전체 부분을 만드는 부분
         $.each(getDailyTotalData, function (index, transactionDate) {
 
@@ -24,12 +25,56 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                 // console.log(history.transaction_date);
                 // console.log(history.memo);
                 // console.log(history.price.toLocaleString());
-                if (history.transaction_date === transactionDate.transaction_date) {
+                // console.log(history.id);
+                // console.log(history);
+                var memo = history.memo;
+                var encodingMemo = encodeURIComponent(memo); //메모에 특수문자가 들어갈 경우 오류 발생 -> 특수문자가 들어갈 경우를 대비해 인코딩 하여 해결
+                var sortName = history.name;
+                var encodingSortName = encodeURIComponent(sortName);
+
+
+
+                if (history.transaction_date === transactionDate.transaction_date && nowLoginUserId != userId) { //자신의 거래내역 페이지가 아닐 경우
                     tbodyHtml += '<tr>';
                     tbodyHtml += '<th scope="row">' + (index + 1) + '</th>';
                     tbodyHtml += '<td>' + history.name + '</td>';
                     tbodyHtml += '<td>' + history.memo + '</td>';
                     tbodyHtml += '<td>' + history.price.toLocaleString() + '</td>';
+                    tbodyHtml += '</tr>';
+                }else if(history.transaction_date === transactionDate.transaction_date && nowLoginUserId == userId){ //자신의 거래내역 페이지 일경우
+                    tbodyHtml += '<tr>';
+                    tbodyHtml += '<th scope="row">' + (index + 1) + '</th>';
+                    tbodyHtml += '<td>' + history.name + '</td>';
+                    tbodyHtml += '<td>' + history.memo + '</td>';
+                    if(history.type == "수입"){
+                        tbodyHtml += '<td style="color: red">' + history.price.toLocaleString() + '</td>';
+                    }else if(history.type == "지출"){
+                        tbodyHtml += '<td style="color: blue;">' + history.price.toLocaleString() + '</td>';
+                    }
+
+
+                    tbodyHtml += '<td>';
+                    // tbodyHtml += '<button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" id="modifyTransactionField" th:onclick="|location.href=\'@{/transaction/modifyTransactionField(transactionHistoryId = ${history.id} ,type=${history.type}, userId=${nowLoginUserId}, transactionDate=${history.transaction_date}, index=${index.count}, sortName=${history.name}, memo=${history.memo}, price=${history.price})}\'|">';
+                    // tbodyHtml += '<a type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" id="modifyTransactionField" href='+"/transaction/modifyTransactionField?transactionHistoryId=" + history.id + '&type=' + history.type + '&userId=' + nowLoginUserId + '&transactionDate=' + history.transaction_date + '&index=' + (index+1) + '&sortName=' + history.name + '&memo=' + `${history.memo}` + '&price=' + history.price + '>';
+                    tbodyHtml += '<a type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" id="modifyTransactionField" href='+"/transaction/modifyTransactionField?transactionHistoryId="  + history.id + '&type=' + history.type + '&userId=' + nowLoginUserId + '&transactionDate=' + history.transaction_date + '&index=' + (index+1) + '&sortName=' + encodingSortName + '&memo=' + encodingMemo + '&price=' + history.price + '>';
+                    tbodyHtml += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16" >';
+                    tbodyHtml += '<path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"></path>';
+                    tbodyHtml += '</svg>';
+                    tbodyHtml += '<span class="visually-hidden">Button</span>';
+                    tbodyHtml += '</a>';
+                    tbodyHtml += '</td>';
+
+                    tbodyHtml += '<td>';
+                    // tbodyHtml += '<button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" th:onclick="deleteTransactionField([[${history.id}]], [[${history.type}]], [[${nowLoginUserId}]], [[${history.transaction_date}]], [[${index.count}]], [[${history.name}]], [[${history.memo}]], [[${history.price}]])">';
+                    tbodyHtml += '<button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" onclick="deleteTransactionField(' + history.id + ', \'' + history.type + '\', \'' + nowLoginUserId + '\', \'' + history.transaction_date + '\', \'' + (index+1) + '\', \'' + encodingSortName + '\', \'' + encodingMemo + '\', \'' + history.price  + '\')">'
+                    tbodyHtml += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">';
+                    tbodyHtml += '<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>';
+                    tbodyHtml += '</svg>';
+                    tbodyHtml += '<span class="visually-hidden">Button</span>';
+                    tbodyHtml += '</button>';
+                    tbodyHtml += '</td>';
+                    tbodyHtml += '</td>';
+
                     tbodyHtml += '</tr>';
                 }
             });
@@ -38,7 +83,7 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
             // console.log(new Date(transactionDate.transaction_date).getDay());
             var today = new Date(transactionDate.transaction_date).getDay();
 
-            if ((index + 1) <= changeDateCnt) {
+            if ((index + 1) <= changeDateCnt && nowLoginUserId != userId) { //현재 로그인한 회원이 아닌 다른 회원의 거래내역일 경우
                 // console.log("만들어지는 테이블 갯수")
                 theadHtml += '<table class="table table-hover" style="text-align: center; font-size: small">';
                 theadHtml += '<thead>';
@@ -59,6 +104,29 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                 theadHtml += '</tbody>';
                 theadHtml += '</table>';
             }
+            else if((index + 1) <= changeDateCnt && nowLoginUserId == userId){ //자시느이 거래내역일 경우
+                theadHtml += '<table class="table table-hover" style="text-align: center; font-size: small">';
+                theadHtml += '<thead>';
+                theadHtml += '<tr style="background-color: #FDF5E6">';
+                theadHtml += '<th colspan="2" style="text-align: left; padding-left: 15px">' + transactionDate.transaction_date + week[today] + '</th>';
+                theadHtml += '<th colspan="4" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + transactionDate.dayCntIncome + '</span>' + '지출 : ' + '<span style="color: blue">' + transactionDate.dayCntExpend + '</span>' + ')';
+                theadHtml += '</th>';
+                theadHtml += '</tr>';
+                theadHtml += '<tr style="background-color: #FDF5E6">';
+                theadHtml += '<th scope="col">' + '번호' + '</th>';
+                theadHtml += '<th scope="col">' + '분류명' + '</th>';
+                theadHtml += '<th scope="col">' + '메모' + '</th>';
+                theadHtml += '<th scope="col">' + '거래' + '</th>';
+                theadHtml += '<th scope="col">' + '수정' + '</th>';
+                theadHtml += '<th scope="col">' + '삭제' + '</th>';
+                theadHtml += '</tr>';
+                theadHtml += '</thead>';
+                theadHtml += '<tbody>' + tbodyHtml;
+
+                theadHtml += '</tbody>';
+                theadHtml += '</table>';
+            }
+
         });
 
         $('#topTable > div').append(theadHtml);
