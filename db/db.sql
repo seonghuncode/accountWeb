@@ -10,7 +10,6 @@ USE account_web;
 #거래내역 : 분류 = N : 1
 
 #사용자 : 분류 = 1 : N
-
 #예산액
 ###
 
@@ -33,6 +32,8 @@ SET test_name = "테스트 입니다.";
 
 SELECT VERSION();
 ##-----------------------------------------------------------------##
+
+
 
 
 #사용자 테이블----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -367,6 +368,8 @@ CREATE TABLE sort(
                      transactionId INT NOT NULL
 )
 
+ALTER TABLE sort CHANGE create_date made_date DATE NOT NULL; #실제 코드 에서 사용하는 컬럼명이 변경되어 수정
+
     INSERT INTO sort
 SET `name` = "식비",
 create_date = NOW(),
@@ -402,7 +405,7 @@ WHERE
 
 
 DROP TABLE sort;
-
+SELECT * FROM sort;
 
 
 
