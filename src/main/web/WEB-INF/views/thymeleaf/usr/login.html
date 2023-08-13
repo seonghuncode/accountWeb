@@ -55,7 +55,13 @@
 
 <!--</form>-->
 
-//login폼 에서 값들을 controller로 보내고 다시 return받아서 처리하는 로직(ajax)
+
+<!-- 이 부분을 추가하여 CSRF 토큰을 JavaScript 변수에 저장합니다 -->
+<script th:inline="javascript">
+    var csrfToken = [[${_csrf.token}]];
+</script>
+
+<!--//login폼 에서 값들을 controller로 보내고 다시 return받아서 처리하는 로직(ajax)-->
 <script src="/resources/static/js/loginAjax.js"></script>
 
 

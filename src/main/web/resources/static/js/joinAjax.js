@@ -61,6 +61,9 @@ $("#emailDuplication").click(function () {
             method: "post",
             dataType: "json",   //dataType : "html",
             contentType: "application/json; charset=utf-8",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가
+            },
             success: function (res) {
                 // alert("success");
                 // console.log("controller에서 받은 데이터 ==>  ")
@@ -129,6 +132,9 @@ $("#userIdDuplication").click(function () { //--> 중복확인 버튼을 클릭�
             method: "post",
             dataType: "json",   //dataType : "html",
             contentType: "application/json; charset=utf-8",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가
+            },
             success: function (res) {
                 // alert("success");
                 // console.log("controller에서 받은 데이터 ==>  ")
@@ -205,6 +211,9 @@ $("#try-join").click(function () {
         method: "post",
         dataType: "json",   //dataType : "html",
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가
+        },
         success: function (res) {
             //alert("success");
             console.log("controller에서 받은 데이터 ==>  ")

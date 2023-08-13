@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans.xsd
+                                 http://www.springframework.org/schema/security
+                                 http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!-- 시큐리티가 동작하기 위해서는 Authenrication Manager라는 존재와 스프링 시큐리티의 시작 지점이 필요요 -->
+    <!--    Authentication(인증) : 자신을 증명하는 것-->
+    <!--    Authorization(권한) : 남에게 자격을 부여받는 것-->
+
+    <!--
+    auto-config="true": Spring Security의 기본 구성을 자동으로 활성화합니다. 즉, 보안 필터 체인, 인증, 인가 등의 기본 설정을 자동으로 구성합니다.
+    use-expressions="false": 접근 제어 표현식 대신에 "ROLE_" 접두사와 함께 역할 이름을 사용하여 권한을 확인합니다. hasRole('ROLE_NAME') 형식으로 역할을 확인합니다.
+    use-expressions="true": 접근 제어 표현식을 사용하여 보다 미세한 권한 검사를 할 수 있습니다. 예를 들어, hasRole('ROLE_USER') 대신에 hasAuthority('AUTHORITY_NAME')와 같이 더 다양한 표현식을 사용할 수 있습니다.
+    -->
+
+    <!--    <http auto-config="true" use-expressions="true">-->
+    <!--        &lt;!&ndash; 실제 로그인 처리 URL &ndash;&gt;&lt;!&ndash; 로그인 성공 시 이동할 페이지 &ndash;&gt;&lt;!&ndash; 로그인 실패 시 이동할 페이지 &ndash;&gt;-->
+    <!--        <form-login login-page="/usr/loginForm" login-processing-url="/usr/loginFn" default-target-url="/usr/main" authentication-failure-url="/usr/loginForm?error=true" />-->
+
+    <!--        &lt;!&ndash; 새로운 설정 추가 &ndash;&gt;-->
+    <!--        <intercept-url pattern="/usr/loginFn" access="permitAll" /> &lt;!&ndash; 모든 사용자에게 접근 허용 &ndash;&gt;-->
+    <!--        <intercept-url pattern="/**/*.js" access="permitAll" />-->
+    <!--        <intercept-url pattern="/**/*.css" access="permitAll" />-->
+
+
+    <!--        &lt;!&ndash; 로그아웃 설정 &ndash;&gt;-->
+    <!--        <logout logout-url="/usr/doLogout" logout-success-url="/usr/loginForm" />-->
+
+    <!--        &lt;!&ndash; 접근 권한 설정 &ndash;&gt;-->
+    <!--        <intercept-url pattern="/usr/main" access="isAuthenticated()" /> &lt;!&ndash; 인증된 사용자만 허용 &ndash;&gt;-->
+    <!--        <intercept-url pattern="/transaction/**" access="isAuthenticated()" /> &lt;!&ndash; 인증된 사용자만 허용 &ndash;&gt;-->
+    <!--    </http>-->
+
+    <!--    <authentication-manager>-->
+    <!--        <authentication-provider>-->
+    <!--            <user-service>-->
+    <!--                <user name="user" password="{bcrypt}encryptedPassword" authorities="ROLE_USER"/>-->
+    <!--&lt;!&ndash;                <user name="user" password="userPw" authorities="ROLE_USER"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;                <user name="guest" password="guest" authorities="ROLE_GUEST"/>&ndash;&gt;-->
+    <!--            </user-service>-->
+    <!--        </authentication-provider>-->
+    <!--    </authentication-manager>-->
+
+
+    <http auto-config="true" use-expressions="true">
+
+        <intercept-url pattern="/usr/main" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/transaction/**" access="hasRole('ROLE_USER')"/>
+
+
+        <form-login
+                username-parameter="loginId"
+                password-parameter="loginPw"
+                login-page="/usr/loginForm"
+                default-target-url="/usr/main"
+        />
+        <csrf disabled="false"/> <!--  CSRF(Cross Site Resquest Fosery) 공격을 방어하기 위한 처리를 하겠다는 뜻 -->
+        <logout logout-url="/usr/doLogout" invalidate-session="true"/> <!-- 로그아웃시 세션 무효화 -->
+
+    </http>
+
+
+
+
+<!--    <authentication-manager>-->
+<!--        <authentication-provider>-->
+<!--            <user-service>-->
+<!--                <user name="user" password="{bcrypt}encryptedPassword" authorities="ROLE_USER"/>-->
+<!--                <user name="member" password="{noop}member" authorities="ROLE_USER"/>-->
+<!--                <user name="111111" password="$10$RTdpNi9ZNEw2Sntq4cCVYOetZoxPacd.kE1woyuu.BzO/kDqkKK3e"-->
+<!--                      authorities="ROLE_USER"/>-->
+<!--                &lt;!&ndash;                    <user name="111111" password="$10$RTdpNi9ZNEw2Sntq4cCVYOetZoxPacd.kE1woyuu.BzO/kDqkKK3e" authorities="ROLE_USER"/>&ndash;&gt;-->
+<!--                &lt;!&ndash;                <user name="user" password="userPw" authorities="ROLE_USER"/>&ndash;&gt;-->
+<!--                <user name="guest" password="guest" authorities="ROLE_GUEST"/>-->
+<!--                <user name="유성훈" password="$10$RTdpNi9ZNEw2Sntq4cCVYOetZoxPacd.kE1woyuu.BzO/kDqkKK3e"-->
+<!--                      authorities="ROLE_GUEST"/>-->
+<!--            </user-service>-->
+<!--        </authentication-provider>-->
+<!--    </authentication-manager>-->
+
+
+    <beans:bean id="customUserDetailsService" class="service.CustomUserDetailsService"/>
+    <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <password-encoder ref="bcryptPasswordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+
+
+    <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+
+</beans:beans>

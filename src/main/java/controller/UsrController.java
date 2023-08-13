@@ -5,6 +5,7 @@ import dto.PageMaker;
 import dto.UsrDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,7 +58,11 @@ public class UsrController {
 //        System.out.println("==============");
 
 
+
         return usrService.doCheckLogin(usrDto, bindingResult, httpSession);
+
+
+//        return usrService.doCheckLogin(usrDto, bindingResult, httpSession);
     }
 
 
@@ -115,6 +120,9 @@ public class UsrController {
 //            httpSession.removeAttribute("loginedUserId");
 //            System.out.println("로그아웃 되었습니다.");
 //        }
+        
+        //로그아웃을 실행하면 저장된 Spring Security권한이 삭제 된다
+        SecurityContextHolder.clearContext();
 
         return usrService.doLogout(httpSession);
 

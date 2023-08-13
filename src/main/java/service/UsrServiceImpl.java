@@ -6,6 +6,9 @@ import dto.Criteria;
 import dto.UserByFindPw;
 import dto.UsrDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -34,6 +37,10 @@ public class UsrServiceImpl implements UsrService {
     private UsrRepository usrRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
 
     public UsrDto getMemberByLoginId(String userId) {
         UsrDto result = usrRepository.getMemberByLoginId(userId);
@@ -225,10 +232,24 @@ public class UsrServiceImpl implements UsrService {
             httpSession.setAttribute("loginedUserId", usrDto.getUserId());
         }
 
+////        //스프링시큐리티 로그인 처리 로직<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //로그인이 성공적으로 실행될 경우에만 실행
+        if(loginStatus.containsKey("success") && loginStatus.containsValue(usrRepository.findUserNameByUserId(usrDto.getUserId()))){
+            UserDetails springSecurityResult = customUserDetailsService.loadUserByUsername(usrDto.getUserId());
+            System.out.println("springSecurityResult : " + springSecurityResult);          
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication : >>>>" + authentication);
+  
+
+
 
         //에러만 모아주는 함수를 실행시켜 결과만 리턴
         return errorProcess(bindingResult, usrDto, successFn);
     }
+
+
+
 
 
     public Map<String, Object> doLogout(HttpSession httpSession) {

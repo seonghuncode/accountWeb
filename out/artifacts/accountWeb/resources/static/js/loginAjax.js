@@ -1,5 +1,6 @@
-$("#try-login").click(function () {
+$("#try-login").click(function (e) {
     //alert("click");
+    e.preventDefault();
 
     function validation(res) {
 
@@ -116,6 +117,9 @@ $("#try-login").click(function () {
         type: "post",
         dataType: "json",   //dataType : "html", "json", "text"
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가
+        },
         success: function (res) {
             // alert("success");
             // console.log("응답");
@@ -135,8 +139,12 @@ $("#try-login").click(function () {
             }
 
         },
-        error: function () {
+        error: function (jqXHR, textStatus, errorThrown) {
             alert("error")
+            console.log("Ajax 요청 실패!");
+            console.log("jqXHR:", jqXHR);
+            console.log("textStatus:", textStatus);
+            console.log("errorThrown:", errorThrown);
         }
     });
 });

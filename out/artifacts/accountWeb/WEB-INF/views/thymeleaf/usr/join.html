@@ -93,6 +93,13 @@
     </div>
 </div>
 
+
+
+<!-- 이 부분을 추가하여 CSRF 토큰을 JavaScript 변수에 저장합니다 -->
+<script th:inline="javascript">
+    var csrfToken = [[${_csrf.token}]];
+</script>
+
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/resources/static/js/joinAjax.js"></script>
 
