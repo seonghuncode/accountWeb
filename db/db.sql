@@ -369,8 +369,9 @@ CREATE TABLE sort(
 )
 
 ALTER TABLE sort CHANGE create_date made_date DATE NOT NULL; #실제 코드 에서 사용하는 컬럼명이 변경되어 수정
+ALTER TABLE sort MODIFY COLUMN transactionId INT NOT NULL DEFAULT -1;
 
-    INSERT INTO sort
+INSERT INTO sort
 SET `name` = "식비",
 create_date = NOW(),
 userId = 1,
@@ -406,6 +407,11 @@ WHERE
 
 DROP TABLE sort;
 SELECT * FROM sort;
+SELECT * FROM `user`;
+SELECT * FROM `transaction`;
+
+
+
 
 
 

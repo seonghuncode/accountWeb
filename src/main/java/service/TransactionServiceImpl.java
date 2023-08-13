@@ -391,7 +391,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     //파라미터로 받은 분류명의 PK를 구하는 로직
-    public int getSortNamePrimaryId(Map<String, Object> sortInfo) {
+    public Integer getSortNamePrimaryId(Map<String, Object> sortInfo) {
         return transactionRepository.getSortNamePrimaryId(sortInfo);
     }
 

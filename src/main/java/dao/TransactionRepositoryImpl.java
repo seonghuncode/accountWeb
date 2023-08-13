@@ -106,7 +106,7 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
     }
 
     //분류명을 통해 해당 분류명의 PK값을 요청하는 로직
-    public int getSortNamePrimaryId(Map<String, Object> sortInfo){
+    public Integer getSortNamePrimaryId(Map<String, Object> sortInfo){
         return sqlSession.selectOne("dao.TransactionRepositoryImpl.getSortNamePrimaryId", sortInfo);
     }
 

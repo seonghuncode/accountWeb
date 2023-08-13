@@ -598,7 +598,7 @@ public class TransactionController {
                 AddTransactionHistory addTransactionHistory = new AddTransactionHistory(); //하나의 필드를 저장 하여 필드 별로 디비에 요청을 보낼 객체
 
                 //거래내역을 추가 하기 위해서는 해당 분류명의 primary key를 알아야 거래내역 테이블에 sortId를 저장해 나중에 참조할 수 있다.
-                int sortNameId = transactionService.getSortNamePrimaryId(sortInfo); //분류명에 대한 컬럼의 PK를 요청
+                Integer sortNameId = transactionService.getSortNamePrimaryId(sortInfo); //분류명에 대한 컬럼의 PK를 요청
 //                System.out.println("분류명의 PK : " + sortNameId);
 
 

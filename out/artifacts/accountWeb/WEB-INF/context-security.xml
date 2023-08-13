@@ -21,7 +21,7 @@
     <http auto-config="true" use-expressions="true">
         <!-- 해당 페이지는 특정 'ROLE_USER'권한이 있는 사용자만 접근 가능 -->
         <intercept-url pattern="/usr/main" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/transaction/**" access="hasRole('ROLE_USER')"/>
+<!--        <intercept-url pattern="/transaction/**" access="hasRole('ROLE_USER')"/>-->
 
 
 

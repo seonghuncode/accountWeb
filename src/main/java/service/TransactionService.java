@@ -61,7 +61,7 @@ public interface TransactionService {
 
     Map<String, Object> doAddTransactionHistory(TransactionController.AddTransactionHistory addTransactionHistory);
 
-    int getSortNamePrimaryId(Map<String, Object> sortInfo);
+    Integer getSortNamePrimaryId(Map<String, Object> sortInfo);
 
     Integer checkBeforeDeleteSortName(Map<String, Object> sortData);
 

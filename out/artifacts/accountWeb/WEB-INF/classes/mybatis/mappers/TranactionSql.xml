@@ -177,11 +177,11 @@
         WHERE
         <choose>
             <when test='year2.equals("") and month2.equals("")'>
-                MONTH(sort.made_date)=#{month} AND DATE_FORMAT(sort.made_date, '%y')=${year} || made_date = '1111-12-12' AND sort.userId = #{primaryId}
+                MONTH(sort.made_date)=#{month}  AND sort.userId = #{primaryId} AND DATE_FORMAT(sort.made_date, '%y')=${year} || made_date = '1111-12-12'
             </when>
             <otherwise>
-                MONTH(sort.made_date) IN (#{month} , #{month2}) AND DATE_FORMAT(sort.made_date, '%y') IN (${year},
-                #{year2}) || made_date = '1111-12-12' AND sort.userId = #{primaryId}
+                MONTH(sort.made_date) IN (#{month} , #{month2})  AND sort.userId = #{primaryId} AND DATE_FORMAT(sort.made_date, '%y') IN (${year},
+                #{year2}) || made_date = '1111-12-12'
             </otherwise>
         </choose>
 
@@ -259,7 +259,7 @@
     </update>
 
     <!-- 특정 분류명에 대한 PK값을 찾는 역할 -->
-    <select id="getSortNamePrimaryId" resultType="int" parameterType="hashmap">
+    <select id="getSortNamePrimaryId" resultType="Integer" parameterType="hashmap">
         SELECT id
         FROM `sort`
         WHERE `name` = #{sortName} and userId = #{userIdPK};
