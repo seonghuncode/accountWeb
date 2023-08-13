@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+//스프링 시큐리티를 사용하기 위해 구현해야 되는 로직으로 기본적으로 아래 처럼만 작성 하고
+//실제 필요한 구현은 CustomUserDetailsService에서 구현 한다.
+
 @Service
 public class CustomUserDetails implements UserDetails {
 

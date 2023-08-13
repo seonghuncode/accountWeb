@@ -67,20 +67,7 @@
     </servlet-mapping>
 
 
-<!--    &lt;!&ndash; 스프링 Security 필터 &ndash;&gt;-->
-<!--    &lt;!&ndash; 사용자가 요청을 할때마다 권한 인증이 이루어 져야한다 -> 모든 url(/*)요청을 해당 필터가 먼저 가로챈다 &ndash;&gt;-->
-<!--    &lt;!&ndash; 필터의 이름은 springSecurityFilterChain으로 약속하며, 이것은 스프링 시큐리티 내부 빈으로써 자동 생성된다. &ndash;&gt;-->
-<!--    <filter>-->
-<!--        <filter-name>springSecurityFilterChain</filter-name>-->
-<!--        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>springSecurityFilterChain</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </filter-mapping>-->
-
-
-
+    <!-- 스프링 시큐리티를 사용하기 위해 추가한 코드 -->
     <!--  Spring Security xml로 하는 방법 -->
     <!-- Spring Security Filter -->
     <filter>
@@ -102,6 +89,7 @@
             /WEB-INF/context-security.xml
         </param-value>
     </context-param>
+    <!-- 스프링 시큐리티를 사용하기 위해 추가한 코드 -->
 
 
 

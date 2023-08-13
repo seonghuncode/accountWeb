@@ -232,16 +232,16 @@ public class UsrServiceImpl implements UsrService {
             httpSession.setAttribute("loginedUserId", usrDto.getUserId());
         }
 
-////        //스프링시큐리티 로그인 처리 로직<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //로그인이 성공적으로 실행될 경우에만 실행
+        //스프링시큐리티 로그인 처리 로직-----------------------------------------------------------------------------------------
+        //로그인이 성공적으로 실행될 경우에만 해당 사용자 에게 권한을 주고 인증을 저장하도록 하는 로직 실행
         if(loginStatus.containsKey("success") && loginStatus.containsValue(usrRepository.findUserNameByUserId(usrDto.getUserId()))){
             UserDetails springSecurityResult = customUserDetailsService.loadUserByUsername(usrDto.getUserId());
-            System.out.println("springSecurityResult : " + springSecurityResult);          
+//            System.out.println("springSecurityResult : " + springSecurityResult);          
         }
+        //사용자에게 권한을 주고 현재 저장된 인증에 대한 권한 결과를 가지고 오는 코드로 확인 하는 용도 이다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication : >>>>" + authentication);
-  
-
+        //System.out.println("authentication : >>>>" + authentication); //ranted Authorities: ROLE_USER라고 나오면 권한이 주어지고 인증이 저장된 것이다
+        //스프링시큐리티 로그인 처리 로직-----------------------------------------------------------------------------------------
 
 
         //에러만 모아주는 함수를 실행시켜 결과만 리턴

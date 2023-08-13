@@ -24,7 +24,7 @@
     <bean id="testRepositoryImpl" class="dao.TestRepositoryImpl" />
     <bean id="usrServiceImpl" class="service.UsrServiceImpl" />
     <bean id="usrRepositoryImpl" class="dao.UsrRepositoryImpl"/>
-<!--    <bean id="SecurityConfig" class="util.SecurityConfig" />  &lt;!&ndash; passwordEncoder를 @Autowired로 사용하기 위함 &ndash;&gt;-->
+<!--    <bean id="SecurityConfig" class="util.SecurityConfig" />  &lt;!&ndash; passwordEncoder를 @Autowired로 사용하기 위함 &ndash;&gt; (context-security.xml를 사용하는 것으로 변경 해서 주석 처리)  -->
     <bean id="transactionServiceImpl" class="service.TransactionServiceImpl"/>
     <bean id="transactionRepositoryImpl" class="dao.TransactionRepositoryImpl" />
 

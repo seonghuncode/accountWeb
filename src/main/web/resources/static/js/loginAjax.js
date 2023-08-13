@@ -1,6 +1,6 @@
 $("#try-login").click(function (e) {
     //alert("click");
-    e.preventDefault();
+    e.preventDefault(); //스프링 시큐리티를 사용할 경우 특정 url을 권한을 준 경우 ajax에서 필요한 로직
 
     function validation(res) {
 
@@ -118,7 +118,7 @@ $("#try-login").click(function (e) {
         dataType: "json",   //dataType : "html", "json", "text"
         contentType: "application/json; charset=utf-8",
         headers: {
-            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
         },
         success: function (res) {
             // alert("success");

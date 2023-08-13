@@ -22,14 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UsrRepository usrRepository;
 
+    //기본 정해진 틀로 String userId만 받아야 한다?
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         // 아이디에 해당하는 사용자 정보 가져오기 (예: usrRepository.findByUserId(userId))
+        //파라미터로 받은(사용자가 입력한) 아이디를 갖고 DB에서 일치하는 아이디와 비밀번호를 찾는다.
         String fetchedUserId = usrRepository.getCheckExistUserId(userId);
         String findPasswordFromDB = usrRepository.getUserPassword(userId);
-        System.out.println("fetchedUserId : " + fetchedUserId);
-        System.out.println("findPasswordFromDB : " + findPasswordFromDB);
+//        System.out.println("fetchedUserId : " + fetchedUserId);
+//        System.out.println("findPasswordFromDB : " + findPasswordFromDB);
 
+        //일치 하는 아이디가 없을 경우
         if (fetchedUserId == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -46,12 +49,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 //        }
 
+        //사용자가 입력한 아이디와 DB에 있는 아이디가 일치할 경우
         if (fetchedUserId.equals(userId)) {
             // 예시로 ROLE_USER 권한을 가진 사용자 생성
             Collection<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-            System.out.println("authorities : " + authorities);
+//            System.out.println("authorities : " + authorities); //권한에 대한 결과
 
+            //중요!!
             //인증을 진행하는 코드 (Spring Security의 기본적인 로그인 인증 처리 코드)
             //인증 정보를 저장하지 않으면 사용자는 인증되지 않은 익명 사용자로 취급됩니다.
             //성공시 아래 로직으로 인증을 저장해야 반영 된다
@@ -65,12 +70,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
-    // 사용자 정보를 데이터베이스에서 가져오는 메서드
-//    private UsrDto getUserInfoFromRepository(String userId) {
-//        // 실제로 데이터베이스에서 사용자 정보를 조회하는 로직을 구현해야 합니다.
-//        // 예시로 아래와 같이 가정합니다.
-//        return usrRepository.findByUserId(userId);
-//    }
 
     // 사용자가 특정 역할을 가지고 있는지 확인하는 메서드
     private boolean userHasRole(String userId, String roleName) {
