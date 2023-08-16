@@ -33,7 +33,6 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                 var encodingSortName = encodeURIComponent(sortName);
 
 
-
                 if (history.transaction_date === transactionDate.transaction_date && nowLoginUserId != userId) { //자신의 거래내역 페이지가 아닐 경우
                     tbodyHtml += '<tr>';
                     tbodyHtml += '<th scope="row">' + (index + 1) + '</th>';
@@ -88,13 +87,22 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
             // console.log(new Date(transactionDate.transaction_date).getDay());
             var today = new Date(transactionDate.transaction_date).getDay();
 
+
+
+            //숫자를 파라미터로 받으면 해당 숫자를 백의 단위로 끊어 ","로 구분하는 값으로 반환해주는 함수
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            // console.log(numberWithCommas(transactionDate.dayCntIncome))
+
             if ((index + 1) <= changeDateCnt && nowLoginUserId != userId) { //현재 로그인한 회원이 아닌 다른 회원의 거래내역일 경우
                 // console.log("만들어지는 테이블 갯수")
                 theadHtml += '<table class="table table-hover" style="text-align: center; font-size: small">';
                 theadHtml += '<thead>';
                 theadHtml += '<tr style="background-color: #FDF5E6">';
                 theadHtml += '<th colspan="2" style="text-align: left; padding-left: 15px">' + transactionDate.transaction_date + week[today] + '</th>';
-                theadHtml += '<th colspan="2" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + transactionDate.dayCntIncome + '</span>' + '지출 : ' + '<span style="color: blue">' + transactionDate.dayCntExpend + '</span>' + ')';
+                // theadHtml += '<th colspan="2" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + transactionDate.dayCntIncome + '</span>' + '지출 : ' + '<span style="color: blue">' + transactionDate.dayCntExpend + '</span>' + ')';
+                theadHtml += '<th colspan="2" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + numberWithCommas(transactionDate.dayCntIncome) + '</span>' + '지출 : ' + '<span style="color: blue">' + numberWithCommas(transactionDate.dayCntExpend) + '</span>' + ')';
                 theadHtml += '</th>';
                 theadHtml += '</tr>';
                 theadHtml += '<tr style="background-color: #FDF5E6">';
@@ -114,7 +122,8 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                 theadHtml += '<thead>';
                 theadHtml += '<tr style="background-color: #FDF5E6">';
                 theadHtml += '<th colspan="2" style="text-align: left; padding-left: 15px">' + transactionDate.transaction_date + week[today] + '</th>';
-                theadHtml += '<th colspan="4" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + transactionDate.dayCntIncome + '</span>' + '지출 : ' + '<span style="color: blue">' + transactionDate.dayCntExpend + '</span>' + ')';
+                // theadHtml += '<th colspan="4" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + transactionDate.dayCntIncome + '</span>' + '지출 : ' + '<span style="color: blue">' + transactionDate.dayCntExpend + '</span>' + ')';
+                theadHtml += '<th colspan="4" style="text-align: right; padding-right: 15px">' + '합계(수입 :' + '<span style="color: red">' + numberWithCommas(transactionDate.dayCntIncome) + '</span>' + '지출 : ' + '<span style="color: blue">' + numberWithCommas(transactionDate.dayCntExpend) + '</span>' + ')';
                 theadHtml += '</th>';
                 theadHtml += '</tr>';
                 theadHtml += '<tr style="background-color: #FDF5E6">';
