@@ -132,7 +132,7 @@ public class UsrController {
     //로그인 폼에서 로그인을 성공하면 해당 회원 정보를 메인화면으로 넘겨 메인화면으로 요청하는 로직
     //현재 로그인 되어있는 세션의 아이디로 회원정보를 찾을 수 있기 때문에 따로 넘겨줄 매개변수는 없다.
     @RequestMapping("/usr/main")
-    public ModelAndView doMain(Model model, Criteria cri) throws Exception {
+    public ModelAndView doMain(Model model, Criteria cri, HttpSession httpSession) throws Exception {
         //현재 전체 회원을 보내주는 것이 아니라 페이징 기능을 사용하기 때문에 페이지에 해당하는 화원만 프론트로 보내주면 되기 때문에 전체 회원을 불러오는 기능은 사용X
 //        List<UsrDto> users = usrService.getAllUserFromDB();
 //        model.addAttribute("users", users); //메인화면 애서 회원 이름, 지출내역 공개 여부에 대한 정보를 보여주어야 하기대문에 객체를 넘겨준다.
@@ -161,6 +161,10 @@ public class UsrController {
         mav.addObject("userYesCnt", userYesCnt); //view_yn=yes인 회원의 수
         int userNoCnt = usrService.getNoUserCnt();
         mav.addObject("userNoCnt", userNoCnt);
+
+        //메인 페이지 에서 네비게이션 바 우측 상단에 로그인 되어있는 회원의 아이디를 보여주기 위해 사용
+        String userId = (String) httpSession.getAttribute("loginedUserId");
+        model.addAttribute("userId", userId);
 
 //        System.out.println(mav);
         return mav;
@@ -344,6 +348,24 @@ public class UsrController {
         //사용자가 입력한 이름, 아이디, 이메일과 일치하는 회원의 PK값을 가지고 오는 로직
         Map<String, Object> result =  usrService.getUserPkByFindPw(data);
 //        System.out.println("회원의 PK : " + result);
+
+        return result;
+    }
+
+
+
+    @RequestMapping("usr/myInfoDelete")
+    @ResponseBody
+    public Map<String, Object> myInfoDelete(@RequestBody  Map<String, Object> data, HttpSession httpSession){
+        //삭제 로직 진행 -> 성공시 알림 메세지 + 성공시 로그인 화면으로 이동
+
+//        System.out.println("userId : " + data.get("userId"));
+//        System.out.println("name : " + data.get("name"));
+//        System.out.println("userIdPK : " + data.get("userIdPK"));
+        
+        //현재 로그인 되어 있는 회원을 탈퇴시키는 로직
+        Map<String, Object> result = usrService.doInfoDelete(data, httpSession);
+//        System.out.println(result);
 
         return result;
     }

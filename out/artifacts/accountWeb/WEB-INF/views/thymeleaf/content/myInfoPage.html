@@ -46,24 +46,30 @@
         </tbody>
     </table>
 
-    <button type="button" class="btn btn-outline-secondary" id="modifyMyInfo">정보수정</button>
+    <div>
+        <button type="button" class="btn btn-outline-secondary" id="modifyMyInfo" style="width: 47%; float: left">정보수정
+        </button>
+        <button type="button" class="btn btn-outline-warning" id="deleteMyInfo" style="width: 47%; float: right">회원 탈퇴
+        </button>
+    </div>
 
-    <!-- 비밀번호 입력 모달(정보 수정 버튼을 클릭하면 생성) -->
+
+    <!-- 비밀번호 입력 모달(정보 수정 버튼을 클릭하면 생성) --------------------------------------------------------------->
     <div id="passwordModal" class="modal">
         <div class="modal-content" style="width: 60%">
             <span class="close" onclick="closePasswordModal()" style="text-align: right">&times;</span>
             <h2 style="text-align: center">비밀번호 입력</h2>
-            <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요." style="margin-top: 10px; margin-bottom: 10px;">
+            <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요."
+                   style="margin-top: 10px; margin-bottom: 10px;">
             <div id="modifyInfoValid" style="margin-bottom: 10px;"></div>
-            <button type="button" class="btn btn-outline-secondary" onclick="submitPassword()" style="margin-bottom: 10px;">확인</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="submitPassword()"
+                    style="margin-bottom: 10px;">확인
+            </button>
         </div>
     </div>
 
 
-
 </div>
-
-
 
 
 <!--

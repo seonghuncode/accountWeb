@@ -139,6 +139,12 @@
     </update>
 
 
+    <!--  현재 로그인 되어 있는 회원을 탈퇴시키는 로직 -->
+    <delete id="doInfoDelete" parameterType="hashmap">
+        DELETE FROM `user` WHERE id = #{userIdPK} and user_id = #{userId};
+    </delete>
+
+
 </mapper>
 
 

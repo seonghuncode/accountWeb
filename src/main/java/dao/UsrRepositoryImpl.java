@@ -96,4 +96,8 @@ public class UsrRepositoryImpl implements  UsrRepository {
     }
 
 
+    public Integer doInfoDelete(Map<String, Object> data){
+        return  sqlSession.delete("dao.UsrRepositoryImpl.doInfoDelete", data);
+    }
+
 }

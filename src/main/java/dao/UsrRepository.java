@@ -50,4 +50,6 @@ public interface UsrRepository {
     Integer getUserPkByFindPw(Map<String, Object> data);
 
     Integer changePwToTemporaryPw(UserByFindPw info);
+
+    Integer doInfoDelete(Map<String, Object> data);
 }

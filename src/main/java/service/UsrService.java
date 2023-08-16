@@ -63,4 +63,7 @@ public interface UsrService {
     //사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직
     Map<String, Object> getUserPkByFindPw(Map<String, Object> data);
 
+    //현재 로그인 되어 있는 회원을 탈퇴시키는 로직
+    Map<String, Object> doInfoDelete(Map<String, Object> data, HttpSession httpSession);
+
 }

@@ -496,7 +496,27 @@ public class UsrServiceImpl implements UsrService {
 
 
 
+    //현재 로그인 되어 있는 회원을 탈퇴시키는 로직
+    public Map<String, Object> doInfoDelete(Map<String, Object> data, HttpSession httpSession) {
 
+        Integer resultQuery = usrRepository.doInfoDelete(data);
+//        System.out.println(resultQuery);
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if (resultQuery == 1) {
+            result.put("result", "success");
+        } else {
+            result.put("result", "fail");
+        }
+
+        doLogout(httpSession); //로그인 했던 세션 삭제
+        SecurityContextHolder.clearContext();  //로그아웃을 실행하면 저장된 Spring Security권한이 삭제 된다
+
+
+        return result;
+
+    }
 
 
 
