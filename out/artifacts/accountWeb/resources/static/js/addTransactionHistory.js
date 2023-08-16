@@ -476,6 +476,7 @@ function addTransactionValid(jsonString) {
             $(`#priceValid${i + 1}`).text("※금액은 최대 999,999,999 까지 입력 가능합니다.");
             $(`#priceValid${i + 1}`).css("color", "red");
             $(`#priceValid${i + 1}`).css("font-size", "small");
+            cnt++;
         }else if(!(obj.price.trim() == "") && $.isNumeric(obj.price.trim()) && obj.price.trim() <= 999999999){
             $(`#priceValid${i + 1}`).text("");
         }

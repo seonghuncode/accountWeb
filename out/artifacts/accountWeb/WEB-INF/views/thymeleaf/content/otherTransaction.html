@@ -155,9 +155,9 @@
                         <div th:if="${#strings.equals(history.transaction_date, transactionDate.transaction_date)}">
                             <th scope="row">[[${index.count}]]</th>
                             <td>[[${history.name}]]</td>
-                            <td>[[${history.memo}]]</td>
-                            <td th:if="${history.type == '수입'}" style="color: red" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
-                            <td th:if="${history.type == '지출'}" style="color: blue" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                            <td style="width: 25%;">[[${history.memo}]]</td>
+                            <td th:if="${history.type == '수입'}" style="color: red; width: 25%;" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                            <td th:if="${history.type == '지출'}" style="color: blue; width: 25%;" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
                             <!-- 로그인한 회원의 지출 내역일 경우 -->
                             <td th:if="${#strings.equals(nowLoginUserId, userId)}">
                                 <button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" id="modifyTransactionField" th:onclick="|location.href='@{/transaction/modifyTransactionField(transactionHistoryId = ${history.id} ,type=${history.type}, userId=${nowLoginUserId}, transactionDate=${history.transaction_date}, index=${index.count}, sortName=${history.name}, memo=${history.memo}, price=${history.price})}'|">
