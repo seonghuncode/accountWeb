@@ -52,10 +52,10 @@
 
 
         <!--        <tbody th:each="user, num : ${users}">  &lt;!&ndash; num은 반복문을 처리 상태변수 접근을 위해 사용 된다. &ndash;&gt;-->
-        <tbody th:each="user : ${list}" id="info"> <!-- 위의 경우 전체 회원, 이 코드의 경우 특정 페이지에 있는 데이터만 보여준다 -->
-
+        <tbody th:each="user, userState : ${list}" id="info"> <!-- 위의 경우 전체 회원, 이 코드의 경우 특정 페이지에 있는 데이터만 보여준다 -->
         <tr>
-            <th scope="row">[[${user.id}]]</th>
+<!--            <th scope="row">[[${user.id}]]</th>-->
+            <td th:text="${userState.count + (nowPage - 1) * 10}"></td>
             <td th:text="${user.name}"></td> <!-- ${user.name} 에러?? -->
             <td>
                 <a th:href="@{/transaction/showTransaction(userId=${user.user_id})}"> <!-- 거래내역 페이지에 사용자가 클릭한 회원 아이디를 함꼐 보내준다 --->
