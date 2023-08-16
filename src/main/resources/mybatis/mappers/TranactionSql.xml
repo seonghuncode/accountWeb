@@ -397,5 +397,22 @@
     </select>
 
 
+    <!-- 기간별 거래내역 검색의 경우 해당 하는 기간의 목표예산을 전부 합해주는 로직 (만약 거래내역 금액을 넣지 않으면 default로 -1이 들어간다.)-->
+    <!-- 사용자가 선택한 시작 날짜를 해당 날짜의 첫날로 바꾸고, 선택한 마지말 날짜에 대해서는 해당 날짜의 마지막 날로 변경 한다. -->
+    <select id="periodTotalBudget" resultType="Integer" parameterType="hashmap">
+        SELECT SUM(price) FROM `budget` WHERE `month` BETWEEN (LAST_DAY(#{startDate} - INTERVAL 1 MONTH) + INTERVAL 1 DAY) AND (LAST_DAY(#{endDate})) AND price != -1 and userId = #{primaryId};
+    </select>
+
+
+    <!-- 기간별 거래내역 검색의 경우 해당 기간에 해당 하는 값들을 가지고 오는 로직 (내역이 수입인지 지출인지 받아오는 데이터)-->
+    <select id="getTransactionValueByPeriod" resultType="map" parameterType="hashmap">
+        SELECT `transaction`.type, `transaction`.price
+        FROM `transaction`
+                 LEFT JOIN `user` ON `transaction`.userId = user.id
+        WHERE transaction_date BETWEEN (LAST_DAY(#{startDate} - INTERVAL 1 MONTH) + INTERVAL 1 DAY) AND (LAST_DAY(#{endDate}))
+          AND user.id = #{primaryId};
+    </select>
+
+
 
 </mapper>

@@ -295,28 +295,25 @@ public class TransactionController {
 //        System.out.println("transaction : " + transaction.getMonth());
 //        System.out.println("transaction : " + transaction.getUserId());
 //        System.out.println("targetBudget : " + targetBudget);
+//        System.out.println("===기간별 검색===");
+//        System.out.println(startDate);
+//        System.out.println(endDate);
+//        System.out.println("startDate : " + transaction.getStartDate());
+//        System.out.println("endDate : " + transaction.getEndDate());
 
         //transactionValue -> [{price=8000, type=수입}, {price=8000, type=지출}, {price=8000, type=수입}, {price=8000, type=지출},......
         //incomeSum -> 총 수입액, expendSum -> 총 지출액
         List<Map<String, Object>> transactionValue = transactionService.getTransactionValue(transaction); //현재 받아온 데이터는 map형태 -> key,value로 구성 되어 있다.
-        int incomeSum = 0; //수입 총액
-        int expendSum = 0; //지출 총액
-        for (Map<String, Object> item : transactionValue) {
-            if (item.get("type").equals("지출")) {
-                expendSum += (int) item.get("price");
-            } else if (item.get("type").equals("수입")) {
-                incomeSum += (int) item.get("price");
-            }
-        }
-        model.addAttribute("incomeSum", incomeSum);
-        model.addAttribute("expendSum", expendSum);
+//        System.out.println(transactionValue);
 
-        //leftMoney -> -1 or 예산액 - 총 지출액
-        Integer leftMoney = -1;
-        if (targetBudget != null) { //사용자가 예산값을 지정해 두어 null값이 아니라면
-            leftMoney = targetBudget - expendSum; //월 목표 예산에서 - 월 총 소비
-        }
-        model.addAttribute("leftMoney", leftMoney);
+        //=============================================================================================
+        //거래내역 부분에서 사용자 자가 월별 검색 또는 기간별 검색을 할경우 검색월 기준 현황에 보여줄 남은 목표 예산, 총 수입, 총 지출에 대한 데이터를 구해주는 로직
+        Map<String, Object> calculateForSearchInfo = transactionService.calculateForSearchInfo(transactionValue, targetBudget);
+        model.addAttribute("incomeSum", calculateForSearchInfo.get("incomeSum"));
+        model.addAttribute("expendSum", calculateForSearchInfo.get("expendSum"));
+        model.addAttribute("leftMoney", calculateForSearchInfo.get("leftMoney"));
+        //=============================================================================================
+
 
 
         //여기서 부터 JS에서 typeRadio변수에 담긴 값이 특정 월, 기간별, 당월에 따라 클라이언트로 보내지는 데이터가 다르게 분류하는 로직
@@ -397,6 +394,24 @@ public class TransactionController {
             model.addAttribute("endDate", endDate);
             model.addAttribute("sortName", sortName);
             model.addAttribute("typeRadio", typeRadio); //해당 데이터를 타임리프에서 js넘겨 페이지가 재로딩 되더라도 이전 페이지가 어떠한 radio button이었는지 알 수 있기 위해서 보내준다.
+
+            model.addAttribute("periodTotalBudget", "periodTotalBudget"); //해당 값이 넘어갈 경우 목표 예산을 선택된 기간의 총 예산을 합친값 + 기간을 출력
+            //(예산액은 월 별로 관리 설정 하기 때문에 기간별 검색읠 경우 기간에 해당 하는 전체 예산액을 합친 금액을 나타낸다)
+//            System.out.println(transaction.getPrimaryId());
+            Integer periodTotalBudget = transactionService.periodTotalBudget(transaction);
+//            System.out.println("기간 총 예산액 : " + periodTotalBudget);
+            model.addAttribute("periodBudget", periodTotalBudget);
+
+            //특정 기간에 해당하는 가격과 타입에 대한 데이터를 전부 가지고 와서 남은 목표 예산과 총 수입, 총 지출을 구할때 사용할 데이터
+            transactionValue = transactionService.getTransactionValueByPeriod(transaction);
+//            System.out.println(transactionValue);
+
+
+            //거래내역 부분에서 사용자 자가 월별 검색 또는 기간별 검색을 할경우 검색월 기준 현황에 보여줄 남은 목표 예산, 총 수입, 총 지출에 대한 데이터를 구해주는 로직
+            calculateForSearchInfo = transactionService.calculateForSearchInfo(transactionValue, periodTotalBudget);
+            model.addAttribute("incomeSum", calculateForSearchInfo.get("incomeSum"));
+            model.addAttribute("expendSum", calculateForSearchInfo.get("expendSum"));
+            model.addAttribute("leftMoney", calculateForSearchInfo.get("leftMoney"));
 
         }
 

@@ -689,5 +689,54 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+    //기간별 거래내역 검색의 경우 해당 하는 기간의 목표예산을 전부 합해주는 로직
+    public Integer periodTotalBudget(TransactionController.Transaction transaction) {
+        return transactionRepository.periodTotalBudget(transaction);
+    }
+
+    
+    //기간별 거래내역 검색의 경우 해당 기간에 해당 하는 값들을 가지고 오는 로직
+    public List<Map<String, Object>> getTransactionValueByPeriod(TransactionController.Transaction transaction) {
+        return transactionRepository.getTransactionValueByPeriod(transaction);
+    }
+
+
+    //거래내역 부분에서 사용자 자가 월별 검색 또는 기간별 검색을 할경우 검색월 기준 현황에 보여줄 남은 목표 예산, 총 수입, 총 지출에 대한 데이터를 구해주는 로직
+    //(/showTransaction/whichSelect 오는 요청)
+    public Map<String, Object> calculateForSearchInfo(List<Map<String, Object>> transactionValue, Integer targetBudget){
+
+        int incomeSum = 0; //수입 총액
+        int expendSum = 0; //지출 총액
+        for (Map<String, Object> item : transactionValue) {
+            if (item.get("type").equals("지출")) {
+                expendSum += (int) item.get("price");
+            } else if (item.get("type").equals("수입")) {
+                incomeSum += (int) item.get("price");
+            }
+        }
+
+        //leftMoney -> -1 or 예산액 - 총 지출액
+        Integer leftMoney = -1;
+        if (targetBudget != null) { //사용자가 예산값을 지정해 두어 null값이 아니라면
+            leftMoney = targetBudget - expendSum; //월 목표 예산에서 - 월 총 소비
+        }
+
+
+        //쿼리에 필요한 데이터들를 Map형태로 넣는다.
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("incomeSum", incomeSum);
+        data.put("expendSum", expendSum);
+        data.put("leftMoney", leftMoney);
+
+        return data;
+
+    }
+
+
+
+
+
+
+
 
 }

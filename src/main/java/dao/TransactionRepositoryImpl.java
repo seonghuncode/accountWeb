@@ -187,6 +187,16 @@ public class TransactionRepositoryImpl implements  TransactionRepository {
         return sqlSession.selectOne("dao.TransactionRepository.getTotalPriceByPeriod", data);
     }
 
+    //기간별 거래내역 검색의 경우 해당 하는 기간의 목표예산을 전부 합해주는 로직
+    public Integer periodTotalBudget(TransactionController.Transaction transaction){
+        return sqlSession.selectOne("dao.TransactionRepositoryImpl.periodTotalBudget", transaction);
+    }
+
+    //기간별 거래내역 검색의 경우 해당 기간에 해당 하는 값들을 가지고 오는 로직
+    public List<Map<String, Object>> getTransactionValueByPeriod(TransactionController.Transaction transaction){
+        return sqlSession.selectList("dao.TransactionRepositoryImpl.getTransactionValueByPeriod", transaction);
+    }
+
 
 
 }

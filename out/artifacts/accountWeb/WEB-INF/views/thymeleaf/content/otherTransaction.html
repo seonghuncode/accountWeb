@@ -66,17 +66,23 @@
                 </thead>
                 <tbody>
                 <tr align="center">
-                    <!-- 목표 예산액에 대한 1000단위 마다 컴마로 표현하기 위한 방법 -->
-                    <td th:if="${targetBudget} != null"
-                        th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}"></td>
-                    <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
+                    <!-- 월별 또는 이번달 검색에서의 목표 예산 부분 /  (목표 예산액에 대한 1000단위 마다 컴마로 표현하기 위한 방법) -->
+                    <div th:if="${periodTotalBudget} == null">
+                        <td th:if="${targetBudget} != null"
+                            th:text="${#numbers.formatInteger(targetBudget, 0, 'COMMA')}"></td>
+                        <td th:unless="${targetBudget} != null"> -</td> <!-- 예산값으로 null값을 받은 경우 -->
+                    </div>
+                    <!-- 만약 기간별 검색일 경우의 목표 예산 -->
+                    <div th:unless="${periodTotalBudget} == null">
+                        <td style="font-size: x-small"><span th:text="${#numbers.formatInteger(periodBudget, 0, 'COMMA')}"></span><br>([[${startDate}]] ~ [[${endDate}]])</td>
+                    </div>
 
-                    <td th:if="${leftMoney} != -1" th:text="${#numbers.formatInteger(leftMoney, 0, 'COMMA')}"></td>
+                    <td th:if="${leftMoney} != -1" th:text="${#numbers.formatInteger(leftMoney, 0, 'COMMA')}"></td> <!-- 남은 목표예산 -->
                     <td th:unless="${leftMoney} != -1"> -</td>
 
-                    <td style="color: red" th:text="${#numbers.formatInteger(incomeSum, 0, 'COMMA')}"></td>
+                    <td style="color: red" th:text="${#numbers.formatInteger(incomeSum, 0, 'COMMA')}"></td> <!-- 총 수입 -->
 
-                    <td style="color: blue" th:text="${#numbers.formatInteger(expendSum, 0, 'COMMA')}"></td>
+                    <td style="color: blue" th:text="${#numbers.formatInteger(expendSum, 0, 'COMMA')}"></td> <!-- 총 지출 -->
                 </tr>
                 </tbody>
             </table>
@@ -91,10 +97,14 @@
     <div class="circleFrame">
 
         <div th:if="${#strings.equals(nowLoginUserId, userId)}">
-            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="openPopUp">분류명 관리</button>
-            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="budgetAmount">예산액 수정</button>
-<!--            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; margin-right: 5px;" id="addTransactionHistory">거래 내역 추가</button>-->
-            <a class="btn btn-outline-secondary" type="button" style="font-size: x-small; margin-right: 5px;"  th:href="@{/transaction/addTransactionHistory(userId = ${userId})}">거래 내역 추가</a>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="openPopUp">분류명 관리
+            </button>
+            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small;" id="budgetAmount">예산액
+                수정
+            </button>
+            <!--            <button type="button" class="btn btn-outline-secondary" style="font-size: x-small; margin-right: 5px;" id="addTransactionHistory">거래 내역 추가</button>-->
+            <a class="btn btn-outline-secondary" type="button" style="font-size: x-small; margin-right: 5px;"
+               th:href="@{/transaction/addTransactionHistory(userId = ${userId})}">거래 내역 추가</a>
         </div>
 
         <div>
@@ -132,11 +142,19 @@
                             [[${transactionDate.transaction_date}]]
                             ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
                         </th>
-                        <th th:if="!(${#strings.equals(nowLoginUserId, userId)})" colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red" th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
-                            지출 : <span style="color: blue" th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span> )
+                        <th th:if="!(${#strings.equals(nowLoginUserId, userId)})" colspan="2"
+                            style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red"
+                                                                                         th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
+                            지출 : <span style="color: blue"
+                                       th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span>
+                            )
                         </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 다를 경우는 colspan="2"로 지정 -->
-                        <th th:unless="!(${#strings.equals(nowLoginUserId, userId)})" colspan="4" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red" th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
-                            지출 : <span style="color: blue" th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span> )
+                        <th th:unless="!(${#strings.equals(nowLoginUserId, userId)})" colspan="4"
+                            style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red"
+                                                                                         th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
+                            지출 : <span style="color: blue"
+                                       th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span>
+                            )
                         </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 같을 경우는 colspan="4"로 지정 -->
                     </tr>
 
@@ -145,8 +163,10 @@
                         <th scope="col">분류명</th>
                         <th scope="col">메모</th>
                         <th scope="col">거래</th>
-                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">수정</th> <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
-                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">삭제</th> <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
+                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">수정</th>
+                        <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
+                        <th scope="col" th:if="${#strings.equals(nowLoginUserId, userId)}">삭제</th>
+                        <!-- 해당 지출 내역이 현재 로그인한 회원과 동일할 경우 -->
                     </tr>
                     </thead>
                     <tbody>
@@ -156,20 +176,28 @@
                             <th scope="row">[[${index.count}]]</th>
                             <td>[[${history.name}]]</td>
                             <td style="width: 25%;">[[${history.memo}]]</td>
-                            <td th:if="${history.type == '수입'}" style="color: red; width: 25%;" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
-                            <td th:if="${history.type == '지출'}" style="color: blue; width: 25%;" th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                            <td th:if="${history.type == '수입'}" style="color: red; width: 25%;"
+                                th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
+                            <td th:if="${history.type == '지출'}" style="color: blue; width: 25%;"
+                                th:text="${#numbers.formatInteger(history.price, 0, 'COMMA')}"></td>
                             <!-- 로그인한 회원의 지출 내역일 경우 -->
                             <td th:if="${#strings.equals(nowLoginUserId, userId)}">
-                                <button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" id="modifyTransactionField" th:onclick="|location.href='@{/transaction/modifyTransactionField(transactionHistoryId = ${history.id} ,type=${history.type}, userId=${nowLoginUserId}, transactionDate=${history.transaction_date}, index=${index.count}, sortName=${history.name}, memo=${history.memo}, price=${history.price})}'|">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16" >
+                                <button type="button" class="btn btn-outline-secondary"
+                                        style="border: none; padding: 0px" id="modifyTransactionField"
+                                        th:onclick="|location.href='@{/transaction/modifyTransactionField(transactionHistoryId = ${history.id} ,type=${history.type}, userId=${nowLoginUserId}, transactionDate=${history.transaction_date}, index=${index.count}, sortName=${history.name}, memo=${history.memo}, price=${history.price})}'|">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-pen" viewBox="0 0 16 16">
                                         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"></path>
                                     </svg>
                                     <span class="visually-hidden">Button</span>
                                 </button>
                             </td>
                             <td th:if="${#strings.equals(nowLoginUserId, userId)}">
-                                <button type="button" class="btn btn-outline-secondary" style="border: none; padding: 0px" th:onclick="deleteTransactionField([[${history.id}]], [[${history.type}]], [[${nowLoginUserId}]], [[${history.transaction_date}]], [[${index.count}]], [[${history.name}]], [[${history.memo}]], [[${history.price}]])">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                <button type="button" class="btn btn-outline-secondary"
+                                        style="border: none; padding: 0px"
+                                        th:onclick="deleteTransactionField([[${history.id}]], [[${history.type}]], [[${nowLoginUserId}]], [[${history.transaction_date}]], [[${index.count}]], [[${history.name}]], [[${history.memo}]], [[${history.price}]])">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-trash3" viewBox="0 0 16 16">
                                         <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"></path>
                                     </svg>
                                     <span class="visually-hidden">Button</span>
@@ -194,7 +222,8 @@
             7일치 내역 더보기
         </button>
 
-        <button type="button" class="btn btn-outline-secondary moveTopBtn" style="font-size: x-small; float: right" id="moveTopBtn">맨위로
+        <button type="button" class="btn btn-outline-secondary moveTopBtn" style="font-size: x-small; float: right"
+                id="moveTopBtn">맨위로
         </button>
     </div>
 
@@ -221,7 +250,7 @@
     var beforeTypeRadio = [[${typeRadio}]];
     var startDate = [[${startDate}]];
     var endDate = [[${endDate}]];
-    var  history = [[${history}]];
+    var history = [[${history}]];
 </script>
 <script type="text/javascript" src="/resources/static/js/otherTransaction.js"></script>
 <script type="text/javascript" src="/resources/static/js/sortAjax.js"></script> <!-- 분류명에 관련된 Js -->

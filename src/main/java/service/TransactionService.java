@@ -95,5 +95,10 @@ public interface TransactionService {
 
     Integer getTotalPriceByPeriod(int primaryId, String startDate, String endDate, String type);
 
+    Integer periodTotalBudget(TransactionController.Transaction transaction);
+
+    List<Map<String, Object>> getTransactionValueByPeriod(TransactionController.Transaction transaction);
+
+    Map<String, Object> calculateForSearchInfo(List<Map<String, Object>> transactionValue, Integer targetBudget);
 
 }

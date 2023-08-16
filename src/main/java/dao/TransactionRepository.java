@@ -83,5 +83,11 @@ public interface TransactionRepository {
 
     Integer getTotalPriceByPeriod(Map<String, Object> data);
 
+    //기간별 거래내역 검색의 경우 해당 하는 기간의 목표예산을 전부 합해주는 로직
+    Integer periodTotalBudget(TransactionController.Transaction transaction);
+
+    //기간별 거래내역 검색의 경우 해당 기간에 해당 하는 값들을 가지고 오는 로직
+    List<Map<String, Object>> getTransactionValueByPeriod(TransactionController.Transaction transaction);
+
 
 }
