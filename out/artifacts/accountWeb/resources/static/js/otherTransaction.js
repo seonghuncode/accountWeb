@@ -89,7 +89,7 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
 
 
 
-            //숫자를 파라미터로 받으면 해당 숫자를 백의 단위로 끊어 ","로 구분하는 값으로 반환해주는 함수
+            //숫자를 파라미터로 받으면 해당 숫자를 백의 단위로 끊어 ","로 구분하는 값으로 반환해주는 함수--------------------------------------
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
@@ -313,6 +313,16 @@ const target3 = document.getElementById('thirdSearch');
 const nowPage = window.location.pathname;
 // console.log("현재 페이지 : " + nowPage);
 const typeRadio1 = beforeTypeRadio; //월별검색, 기간별검색의 경우 controller에서 하나의 url로 데이터를 받아  처리하기 때문에 두 기능에 대해 구분할 수 있는 변수가 필요
+
+
+//당월을 구하는 코드를 추가한 이유
+//기존 otherTransaction.html에서 당해, 당월을 넘겨주는데 검색 버튼을 클릭했을 경우 페이지가 로딩 되면서 오류가 없지만
+//기간별 검색을 하고 이번달 라디오 버튼을 클릭할 경우 당월에 대한 연도와 달을 읽어 오지 못하는 문제점을 해결하기 위해 추가 작성
+var now = new Date();
+var year=now.getFullYear().toString().substr(2, 2);
+var month=now.getMonth()+1;
+// console.log(year);
+// console.log(month);
 
 if (nowPage === "/transaction/showTransaction") {
     target1.checked = false;
