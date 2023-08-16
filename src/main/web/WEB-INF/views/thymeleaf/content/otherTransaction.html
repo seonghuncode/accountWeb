@@ -128,17 +128,18 @@
                     <!-- 컨트롤러 에서 받아오는 보여주고 싶은 dateCnt까지만 테이블을 생성해서 보여줘라 -->
                     <thead>
                     <tr style="background-color: #FDF5E6">
-                        <th colspan="2" style="text-align: left; padding-left: 15px">
+                        <th colspan="2" style="text-align: left; padding-left: 15px"> <!-- 날짜 부분 -->
                             [[${transactionDate.transaction_date}]]
                             ([[${#calendars.dayOfWeekNameShort(transactionDate.transaction_date)}]])
                         </th>
-                        <th th:if="!(${#strings.equals(nowLoginUserId, userId)})" colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
-                            지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
+                        <th th:if="!(${#strings.equals(nowLoginUserId, userId)})" colspan="2" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red" th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
+                            지출 : <span style="color: blue" th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span> )
                         </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 다를 경우는 colspan="2"로 지정 -->
-                        <th th:unless="!(${#strings.equals(nowLoginUserId, userId)})" colspan="4" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red">[[${transactionDate.dayCntIncome}]]</span>
-                            지출 : <span style="color: blue">[[${transactionDate.dayCntExpend}]]</span> )
+                        <th th:unless="!(${#strings.equals(nowLoginUserId, userId)})" colspan="4" style="text-align: right; padding-right: 15px">합계(수입 : <span style="color: red" th:text="${#numbers.formatInteger(transactionDate.dayCntIncome, 0, 'COMMA')}"></span>
+                            지출 : <span style="color: blue" th:text="${#numbers.formatInteger(transactionDate.dayCntExpend, 0, 'COMMA')}"></span> )
                         </th> <!-- 해당 페이지의 지출 내역이 현재 로그인한 회원이랑 같을 경우는 colspan="4"로 지정 -->
                     </tr>
+
                     <tr style="background-color: #FDF5E6">
                         <th scope="col">번호</th>
                         <th scope="col">분류명</th>

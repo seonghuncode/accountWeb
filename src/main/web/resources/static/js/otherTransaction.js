@@ -39,7 +39,12 @@ $("#show_more").click(function () {  //7일치 더 보기를 클릭할 경우의
                     tbodyHtml += '<th scope="row">' + (index + 1) + '</th>';
                     tbodyHtml += '<td>' + history.name + '</td>';
                     tbodyHtml += '<td>' + history.memo + '</td>';
-                    tbodyHtml += '<td>' + history.price.toLocaleString() + '</td>';
+                    // tbodyHtml += '<td>' + history.price.toLocaleString() + '</td>';
+                    if(history.type == "수입"){
+                        tbodyHtml += '<td style="color: red">' + history.price.toLocaleString() + '</td>';
+                    }else if(history.type == "지출"){
+                        tbodyHtml += '<td style="color: blue;">' + history.price.toLocaleString() + '</td>';
+                    }
                     tbodyHtml += '</tr>';
                 }else if(history.transaction_date === transactionDate.transaction_date && nowLoginUserId == userId){ //자신의 거래내역 페이지 일경우
                     tbodyHtml += '<tr>';
