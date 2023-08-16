@@ -147,6 +147,9 @@ function emailDuplicationProcess(newEmail) {
         method: "post",
         dataType: "json",   //dataType : "html",
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
+        },
         success: function (res) {
             // console.log(res);
             if (res.result == 'success') {
@@ -184,6 +187,9 @@ function userDuplicationProcess(newUserId) {
         method: "post",
         dataType: "json",   //dataType : "html",
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
+        },
         success: function (res) {
             // console.log(res);
             if (res.result == 'success') {
@@ -294,6 +300,9 @@ function checkPWProcess(password){
         dataType: "json",   //dataType : "html", "json", "text"
         async: false, //동기 처리
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
+        },
         success: function (res) {
             // console.log(res);
             result = res.result;
@@ -330,6 +339,9 @@ function doUpdateUserInfo(newName, newEmail, newUserId, newPassword, newView_YN,
         method: "post",
         dataType: "json",   //dataType : "html",
         contentType: "application/json; charset=utf-8",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
+        },
         success: function (res) {
             // console.log(res);
             if (res.result == 'success') {
@@ -353,6 +365,9 @@ function doLogout(){
     $.ajax({
         url: "/usr/doLogout",
         dataType: "json",   //dataType : "html", "json", "text"
+        headers: {
+            "X-CSRF-TOKEN": csrfToken // CSRF 토큰 추가(스프링 시큐리티를 사용할 경우 ajax통신을 할 경우 토큰을 헤더에 넣어 주어야 오류가 발생하지 않는다)
+        },
         success: function (res) {
             // alert("success");
             // console.log("응답");

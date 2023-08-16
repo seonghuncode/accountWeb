@@ -64,6 +64,16 @@
 </div>
 
 
+
+
+<!--
+ 이 부분을 추가하여 CSRF 토큰을 JavaScript 변수에 저장합니다
+ 원래 form태그를 사용할 경우 필요 없지만? ajax통신을 할 경우 필요하다
+ -->
+<script th:inline="javascript">
+    var csrfToken = [[${_csrf.token}]];
+</script>
+
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <!-- 제이쿼리 사용 -->
 <!-- 자바스크립트로 타임리프 객체 넘기는 방법 -->
 <script type="text/javascript" th:inline="javascript">
