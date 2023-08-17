@@ -41,6 +41,32 @@ if (totalPrice != null) { //값이 있을 경우 에만 실행, 값이 없을 �
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+
+        var options2 = {
+            title: '지출관리웹',
+            vAxis: {
+                title: '분류명',
+                titleTextStyle: {
+                    fontSize: 15, // 제목 텍스트 크기 조절
+                    bold: true, // 제목 텍스트 굵게 설정
+                    italic: false, // 기울임 없이 설정
+                    rotation: 0 // 글자 회전 각도 설정 (0도: 가로, 90도: 세로)
+                }
+            },
+            hAxis: {
+                title: '금액',
+                titleTextStyle: {
+                    fontSize: 15,
+                    bold: true,
+                    italic: false,
+                    rotation: 0
+                }
+            },
+            legend: { position: 'none' }, // 범례를 표시하지 않음
+        };
+
+        var barChart = new google.visualization.BarChart(document.getElementById('barChart_div'));
+        barChart.draw(data, options2);
     }
 
 
@@ -323,7 +349,7 @@ $('#sortAsc').click(function () {
         list += `<td>` + addComma(history.sum) + `원</td>`
         list += `</tr>`
     });
-    
+
     $(`tbody > #sortList`).remove();
     $(`tbody > #newList`).remove(); //기존에 정렬한 것을 지워주고 다시 만든다
     $('tbody').prepend(list);
@@ -332,3 +358,13 @@ $('#sortAsc').click(function () {
 
 
 
+//통계 페이지 에서 사용자가 선택하는 차트 종류에 따라 파이차트 또는 막대 차트로 보여준다.
+$('#pieChart').click(function () {
+    $('#barChart_div').hide(); // 태그 숨기기
+    $('#chart_div').show(); // 태그 보이게 하기
+})
+
+$('#barChart').click(function () {
+    $('#chart_div').hide(); // 태그 숨기기
+    $('#barChart_div').show(); // 태그 보이게 하기
+})

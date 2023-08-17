@@ -162,8 +162,8 @@
             <nav class="navbar bg-light">
                 <div class="container-fluid">
                     <a class="navbar-brand" style="font-size: small; font-weight: bold;">정렬</a>
-                    <button type="button" class="btn btn-outline-secondary" style="float: left; font-size: small;" id="sortDesc">오름차순</button>
-                    <button type="button" class="btn btn-outline-secondary" style="float: right; font-size: small;" id="sortAsc">내림차순</button>
+                    <button type="button" class="btn btn-outline-secondary" style="float: left; font-size: small; width: 30%" id="sortDesc">  <i class="bi bi-sort-up"></i></button>
+                    <button type="button" class="btn btn-outline-secondary" style="float: right; font-size: small; width: 30%" id="sortAsc"><i class="bi bi-sort-down"></i></button>
                 </div>
             </nav>
             <table class="table table-bordered table-hover" style="text-align: center;">
@@ -222,11 +222,20 @@
         </div>
 
         <!-- 그래프를 보여주는 부분 --------------------------------------------------------------------------->
-        <div style="width: 35%; float: right" th:if="${totalPrice} != null">
+        <div style="width: 40%; float: right;" th:if="${totalPrice} != null">
+            <!-- 그래프 종류(파이 or 막대) -->
+            <nav class="navbar bg-light" style="margin-bottom: 15%;">
+                <div class="container-fluid">
+                    <a class="navbar-brand" style="font-size: small; font-weight: bold;">차트 종류</a>
+                    <button type="button" class="btn btn-outline-secondary" style="float: left; font-size: small; width: 30%" id="pieChart"><i class="bi bi-pie-chart-fill"></i></button>
+                    <button type="button" class="btn btn-outline-secondary" style="float: right; font-size: small; width: 30%" id="barChart"><i class="bi bi-bar-chart-fill"></i></button>
+                </div>
+            </nav>
             <!--차트가 그려질 부분-->
             <div id="chart_div" style="display: inline; float: right"></div>
+            <div id="barChart_div" style="display: inline; float: right; display: none;"></div>
         </div>
-        <div style="width: 35%; float: right" th:unless="${totalPrice} != null">
+        <div style="width: 40%; float: right" th:unless="${totalPrice} != null">
             <div id="chart_div2" style="display: inline; float: right"></div>
         </div>
 
