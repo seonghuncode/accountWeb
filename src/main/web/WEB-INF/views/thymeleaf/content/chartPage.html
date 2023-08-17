@@ -158,6 +158,14 @@
 
         <!-- 통계 정보를 테이블로 보여주는 부분 ---------------------------------------------------------------------------->
         <div style="width: 35%; float: left">
+            <!-- 정렬 버튼(내림 or 오름) -->
+            <nav class="navbar bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" style="font-size: small; font-weight: bold;">정렬</a>
+                    <button type="button" class="btn btn-outline-secondary" style="float: left; font-size: small;" id="sortDesc">오름차순</button>
+                    <button type="button" class="btn btn-outline-secondary" style="float: right; font-size: small;" id="sortAsc">내림차순</button>
+                </div>
+            </nav>
             <table class="table table-bordered table-hover" style="text-align: center;">
                 <caption style="caption-side: top; font-weight: bold; font-size: small; text-align: center"
                          th:if="${searchMethod} == '기간검색'">
@@ -174,7 +182,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="summary : ${result}">
+                <tr th:each="summary : ${result}" id="sortList">
                     <th scope="row">[[${summary.name}]]</th>
                     <td th:text="${#numbers.formatInteger(summary.sum, 0, 'COMMA')+'원'}"></td>
                 </tr>
@@ -209,8 +217,6 @@
                             style="color: red;"></td>
                     </div>
                 </tr>
-
-
                 </tbody>
             </table>
         </div>

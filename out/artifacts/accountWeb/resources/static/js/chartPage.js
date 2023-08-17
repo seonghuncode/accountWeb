@@ -260,3 +260,75 @@ $('#searchMonth').click(function () {
 
 
 
+
+
+//100단위씩 ","로 숫자를 구분해 주는 함수
+function addComma(value){
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+
+
+//통계 페이지 에서 분류명을 기준으로 테이블 통계를 보여줄때 해당 버튼을 클릭하면 오름 분류명을 금액 기준으로 오름차순으로 표현 해주는 기능
+$('#sortDesc').click(function () {
+    // console.log("result : " + result);
+    // console.log("userId : " + userId);
+    // console.log("year : " + year);
+    // console.log("month : " + month);
+    // console.log("type : " + type);
+
+    //오름 차순 정렬 진행
+    result.sort(function(a, b) {
+        return a.sum - b.sum;
+    });
+    // console.log("정렬후");
+    // result.forEach (function (key, index) {
+    //     console.log('elements', index, key);
+    //     console.log(key.name);
+    //     console.log(key.sum);
+    //     console.log(key.type);
+    // });
+
+    var list = '';
+    $.each(result, function (index, history) {
+        list += `<tr id = "newList">`
+        list += `<th scope="row">` + history.name + `</th>`
+        list += `<td>` + addComma(history.sum) + `원</td>`
+        list += `</tr>`
+    });
+    
+
+    $(`tbody > #sortList`).remove();
+    $(`tbody > #newList`).remove(); //기존에 정렬한 것을 지워주고 다시 만든다
+    $('tbody').prepend(list);
+
+
+})
+
+
+
+
+//통계 페이지 에서 분류명을 기준으로 테이블 통계를 보여줄때 해당 버튼을 클릭하면  분류명을 금액 기준으로 내림차순으로 표현 해주는 기능
+$('#sortAsc').click(function () {
+
+    //내림 차순 정렬 진행
+    result.sort(function(a, b) {
+        return b.sum - a.sum;
+    });
+
+    var list = '';
+    $.each(result, function (index, history) {
+        list += `<tr id = "newList">`
+        list += `<th scope="row">` + history.name + `</th>`
+        list += `<td>` + addComma(history.sum) + `원</td>`
+        list += `</tr>`
+    });
+    
+    $(`tbody > #sortList`).remove();
+    $(`tbody > #newList`).remove(); //기존에 정렬한 것을 지워주고 다시 만든다
+    $('tbody').prepend(list);
+    
+})
+
+
+
