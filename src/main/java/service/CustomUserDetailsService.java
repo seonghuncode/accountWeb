@@ -16,8 +16,11 @@ import util.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+
+//사용자를 인증하고 사용자 정보와 권한을 반환하는 역할을 수행
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
 
     @Autowired
     private UsrRepository usrRepository;
@@ -31,6 +34,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         String findPasswordFromDB = usrRepository.getUserPassword(userId);
 //        System.out.println("fetchedUserId : " + fetchedUserId);
 //        System.out.println("findPasswordFromDB : " + findPasswordFromDB);
+
+//        System.out.println("권한인증, 부여 부분");
 
         //일치 하는 아이디가 없을 경우
         if (fetchedUserId == null) {
@@ -62,10 +67,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             //성공시 아래 로직으로 인증을 저장해야 반영 된다
             Authentication authentication = new UsernamePasswordAuthenticationToken(fetchedUserId, findPasswordFromDB, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+//            System.out.println("등록된 권한 : "  + authentication);
+
+//            System.out.println("권한 인증 및 부여됨");
+
             // 사용자 정보 반환
             return new CustomUserDetails(fetchedUserId, findPasswordFromDB, authorities);
         } else {
+//            System.out.println("권한이 없음");
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
     }
@@ -77,4 +86,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         // 예시로 아래와 같이 가정합니다.
         return userId.startsWith(roleName);
     }
+
+
 }

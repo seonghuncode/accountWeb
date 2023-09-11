@@ -7,7 +7,7 @@
     <!-- Annotation 활성화 / 어노테이션 옵션 -->
     <mvc:annotation-driven/>
 
-<!--    <context:annotation-config /> &lt;!&ndash;  자동 주입 사용을 위한 코드 ex.@Autowired &ndash;&gt;-->
+    <!--    <context:annotation-config /> &lt;!&ndash;  자동 주입 사용을 위한 코드 ex.@Autowired &ndash;&gt;-->
 
     <!--
      web.xml에 특정 주소로 호출하게 되면 이때 연결할 Controller를 설정 해주어야 한다.
@@ -16,21 +16,21 @@
      -->
     <!-- Base package / 만약 패키지를 생성하지도 잡아주지 않을 경우 test 오류  == component 패키지 지정-->
     <context:component-scan base-package="controller"/>
-<!--    <context:component-scan base-package="service" />-->
-<!--    <context:component-scan base-package="repository" />-->
+    <!--    <context:component-scan base-package="service" />-->
+    <!--    <context:component-scan base-package="repository" />-->
 
     <!-- @Autowired로 service class , repository class를 읽어들이지 못해서 추가한 코드 / 구현체를 해주어야 한다(interface x) -->
-    <bean id="testServiceImpl" class="service.TestServiceImpl" />
-    <bean id="testRepositoryImpl" class="dao.TestRepositoryImpl" />
-    <bean id="usrServiceImpl" class="service.UsrServiceImpl" />
+    <bean id="testServiceImpl" class="service.TestServiceImpl"/>
+    <bean id="testRepositoryImpl" class="dao.TestRepositoryImpl"/>
+    <bean id="usrServiceImpl" class="service.UsrServiceImpl"/>
     <bean id="usrRepositoryImpl" class="dao.UsrRepositoryImpl"/>
-<!--    <bean id="SecurityConfig" class="util.SecurityConfig" />  &lt;!&ndash; passwordEncoder를 @Autowired로 사용하기 위함 &ndash;&gt; (context-security.xml를 사용하는 것으로 변경 해서 주석 처리)  -->
+    <!--    <bean id="SecurityConfig" class="util.SecurityConfig" />  &lt;!&ndash; passwordEncoder를 @Autowired로 사용하기 위함 &ndash;&gt; (context-security.xml를 사용하는 것으로 변경 해서 주석 처리)  -->
     <bean id="transactionServiceImpl" class="service.TransactionServiceImpl"/>
-    <bean id="transactionRepositoryImpl" class="dao.TransactionRepositoryImpl" />
+    <bean id="transactionRepositoryImpl" class="dao.TransactionRepositoryImpl"/>
 
 
     <!--    정적자원 매핑 / 현재 경로 오류오 인해 web.xml에 spring 정적 리스서 설정을 통해 사용하고 있다.&ndash;&gt;-->
-<!--    <mvc:resources mapping="/resources/**" location="/resources/"/>-->
+    <!--    <mvc:resources mapping="/resources/**" location="/resources/"/>-->
 
     <!-- controller에서 return할때 해당 경로 앞뒤에 붙여질 경로 / JSP부 리졸버 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -42,28 +42,60 @@
     <!-- Thymeleaf 뷰 리졸버 -->
     <bean id="templateResolver"
           class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".html" />
-        <property name="templateMode" value="HTML5" />
-        <property name="cacheable" value="false" />
-        <property name="characterEncoding" value="UTF-8" />
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML5"/>
+        <property name="cacheable" value="false"/>
+        <property name="characterEncoding" value="UTF-8"/>
     </bean>
     <bean id="templateEngine"
           class="org.thymeleaf.spring4.SpringTemplateEngine">
-        <property name="templateResolver" ref="templateResolver" />
+        <property name="templateResolver" ref="templateResolver"/>
     </bean>
     <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
-        <property name="templateEngine" ref="templateEngine" />
-        <property name="characterEncoding" value="UTF-8" />
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="characterEncoding" value="UTF-8"/>
     </bean>
 
 
+    <!-- ================================================================================================================== -->
+
+    <!--mvc 인터셉터 컨트롤러 빈객체 정의 -->
+    <mvc:interceptors>
+        <!-- global 인터셉터 (여기서는 전체 적용 된다) -->
+        <!-- <bean id="customInterceptor" class="util.CustomInterceptor"/>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--mvc 인터셉터를 거치지 않고 예외 시킬 URL 요청들 정의 -->
+            <mvc:exclude-mapping path="/usr/loginForm"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/usr/loginFn"/>
+            <mvc:exclude-mapping path="/usr/joinForm"/>
+            <mvc:exclude-mapping path="/usr/joinFn"/>
+            <mvc:exclude-mapping path="/usr/findUserId"/>
+            <mvc:exclude-mapping path="/usr/findUserPw"/>
+            <bean class="util.CustomInterceptor"/>
+        </mvc:interceptor>
+
+        <!-- web.xml에서 세션을 설정할 경우 적용한 시간 동안 요청이 없을 경우 세션이 만료되기 때문에 로그인 페이지에 한해서 세션이 만료되면 리다이렉트 되도록 해야한다 -->
+        <mvc:interceptor>
+            <!-- path 에 있는 서블릿이 호출될때 ref 에 참조되어 있는 interceprot 를 샐행하여 세션을 관리한다. -->
+            <mvc:mapping path="/usr/loginForm"/>
+            <mvc:mapping path="/usr/loginFn"/>
+            <mvc:mapping path="/usr/joinForm"/>
+            <mvc:mapping path="/usr/joinFn"/>
+            <mvc:mapping path="/usr/findUserId"/>
+            <mvc:mapping path="/usr/findUserIdProcess"/>
+            <mvc:mapping path="/usr/findUserPw"/>
+            <mvc:mapping path="/usr/findUserPWProcess"/>
+            <bean class="util.CustomLoginPage"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
+
+    <!-- ============================================================================================================== -->
 
 
-
-
-
-
-<!-- HandlerMapping, Controller, ViewResolver, View등의 빈 설정 -->
+    <!-- HandlerMapping, Controller, ViewResolver, View등의 빈 설정 -->
 </beans>
 

@@ -93,4 +93,16 @@
 
 
 
+<!--    &lt;!&ndash; 세션 타임아웃을 설정할 수 있는 방법 1. Java소스로 설정 > 2. web.xml에서 설정 > 3. Tomcat등 WAS서버내 conf/web.xml에서 설정 &ndash;&gt;-->
+    <!-- 세션 타임아웃 설정 (10분 / 분단위) -->
+    <!-- 세션을 시간을 정하면 정한 시간동안 사용자가 요청이 없을 경우 세션을 만료 시킨다 -> interceptor가 모든 controller요청이 들어오면 수행하기 전 권한이 있는지 확인한다, 없으면 로그인 페이지로 강제로 넘긴다 -->
+    <session-config>
+        <session-timeout>1</session-timeout>
+    </session-config>
+
+
+
+
+
+
 </web-app>

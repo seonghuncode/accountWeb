@@ -111,6 +111,7 @@ $("#try-login").click(function (e) {
     };
 
     console.log(info);
+    console.log("csrfToken : " + csrfToken);
     $.ajax({
         url: "/usr/loginFn",
         data: JSON.stringify(info), //data: info, JSON.stringify(info)
@@ -148,3 +149,5 @@ $("#try-login").click(function (e) {
         }
     });
 });
+
+

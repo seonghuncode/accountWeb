@@ -24,6 +24,7 @@ import java.util.Map;
 @Controller
 public class UsrController {
 
+
     @Autowired
     private UsrService usrService;
 
@@ -40,7 +41,7 @@ public class UsrController {
 
     //로그인 폼 화면으로 이동하는 경로
     @RequestMapping(value = "/usr/loginForm")
-    public String showLogin() {
+    public String showLogin(Model model) {
         return "thymeleaf/usr/login";
     }
 
@@ -56,7 +57,6 @@ public class UsrController {
 //        System.out.println("로그인 로직 return값");
 //        System.out.println(usrService.doCheckLogin(usrDto, bindingResult));
 //        System.out.println("==============");
-
 
 
         return usrService.doCheckLogin(usrDto, bindingResult, httpSession);
@@ -120,13 +120,16 @@ public class UsrController {
 //            httpSession.removeAttribute("loginedUserId");
 //            System.out.println("로그아웃 되었습니다.");
 //        }
-        
+
         //로그아웃을 실행하면 저장된 Spring Security권한이 삭제 된다
         SecurityContextHolder.clearContext();
 
         return usrService.doLogout(httpSession);
 
     }
+
+
+
 
 
     //로그인 폼에서 로그인을 성공하면 해당 회원 정보를 메인화면으로 넘겨 메인화면으로 요청하는 로직
@@ -137,6 +140,8 @@ public class UsrController {
 //        List<UsrDto> users = usrService.getAllUserFromDB();
 //        model.addAttribute("users", users); //메인화면 애서 회원 이름, 지출내역 공개 여부에 대한 정보를 보여주어야 하기대문에 객체를 넘겨준다.
 //        return "thymeleaf/content/main";
+
+
 
         ModelAndView mav = new ModelAndView("thymeleaf/content/main");
 
@@ -200,11 +205,9 @@ public class UsrController {
     }
 
 
-
-
-
     /**
      * 네비게이션바 에서 회원정보 버튼을 클릭했을 경우 세션에 저장된 아이디 값을 받아 회원정보 페이지로 이동하는 controller
+     *
      * @param model
      * @param userId : 현재 세션에 저장된 회원의 아이디
      * @return
@@ -225,11 +228,10 @@ public class UsrController {
     }
 
 
-
     //사용자가 마이페이지 에서 정보수정 버튼을 클릭해서 나오는 모달창에 입력한 비밀번호가 현재 로그인한 회원의 아이디와 일치하는지 확인하는 로직
     @RequestMapping(value = "/usr/checkPW", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> checkPW(@RequestBody  Map<String, Object> data) {
+    public Map<String, Object> checkPW(@RequestBody Map<String, Object> data) {
 
 //        System.out.println("Controller에서의 data : " + data);
         Map<String, Object> result = usrService.checkPW(data);
@@ -239,16 +241,15 @@ public class UsrController {
 
 
     /**
-     *
-     * @param userId : 현재 로그인 되어 있는 사용자 아이디
-     * @param name : 사용자 닉네임
-     * @param email : 사용지
-     * @param view_YN : 거래내역 공개 여부
+     * @param userId     : 현재 로그인 되어 있는 사용자 아이디
+     * @param name       : 사용자 닉네임
+     * @param email      : 사용지
+     * @param view_YN    : 거래내역 공개 여부
      * @param createDate : 사용자 회원가입 날짜
-     * @param userIdPK : 사용자 PK
+     * @param userIdPK   : 사용자 PK
      */
     @RequestMapping("usr/myInfoModify")
-    public String myInfoModify(String userId, String name, String email, String view_YN, String createDate, int userIdPK, Model model){
+    public String myInfoModify(String userId, String name, String email, String view_YN, String createDate, int userIdPK, Model model) {
 //        System.out.println("userId : " + userId);
 //        System.out.println("name : " + name);
 //        System.out.println("email : " + email);
@@ -269,27 +270,27 @@ public class UsrController {
     }
 
 
-    /**회원정보 수정 페이지 에서 사용자가 입력한 이메일이 자신 이메일을 제외하고 중복되는 이메일이 있는지 확인하는 로직
-     * 
+    /**
+     * 회원정보 수정 페이지 에서 사용자가 입력한 이메일이 자신 이메일을 제외하고 중복되는 이메일이 있는지 확인하는 로직
+     *
      * @param data
      * @return
      */
     @RequestMapping(value = "/usr/checkEmailForModifyMyInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> checkEmailForModifyMyInfo(@RequestBody  Map<String, Object> data) {
+    public Map<String, Object> checkEmailForModifyMyInfo(@RequestBody Map<String, Object> data) {
 
 //        System.out.println("Controller에서의 data : " + data);
         Map<String, Object> result = usrService.checkEmailForModifyMyInfo(data);
-        
+
         return result;
     }
-
 
 
     //회원 정보 수정 에서 사용자가 입력한 아이디가 현재 자신의 아이디 외에 중복되는 아이디가 있는지 확인하는 로직
     @RequestMapping(value = "/usr/checkUserIdForModifyMyInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> checkUserIdForModifyMyInfo(@RequestBody  Map<String, Object> data) {
+    public Map<String, Object> checkUserIdForModifyMyInfo(@RequestBody Map<String, Object> data) {
 
 //        System.out.println("Controller에서의 data : " + data);
         Map<String, Object> result = usrService.checkUserIdForModifyMyInfo(data);
@@ -301,7 +302,7 @@ public class UsrController {
     //회원 정보 수정 에서 사용자가 입력한 모든 데이터가 유효성 검증을 통과해서 넘어오는 데이터로 실제 데이터베이스에 회원정보를 수정하는 로직이다.
     @RequestMapping(value = "/usr/doModifyUserInfo", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> doModifyUserInfo(@RequestBody  Map<String, Object> data) {
+    public Map<String, Object> doModifyUserInfo(@RequestBody Map<String, Object> data) {
 //        System.out.println("최종적으로 수정할 데이터 : " + data);
         Map<String, Object> result = usrService.doModifyUserInfo(data);
         return result;
@@ -316,7 +317,7 @@ public class UsrController {
 
     @RequestMapping("/usr/findUserIdProcess")
     @ResponseBody
-    public Map<String,Object> findUserIdProcess(Model model, @RequestParam Map<String, Object> data) {
+    public Map<String, Object> findUserIdProcess(Model model, @RequestParam Map<String, Object> data) {
 
 //        System.out.println(data);
         //사용자가 아이디 찾기 페이지 에서 보낸 usreName, userEmail와 일치하는 회원의 아이디를 찾는 로직
@@ -330,39 +331,39 @@ public class UsrController {
 
     //사용자가 로그인/아이디 찾기 페이지 에서 비밀번호 찾기 버튼을 클릭할 경우 비밀번호 찾기 페이지로 이동하는 로직
     @RequestMapping("usr/findUserPw")
-    public String findUserPw(){
+    public String findUserPw() {
         return "thymeleaf/usr/findUserPw";
     }
 
 
     /**
      * 사용자가 비밀번호 찾기 에서 입력한 이름, 아이디, 이메일 값이 유효성 검증을 통과하면 해당 데이터와 일치하는 회원의 PK값을 찾는 로직
+     *
      * @param data
      * @return
      */
     @RequestMapping(value = "/usr/findUserPWProcess", produces = "application/json; charset=utf8", method = {RequestMethod.POST})
     @ResponseBody
-    public Map<String, Object> findUserPWProcess(@RequestBody  Map<String, Object> data)  {
+    public Map<String, Object> findUserPWProcess(@RequestBody Map<String, Object> data) {
         System.out.println(data);
 
         //사용자가 입력한 이름, 아이디, 이메일과 일치하는 회원의 PK값을 가지고 오는 로직
-        Map<String, Object> result =  usrService.getUserPkByFindPw(data);
+        Map<String, Object> result = usrService.getUserPkByFindPw(data);
 //        System.out.println("회원의 PK : " + result);
 
         return result;
     }
 
 
-
     @RequestMapping("usr/myInfoDelete")
     @ResponseBody
-    public Map<String, Object> myInfoDelete(@RequestBody  Map<String, Object> data, HttpSession httpSession){
+    public Map<String, Object> myInfoDelete(@RequestBody Map<String, Object> data, HttpSession httpSession) {
         //삭제 로직 진행 -> 성공시 알림 메세지 + 성공시 로그인 화면으로 이동
 
 //        System.out.println("userId : " + data.get("userId"));
 //        System.out.println("name : " + data.get("name"));
 //        System.out.println("userIdPK : " + data.get("userIdPK"));
-        
+
         //현재 로그인 되어 있는 회원을 탈퇴시키는 로직
         Map<String, Object> result = usrService.doInfoDelete(data, httpSession);
 //        System.out.println(result);
@@ -370,6 +371,17 @@ public class UsrController {
         return result;
     }
 
+
+
+    //만약 interceptor에서 세션이 만료되었다고 판단될 경우 사용자에게 alert메시지를 보여주고 메인페이지로 이동시키는 로직
+    @RequestMapping("usr/sessionExpired")
+    public String sessionExpired(HttpSession httpSession) {
+//        SecurityContextHolder.clearContext();
+//        usrService.doLogout(httpSession);
+//        System.out.println("usr/sessionExpired");
+//        System.out.println(usrService.doLogout(httpSession));
+        return "thymeleaf/usr/sessionExpiredPage";
+    }
 
 
 }
