@@ -1,5 +1,6 @@
 <br><br><br>
-💁웹 서비스 소개
+
+💁웹 서비스 소개(개인 프로젝트트)
 <h5>
 지출관리 웹 서비스는 사용자들에게 간편하고 효과적인 지출 관리를 제공하는 웹 서비스 입니다. <br>
 이 서비스를 통해 사용자들은 개인 지출 내역을 손쉽게 관리할 수 있으며, 지출 내역을 다른 사용자들과 공유할 수 있습니다. <br>
@@ -73,17 +74,21 @@
 <table>
 <thead>
 <tr>
+<th align="center"><a target="_blank" rel="noopener noreferrer nofollow" href=""><img src="https://github.com/seonghuncode/accountWeb/assets/93322852/9993f864-b984-4c38-98b2-214366b6dd62" alt="" width="50px" height="50px" data-canonical-src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" style="max-width: 100%;"></a></th>  
 <th align="center"><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d85c49baf2946a337ca5f2b9a9a13cf0c37f633505b3d695afbc5784733f3e25/68747470733a2f2f70726f66696c696e61746f722e7269736861762e6465762f736b696c6c732d6173736574732f6d7973716c2d6f726967696e616c2d776f72646d61726b2e737667"><img src="https://camo.githubusercontent.com/d85c49baf2946a337ca5f2b9a9a13cf0c37f633505b3d695afbc5784733f3e25/68747470733a2f2f70726f66696c696e61746f722e7269736861762e6465762f736b696c6c732d6173736574732f6d7973716c2d6f726967696e616c2d776f72646d61726b2e737667" alt="MySQL" width="50px" height="50px" data-canonical-src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" style="max-width: 100%;"></a></th>
 <th align="center"><a target="_blank" rel="noopener noreferrer nofollow" href="https://github.com/seonghuncode/accountWeb/assets/93322852/e616d05c-6496-4698-8143-ab6b89579248"><img src="https://github.com/seonghuncode/accountWeb/assets/93322852/e616d05c-6496-4698-8143-ab6b89579248" alt="MySQL" width="50px" height="50px" data-canonical-src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" style="max-width: 100%;"></a></th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td align="center">MyBatis(3.4.1)
 <td align="center">MySQL(10.4.27)</td>
 <td align="center">tomcat(9)</td>
+</td>
 </tr>
 </tbody>
 </table>
+
 
 
 <!-- version control------------------------------------------------------------------------------------------->
@@ -116,57 +121,57 @@
 <tbody>
 <tr>
 <td align="left" rowspan="6" margin="1px" width = "15%">회원관리</td>
-<td align="left">회원가입<br>➡️이름, 이메일, 아이디, 비밀번호, 비밀번호 재확인, 거래내역 공개 여부 선택을 통해 회원가입 진행<br>(※이메일, 아이디는 DB와 중복 불가)</td>
+<td align="left">회원가입<br>→ 이름, 이메일, 아이디, 비밀번호, 비밀번호 재확인, 거래내역 공개 여부 선택을 통해 회원가입 진행<br>(※이메일, 아이디는 DB와 중복 불가)</td>
 </tr>
 <tr>
-<td align="left">로그인<br>➡️아이디와 비밀번호 입력을 통해 로그인</td>
+<td align="left">로그인<br>→ 아이디와 비밀번호 입력을 통해 로그인</td>
 </tr>
 <tr>
 <td align="left">로그아웃</td>
 </tr>
 <tr>
-<td align="left">아이디 찾기<br>➡️이름, 이메일을 통해 일치하는 아이디 찾기 진행</td>
+<td align="left">아이디 찾기<br>→ 이름, 이메일을 통해 일치하는 아이디 찾기 진행</td>
 </tr>
 <tr>
 <td align="left">비밀번호 찾기<br>1. 이름, 아이디, 이메일을 통해 비밀번호 찾기 진행<br>2. DB에 일치하는 정보가 있을 경우 난수를 통해 밀번호 생성<br>3. 회원가입시 입력한 이메일로 임시 비밀번호 전송</td>
 </tr>
 <tr>
-<td align="left">회원정보 수정<br>1. 정보 수정을 위해 현재 로그인 되어 있는 회원 비밀번호 입력<br>2. 이름, 이메일, 아이디, 비밀번호, 거래 내역 공개 여부에 대해서 변경 가능능</td>
+<td align="left">회원정보 수정<br>1. 정보 수정을 위해 현재 로그인 되어 있는 회원 비밀번호 입력<br>2. 이름, 이메일, 아이디, 비밀번호, 거래 내역 공개 여부에 대해서 변경 가능</td>
 </tr>
 <tr>
 <td align="left" width = "15%">메인화면</td>
 <td align="left">
-  ➡️상단 네비게이션 바를 통해 메인화면 이동 아이콘, 회원정보, 거래내역, 통계 페이지로 이동하는 서비스를 제공하고 로그아웃 버튼이 있습니다.<br>
-  ➡️현재 해당 지출 관리 웹에서 회원가입시 거래 내역 공개를 선택한 회원들을 테이블로 전부 보여 줍니다.<br>
+  → 상단 네비게이션 바를 통해 메인화면 이동 아이콘, 회원정보, 거래내역, 통계 페이지로 이동하는 서비스를 제공하고 로그아웃 버튼이 있습니다.<br>
+  → 현재 해당 지출 관리 웹에서 회원가입시 거래 내역 공개를 선택한 회원들을 테이블로 전부 보여 줍니다.<br>
   ※세부 내용<br>1. 회원 이름을 검색해 찾을 수 있습니다. <br>2. 최대 10명의 회원을 보여주고 회원 수가 10명이 넘어가면 페이징을 통해 다음 페이지에 이어서 보여 줍니다.)<br>
-  ➡️하단에는 지출관리 웹을 사용하는 전체 회원 수를 정보 공개 회원, 비공개 회원 수로 나누어 보여준다.
+  → 하단에는 지출관리 웹을 사용하는 전체 회원 수를 정보 공개 회원, 비공개 회원 수로 나누어 보여준다.
 </td>
 </tr>
 <tr>
 <td align="left" width = "15%">특정회원 거래 내역</td>
 <td align="left">
-  ➡️조건별 검색(조건 : 특정월, 기간, 당월, 분류명)<br>
-  ➡️검색월 기준 거래 내역 요약 정보<br>
-  ➡️일별 거래내역(세부정보 : 최초 3일치 정보만 표시, 7일치 더보기 버튼으로 거래내역 더보기 가능, 맨위로 버튼으로 상단이동 가능)
+  → 조건별 검색(조건 : 특정월, 기간, 당월, 분류명)<br>
+  → 검색월 기준 거래 내역 요약 정보<br>
+  → 일별 거래내역(세부정보 : 최초 3일치 정보만 표시, 7일치 더보기 버튼으로 거래내역 더보기 가능, 맨위로 버튼으로 상단이동 가능)
 </td>
 </tr>
 <tr>
 <td align="left" width = "15%">회원 거래 내역</td>
 <td align="left">
-  ➡️조건별 검색(조건 : 특정월, 기간, 당월, 분류명)<br>
-  ➡️검색월 기준 거래 내역 요약 정보<br>
-  ➡️일별 거래내역<br>(※세부정보 : 최초 3일치 정보만 표시, 7일치 더보기 버튼으로 거래내역 더보기 가능, 맨위로 버튼으로 상단이동 가능)<br>
-  ➡️분류명 관리(추가, 수정, 삭제)<br>
-  ➡️예산액 수정<br>
-  ➡️특정 거래내역 추가<br>
-  ➡️특정 거래내역 수정/삭제
+  → 조건별 검색(조건 : 특정월, 기간, 당월, 분류명)<br>
+  → 검색월 기준 거래 내역 요약 정보<br>
+  → 일별 거래내역<br>(※세부정보 : 최초 3일치 정보만 표시, 7일치 더보기 버튼으로 거래내역 더보기 가능, 맨위로 버튼으로 상단이동 가능)<br>
+  → 분류명 관리(추가, 수정, 삭제)<br>
+  → 예산액 수정<br>
+  → 특정 거래내역 추가<br>
+  → 특정 거래내역 수정/삭제
 </td>
 </tr>
 <tr>
   <td align="left" width = "15%">통계</td>
 <td align="left">
-  ➡️지출 통계(특정 월 검색/기간 검색)<br>
-  ➡️수입 통계(특정 월 검색/기간 검색)
+  → 지출 통계(특정 월 검색/기간 검색)<br>
+  → 수입 통계(특정 월 검색/기간 검색)
 </td>
 </tr>
 </tbody>
@@ -336,10 +341,17 @@
 </tbody>
 </table>
 
+<br><br><br>
+
+<h2 tabindex="-1" dir="auto"><a id="user-content--개발-기간" class="anchor" aria-hidden="true" tabindex="-1" href="#-개발-기간"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>📅 개발 기간</h2>
+<p dir="auto">23.02.03. ~ 23.09.11.</p>
+
 
 <br><br><br>
+
 <!-- 데모 영상---------------------------------------------------------------------------------- -->
-<h2 tabindex="-1" dir="auto"><a id="user-content--데모-영상" class="anchor" aria-hidden="true" tabindex="-1" href="#-데모-영상"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>♾️상세 내역(blog)</h2>
+<h2 tabindex="-1" dir="auto"><a id="user-content--데모-영상" class="anchor" aria-hidden="true" tabindex="-1" href="#-데모-영상"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>♾️상세 내역(개발 하면서 정리한 개인 Blog)</h2>
 <a href="https://velog.io/@gnos456/series/%EC%A7%80%EC%B6%9C%EA%B4%80%EB%A6%AC%EC%9B%B9SpringFramework">블로그 이동</a>
+(※ 화면 설계서, 테이블 설계서, 기능 명세서, 개발 세부 내용, 완성 리뷰)
 
-
+<br><br><br><br><br><br>
